@@ -2,7 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>commercio_sdk.cs</RootNamespace>
+    <RootNamespace>commercio.sdk</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>commercio.network, Blockit S.r.l.</Authors>
+    <Company>commercio.network</Company>
+    <Product />
+    <PackageId>commercio.sdk</PackageId>
+    <Description>Sdk for commercio.network applications</Description>
+    <Copyright>Copyrigthr (c) 2020 commercio.network, Blockit S.r.l.</Copyright>
   </PropertyGroup>
 
 </Project>

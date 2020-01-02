@@ -13,21 +13,5 @@ namespace commercio.sdk
 {
     public class Class1
     {
-        #region Properties
-
-        #endregion
-
-        #region Constructors
-
-        #endregion
-
-        #region Public Methods
-
-        #endregion
-
-        #region Helpers
-
-        #endregion
-
     }
 }
