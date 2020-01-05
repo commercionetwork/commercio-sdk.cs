@@ -8,26 +8,23 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace commercio.sdk
 {
-    public class Class1
+    public class DidDocumentPublicKey
     {
         #region Properties
-
         #endregion
 
         #region Constructors
-
         #endregion
 
         #region Public Methods
-
         #endregion
 
         #region Helpers
-
         #endregion
-
     }
 }

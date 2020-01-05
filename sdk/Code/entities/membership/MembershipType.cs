@@ -8,10 +8,17 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace commercio.sdk
 {
-    public class Class1
+    enum MembershipType
     {
+        BRONZE,
+        SILVER,
+        GOLD,
+        BLACK
     }
+
 }

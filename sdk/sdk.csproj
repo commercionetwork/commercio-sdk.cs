@@ -12,4 +12,13 @@
     <Copyright>Copyrigthr (c) 2020 commercio.network, Blockit S.r.l.</Copyright>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="commercio.sacco.lib" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Example\" />
+    <Folder Include="Docs\" />
+  </ItemGroup>
+
 </Project>
