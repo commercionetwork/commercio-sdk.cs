@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>commercio.sdk</RootNamespace>
+    <Version>0.1.0</Version>
+    <Authors>commercio.network, Blockit S.r.l.</Authors>
+    <Company>commercio.network</Company>
+    <Product />
+    <PackageId>commercio.sdk</PackageId>
+    <Description>Sdk for commercio.network applications</Description>
+    <Copyright>Copyrigthr (c) 2020 commercio.network, Blockit S.r.l.</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="commercio.sacco.lib" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Example\" />
+    <Folder Include="Docs\" />
+  </ItemGroup>
+
+</Project>
