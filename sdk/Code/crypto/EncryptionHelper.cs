@@ -16,6 +16,8 @@ using System.Text;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.Asn1.Pkcs;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Parameters;
 
 namespace commercio.sdk
 {
@@ -32,16 +34,58 @@ namespace commercio.sdk
         /// Returns the RSA public key associated to the government that should be used when
         /// encrypting the data that only it should see.
         public static async Task<RSAPublicKey> getGovernmentRsaPubKey()
+        // public static RSAPublicKey getGovernmentRsaPubKey()
         {
-            // final response = await Network.query("http://localhost:8080/government/publicKey");
-            String response = "Pollo";
+            Object response = await Network.query("http://localhost:8080/government/publicKey");
             if (response == null)
             {
                 System.ArgumentException argEx = new System.ArgumentException("Cannot get government RSA public key");
                 throw argEx;
             }
-            RsaPublicKeyStructure rsaPublicKey = RSAKeyParser.parsePublicKeyFromPem(response);
+            RsaKeyParameters rsaPublicKey = RSAKeyParser.parsePublicKeyFromPem(response.ToString());
             return new RSAPublicKey(rsaPublicKey);
+        }
+
+        /// Encrypts the given [data] with AES using the specified [key].
+        static byte[] encryptStringWithAes(String data, KeyParameter key)
+        {
+            AEScoder coder = new AEScoder(key);
+            return coder.encode(System.Text.Encoding.UTF8.GetBytes(data));
+        }
+
+        /// Encrypts the given [data] with AES using the specified [key].
+        static byte[] encryptBytesWithAes(byte[] data, KeyParameter key)
+        {
+            AEScoder coder = new AEScoder(key);
+            return coder.encode(data);
+        }
+
+        /// Decrypts the given [data] with AES using the specified [key].
+        static byte[] decryptWithAes(byte[] data, KeyParameter key)
+        {
+            AEScoder coder = new AEScoder(key);
+            return coder.encode(data);
+        }
+
+        /// Encrypts the given [data] with RSA using the specified [key].
+        static byte[] encryptStringWithRsa(String data, RSAPublicKey key)
+        {
+            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) key.pubKey);
+            return coder.Encrypt(System.Text.Encoding.UTF8.GetBytes(data));
+        }
+
+        /// Encrypts the given [data] with RSA using the specified [key].
+        static byte[] encryptBytesWithRsa(byte[] data, RSAPublicKey key)
+        {
+            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) key.pubKey);
+            return coder.Encrypt(data);
+        }
+
+        /// Decrypts the given data using the specified private [key].
+        static byte[] decryptBytesWithRsa(byte[] data, RSAPrivateKey key)
+        {
+            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) key.secretKey);
+            return coder.Decrypt(data);
         }
 
         #endregion

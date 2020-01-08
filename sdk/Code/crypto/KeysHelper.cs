@@ -20,7 +20,7 @@ using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Generators;
 using Org.BouncyCastle.Asn1.Pkcs;
-using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.Asn1.X9;
 using Org.BouncyCastle.Asn1.X509;
 
 
@@ -57,20 +57,38 @@ namespace commercio.sdk
             SecureRandom secureRandom = _getSecureRandom();
             RsaKeyGenerationParameters keyGenerationParameters = new RsaKeyGenerationParameters(new BigInteger("65537", 10), secureRandom, bytes, 5);
 
-            var keyPairGenerator = new RsaKeyPairGenerator();
+            RsaKeyPairGenerator keyPairGenerator = new RsaKeyPairGenerator();
             keyPairGenerator.Init(keyGenerationParameters);
             AsymmetricCipherKeyPair rsaKeys = keyPairGenerator.GenerateKeyPair();
             RsaKeyParameters rsaPubRaw = (RsaKeyParameters)rsaKeys.Public;
-            RsaPrivateCrtKeyParameters rsaPrivRaw = (RsaPrivateCrtKeyParameters)rsaKeys.Private;
+            RsaKeyParameters rsaPrivRaw = (RsaKeyParameters)rsaKeys.Private;
             // Recreate the structure from raw data
-            RsaPublicKeyStructure rsaPub = new RsaPublicKeyStructure(rsaPubRaw.Modulus, rsaPubRaw.Exponent);
+            // RsaPublicKeyStructure rsaPub = new RsaPublicKeyStructure(rsaPubRaw.Modulus, rsaPubRaw.Exponent);
             // No documentation here ... hope the sequence is correct
-            RsaPrivateKeyStructure rsaPriv = new RsaPrivateKeyStructure(rsaPrivRaw.Modulus, rsaPrivRaw.PublicExponent, rsaPrivRaw.Exponent, rsaPrivRaw.P, rsaPrivRaw.Q, rsaPrivRaw.DP, rsaPrivRaw.DQ, rsaPrivRaw.QInv);
+            // RsaPrivateKeyStructure rsaPriv = new RsaPrivateKeyStructure(rsaPrivRaw.Modulus, rsaPrivRaw.PublicExponent, rsaPrivRaw.Exponent, rsaPrivRaw.P, rsaPrivRaw.Q, rsaPrivRaw.DP, rsaPrivRaw.DQ, rsaPrivRaw.QInv);
             // Return the key
-            return new KeyPair( new RSAPublicKey(rsaPub), new RSAPrivateKey(rsaPriv) );
+            return new KeyPair( new RSAPublicKey(rsaPubRaw), new RSAPrivateKey(rsaPrivRaw) );
         }
 
+        /// Generates a new random EC key pair.
+        // public static async Task<KeyPair<ECPublicKey, ECPrivateKey>> generateEcKeyPair()
+        public static KeyPair generateEcKeyPair()
+        {
+            var curve = ECNamedCurveTable.GetByName("secp256k1");
+            ECDomainParameters domainParams = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H, curve.GetSeed());
 
+            SecureRandom secureRandom = _getSecureRandom();
+            var keyParams = new ECKeyGenerationParameters(domainParams, secureRandom);
+            var generator = new ECKeyPairGenerator("ECDSA");
+            generator.Init(keyParams);
+            var keyPair = generator.GenerateKeyPair();
+
+            ECPrivateKeyParameters privateKey = keyPair.Private as ECPrivateKeyParameters;
+            ECPublicKeyParameters publicKey = keyPair.Public as ECPublicKeyParameters;
+
+            return new KeyPair(new ECPublicKey(publicKey), new ECPrivateKey(privateKey));
+        }
+               
         #endregion
 
         #region Helpers

@@ -32,24 +32,26 @@ namespace commercio.sdk
         /// Reads the given [pemString] as a PEM-encoded RSA public key, returning
         /// the object representing the key itself.
         /// The aprroach is quite different from Dart code, we let Bouncycatle do all the work...
-        public static RsaPublicKeyStructure parsePublicKeyFromPem(String pemString)
+        public static RsaKeyParameters parsePublicKeyFromPem(String pemString)
         {
-            RsaPublicKeyStructure publicKeyStructure = null;
+            // RsaPublicKeyStructure publicKeyStructure = null;
+            RsaKeyParameters publicKeyParameter = null;
 
             TextReader sr = new StringReader(pemString);
             PemReader sslReader = new PemReader(sr);
             Object readObj = sslReader.ReadObject();
             if (readObj is RsaKeyParameters)
             {
-                RsaKeyParameters publicKeyParameter = (RsaKeyParameters)readObj;
-                publicKeyStructure = new RsaPublicKeyStructure(publicKeyParameter.Modulus, publicKeyParameter.Exponent);
+                publicKeyParameter = (RsaKeyParameters) readObj;
+                // publicKeyStructure = new RsaPublicKeyStructure(publicKeyParameter.Modulus, publicKeyParameter.Exponent);
             }
             else
             {
                 System.ArgumentException argEx = new System.ArgumentException($"Cannot parse RSA public key - input PEM is: {pemString}");
                 throw argEx;
             }
-            return publicKeyStructure;
+            // return publicKeyStructure;
+            return publicKeyParameter;
         }
 
         #endregion
