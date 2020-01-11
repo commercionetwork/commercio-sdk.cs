@@ -27,7 +27,8 @@ namespace commercio.sdk
     {
         #region Properties
 
-        public AsymmetricCipherKeyPair Keys { get; private set; }
+        public AsymmetricKeyParameter pubkey { get; private set; }
+        public AsymmetricKeyParameter privkey { get; private set; }
         private readonly Pkcs1Encoding _engine;
 
         #endregion
@@ -50,16 +51,24 @@ namespace commercio.sdk
         // Init with a random key
         public RSAcoder(int Strength)
         {
-            Keys = GenerateKeys(Strength);
+            AsymmetricCipherKeyPair keys = GenerateKeys(Strength);
+            this.pubkey = keys.Public;
+            this.privkey = keys.Private;
             _engine = new Pkcs1Encoding(new RsaEngine());
         }
 
         public RSAcoder(AsymmetricKeyParameter key)
         {
-            if (key.IsPrivate)
-                Keys = new AsymmetricCipherKeyPair(null, key);
+            if (key.IsPrivate == false)
+            {
+                this.pubkey = key;
+                this.privkey = null;
+            }
             else
-                Keys = new AsymmetricCipherKeyPair(key, null);
+            {
+                this.privkey = key;
+                this.pubkey = null;
+            }
             _engine = new Pkcs1Encoding(new RsaEngine());
         }
 
@@ -79,16 +88,16 @@ namespace commercio.sdk
 
         public byte[] Encrypt(byte[] buffer, int offSet, int length)
         {
-            if (Keys.Public != null)
-                return RsaProcessor(buffer, offSet, length, Keys.Public);
+            if (pubkey != null)
+                return RsaProcessor(buffer, offSet, length, pubkey);
             else
                 return null;
         }
 
         public byte[] Decrypt(byte[] buffer, int offSet, int length)
         {
-            if (Keys.Private != null)
-                return RsaProcessor(buffer, offSet, length, Keys.Private);
+            if (privkey != null)
+                return RsaProcessor(buffer, offSet, length, privkey);
             else
                 return null;
         }

@@ -47,44 +47,44 @@ namespace commercio.sdk
         }
 
         /// Encrypts the given [data] with AES using the specified [key].
-        static byte[] encryptStringWithAes(String data, KeyParameter key)
+        public static byte[] encryptStringWithAes(String data, KeyParameter key)
         {
             AEScoder coder = new AEScoder(key);
             return coder.encode(System.Text.Encoding.UTF8.GetBytes(data));
         }
 
         /// Encrypts the given [data] with AES using the specified [key].
-        static byte[] encryptBytesWithAes(byte[] data, KeyParameter key)
+        public static byte[] encryptBytesWithAes(byte[] data, KeyParameter key)
         {
             AEScoder coder = new AEScoder(key);
             return coder.encode(data);
         }
 
         /// Decrypts the given [data] with AES using the specified [key].
-        static byte[] decryptWithAes(byte[] data, KeyParameter key)
+        public static byte[] decryptWithAes(byte[] data, KeyParameter key)
         {
             AEScoder coder = new AEScoder(key);
-            return coder.encode(data);
+            return coder.decode(data);
         }
 
         /// Encrypts the given [data] with RSA using the specified [key].
-        static byte[] encryptStringWithRsa(String data, RSAPublicKey key)
+        public static byte[] encryptStringWithRsa(String data, PublicKey key)
         {
-            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) key.pubKey);
+            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) ((RSAPublicKey)key).pubKey);
             return coder.Encrypt(System.Text.Encoding.UTF8.GetBytes(data));
         }
 
         /// Encrypts the given [data] with RSA using the specified [key].
-        static byte[] encryptBytesWithRsa(byte[] data, RSAPublicKey key)
+        public static byte[] encryptBytesWithRsa(byte[] data, PublicKey key)
         {
-            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) key.pubKey);
+            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter)((RSAPublicKey)key).pubKey);
             return coder.Encrypt(data);
         }
 
         /// Decrypts the given data using the specified private [key].
-        static byte[] decryptBytesWithRsa(byte[] data, RSAPrivateKey key)
+        public static byte[] decryptBytesWithRsa(byte[] data, PrivateKey key)
         {
-            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter) key.secretKey);
+            RSAcoder coder = new RSAcoder((AsymmetricKeyParameter)((RSAPrivateKey)key).secretKey);
             return coder.Decrypt(data);
         }
 

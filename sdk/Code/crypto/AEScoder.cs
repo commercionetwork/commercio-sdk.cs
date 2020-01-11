@@ -20,6 +20,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Security;
 
 
 
@@ -40,8 +41,7 @@ namespace commercio.sdk
 
         #region Properties
 
-        // public AESMode mode { get;  }
-        public PrivateKey key { get;  }
+        public KeyParameter key { get;  }
 
         private readonly BufferedBlockCipher _wkCipher;
 
@@ -52,14 +52,13 @@ namespace commercio.sdk
         // Coder init
         public AEScoder(KeyParameter Aeskey)
         {
-            byte[] iv = new byte[16];
             // Works in EBC/PKCS7 only!
             // setup AES cipher in ECB mode with PKCS7 padding
             AesEngine engine = new AesEngine();
             _wkCipher = new PaddedBufferedBlockCipher(engine, new Pkcs7Padding()); //Default scheme is PKCS7
-            ParametersWithIV keyParamWithIV = new ParametersWithIV(Aeskey, iv, 0, 16);
+            // _wkCipher = (BufferedBlockCipher) CipherUtilities.GetCipher("AES/ECB/PKCS7Padding");
+            this.key = Aeskey;
             _wkCipher.Reset();
-            _wkCipher.Init(true, keyParamWithIV);
         }
 
 
@@ -70,6 +69,17 @@ namespace commercio.sdk
         // Encrypt/decrypt using the given key
         public byte[] encode(byte[] data)
         {
+            _wkCipher.Init(true, this.key);
+            byte[] outputBytes = new byte[_wkCipher.GetOutputSize(data.Length)];
+            int length = _wkCipher.ProcessBytes(data, outputBytes, 0);
+            _wkCipher.DoFinal(outputBytes, length); //Do the final block
+            return outputBytes;
+        }
+
+        // Encrypt/decrypt using the given key
+        public byte[] decode(byte[] data)
+        {
+            _wkCipher.Init(false, this.key);
             byte[] outputBytes = new byte[_wkCipher.GetOutputSize(data.Length)];
             int length = _wkCipher.ProcessBytes(data, outputBytes, 0);
             _wkCipher.DoFinal(outputBytes, length); //Do the final block
