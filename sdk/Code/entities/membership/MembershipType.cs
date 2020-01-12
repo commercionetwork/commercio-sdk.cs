@@ -13,7 +13,7 @@ using System.Text;
 
 namespace commercio.sdk
 {
-    enum MembershipType
+    public enum MembershipType
     {
         BRONZE,
         SILVER,

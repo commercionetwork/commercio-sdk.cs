@@ -5,26 +5,61 @@
 // Dec. 30, 2019
 // BlockIt s.r.l.
 // 
+/// Represents the transaction message that must be used when wanting to buy a membership.
 //
 
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class MsgBuyMembership
+    public class MsgBuyMembership : StdMsg
     {
         #region Properties
+        public MembershipType membershipType { get; private set; }
+        public String buyerDid { get; private set; }
+
+        // The override of the value getter is mandatory to obtain a correct codified Json
+        public new Dictionary<String, Object> value
+        {
+            get
+            {
+                return _toJson();
+            }
+        }
+
         #endregion
 
         #region Constructors
+
+        /// Public constructor.
+        public MsgBuyMembership(MembershipType membershipType, String buyerDid)
+        {
+            // Trace.Assert(membershipType != null);
+            Trace.Assert(buyerDid != null);
+            // Assigns the properties
+            this.membershipType = membershipType;
+            this.buyerDid = buyerDid;
+            base.setProperties("commercio/MsgBuyMembership", _toJson());
+        }
+
         #endregion
 
         #region Public Methods
         #endregion
 
         #region Helpers
+
+        private Dictionary<String, Object> _toJson()
+        {
+            Dictionary<String, Object> wk = new Dictionary<String, Object>();
+            wk.Add("membership_type", (Enum.GetName(typeof(MembershipType), this.membershipType)).ToLower()); 
+            wk.Add("buyer", this.buyerDid);
+            return wk;
+        }
         #endregion
     }
 }

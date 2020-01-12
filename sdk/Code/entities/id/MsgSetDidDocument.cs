@@ -5,26 +5,58 @@
 // Dec. 30, 2019
 // BlockIt s.r.l.
 // 
+/// Message that must be used when setting a Did document.
 //
 
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Diagnostics;
+using commercio.sacco.lib;
+
 
 namespace commercio.sdk
 {
-    public class MsgSetDidDocument
+    public class MsgSetDidDocument : StdMsg
     {
         #region Properties
+        public DidDocument didDocument { get; private set; }
+
+        // The override of the value getter is mandatory to obtain a correct codified Json
+        public new Dictionary<String, Object> value
+        {
+            get
+            {
+                return _toJson();
+            }
+        }
+
         #endregion
 
         #region Constructors
+
+        /// Public constructor.
+        public MsgSetDidDocument(DidDocument didDocument)
+        {
+            Trace.Assert(didDocument != null);
+            // Assigns the properties
+            this.didDocument = didDocument;
+            base.setProperties("commercio/MsgSetIdentity", _toJson());
+        }
+
         #endregion
 
         #region Public Methods
         #endregion
 
         #region Helpers
+
+        private Dictionary<String, Object> _toJson()
+        {
+            Dictionary<String, Object> wk = this.didDocument.toJson();
+            return wk;
+        }
         #endregion
     }
 }

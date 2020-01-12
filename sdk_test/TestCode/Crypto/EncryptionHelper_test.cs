@@ -19,7 +19,7 @@ namespace commercio.sdk_test
 
         public EncryptionHelper_test()
         {
-            aesKey = new KeyParameter(System.Text.Encoding.UTF8.GetBytes(@"Xn2r5u8x/A?D(G+KbPdSgVkYp3s6v9y$"));
+            aesKey = new KeyParameter(Encoding.UTF8.GetBytes(@"Xn2r5u8x/A?D(G+KbPdSgVkYp3s6v9y$"));
         }
 
         [TestMethod]
@@ -49,7 +49,7 @@ namespace commercio.sdk_test
             Assert.IsTrue(String.Equals(expectedResult, hexResult, StringComparison.InvariantCultureIgnoreCase));
 
             byte[] decodeResult = EncryptionHelper.decryptWithAes(result, aesKey);
-            String decodeStrResult = System.Text.Encoding.UTF8.GetString(decodeResult);
+            String decodeStrResult = Encoding.UTF8.GetString(decodeResult);
 
             Assert.IsTrue(String.Equals(decodeStrResult, originalData, StringComparison.InvariantCultureIgnoreCase));
 
@@ -64,7 +64,7 @@ namespace commercio.sdk_test
             byte[] DataToBeDecoded = HexEncDec.StringToByteArray(originalData);
 
             byte[] byteResult = EncryptionHelper.decryptWithAes(DataToBeDecoded, aesKey);
-            String result = System.Text.Encoding.UTF8.GetString(byteResult);
+            String result = Encoding.UTF8.GetString(byteResult);
 
             Assert.IsTrue(String.Equals(expectedResult, result, StringComparison.InvariantCulture));
         }
@@ -79,7 +79,7 @@ namespace commercio.sdk_test
             byte[] dataEncoded = EncryptionHelper.encryptStringWithRsa(originalData, keys.publicKey);
 
             byte[] dataDecoded = EncryptionHelper.decryptBytesWithRsa(dataEncoded, keys.privateKey);
-            String decodedData = System.Text.Encoding.UTF8.GetString(dataDecoded);
+            String decodedData = Encoding.UTF8.GetString(dataDecoded);
 
             Assert.IsTrue(String.Equals(originalData, decodedData, StringComparison.InvariantCulture));
         }
@@ -94,7 +94,7 @@ namespace commercio.sdk_test
             byte[] dataEncoded = EncryptionHelper.encryptBytesWithRsa(encodedOriginal, keys.publicKey);
 
             byte[] dataDecoded = EncryptionHelper.decryptBytesWithRsa(dataEncoded, keys.privateKey);
-            String decodedData = System.Text.Encoding.UTF8.GetString(dataDecoded);
+            String decodedData = Encoding.UTF8.GetString(dataDecoded);
 
             Assert.IsTrue(String.Equals(originalData, decodedData, StringComparison.InvariantCulture));
         }
