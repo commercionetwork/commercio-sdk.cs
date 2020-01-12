@@ -4,7 +4,7 @@
 // Riccardo Costacurta
 // Dec. 30, 2019
 // BlockIt s.r.l.
-// 
+//
 //
 
 using System;
@@ -26,5 +26,9 @@ namespace commercio.sdk
 
         #region Helpers
         #endregion
+
+/*
+ *
+*/
     }
 }
