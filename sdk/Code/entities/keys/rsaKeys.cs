@@ -17,18 +17,18 @@ using Org.BouncyCastle.Asn1.Pkcs;
 
 namespace commercio.sdk
 {
-    /// Wrapper of the pointyCastle ECPublicKey
+    /// Wrapper of the pointyCastle RSAPublicKey
     public class RSAPublicKey : PublicKey
     {
         #region Properties
 
-        public RsaPublicKeyStructure pubKey { get; set; }
+        public RsaKeyParameters pubKey { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public RSAPublicKey(RsaPublicKeyStructure ecPublicKey)
+        public RSAPublicKey(RsaKeyParameters ecPublicKey)
         {
             this.pubKey = ecPublicKey;
         }
@@ -41,7 +41,7 @@ namespace commercio.sdk
         {
             Asn1EncodableVector asn1Vect = new Asn1EncodableVector();
             asn1Vect.Add(new DerInteger(this.pubKey.Modulus));
-            asn1Vect.Add(new DerInteger(this.pubKey.PublicExponent));
+            asn1Vect.Add(new DerInteger(this.pubKey.Exponent));
             DerSequence sequence = new DerSequence(asn1Vect);
             return sequence.GetEncoded();
         }
@@ -59,13 +59,13 @@ namespace commercio.sdk
     {
         #region Properties
 
-        public RsaPrivateKeyStructure secretKey { get; set; }
+        public RsaKeyParameters secretKey { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public RSAPrivateKey(RsaPrivateKeyStructure ecSecretKey)
+        public RSAPrivateKey(RsaKeyParameters ecSecretKey)
         {
             this.secretKey = ecSecretKey;
         }
