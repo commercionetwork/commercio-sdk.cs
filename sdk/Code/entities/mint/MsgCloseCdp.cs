@@ -9,10 +9,9 @@
 /// to close a previously opened Collateralized Debt position to get
 /// back the Commercio Tokens that have been locked with it.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Diagnostics;
 using commercio.sacco.lib;
 
@@ -25,7 +24,7 @@ namespace commercio.sdk
         public int timeStamp { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
-        public new Dictionary<String, Object> value
+        public override Dictionary<String, Object> value
         {
             get
             {

@@ -7,7 +7,6 @@
 // 
 /// Allows to easily parse a PEM-encoded RSA public key.
 //
-
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -15,7 +14,6 @@ using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Crypto.Parameters;
-
 
 namespace commercio.sdk
 {

@@ -7,13 +7,9 @@
 // 
 /// Wrapper of the pointyCastle RSAPublicKey
 //
-
 using System;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1.Pkcs;
-
 
 namespace commercio.sdk
 {

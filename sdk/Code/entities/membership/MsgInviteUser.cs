@@ -11,13 +11,11 @@
 /// able to get a reward based on your current membership and the type
 /// he has bought.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Diagnostics;
 using commercio.sacco.lib;
-
 
 namespace commercio.sdk
 {
@@ -28,7 +26,7 @@ namespace commercio.sdk
         public String senderDid { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
-        public new Dictionary<String, Object> value
+        public override Dictionary<String, Object> value
         {
             get
             {

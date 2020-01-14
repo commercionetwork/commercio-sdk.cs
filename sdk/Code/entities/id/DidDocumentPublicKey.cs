@@ -86,7 +86,7 @@ namespace commercio.sdk
                     else
                     {
                         // Error - We cannot recognizee the key type
-                        System.ArgumentException argEx = new System.ArgumentException($"Unsupported key type value ${keyValue} - Supported types: {String.Join(',', (new List<String>(didDocumentPubKeyType.Values)))} ");
+                        System.ArgumentException argEx = new System.ArgumentException($"Unsupported key type value {keyValue} - Supported types: {String.Join(',', (new List<String>(didDocumentPubKeyType.Values)))} ");
                         throw argEx;
                     }
                 }

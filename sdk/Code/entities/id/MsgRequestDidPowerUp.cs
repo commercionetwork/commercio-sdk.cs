@@ -8,10 +8,9 @@
 /// Represents the transaction message that should be used when asking
 /// for a private Did power up.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using commercio.sacco.lib;
@@ -27,7 +26,7 @@ namespace commercio.sdk
         public String encryptionKey { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
-        public new Dictionary<String, Object> value
+        public override Dictionary<String, Object> value
         {
             get
             {

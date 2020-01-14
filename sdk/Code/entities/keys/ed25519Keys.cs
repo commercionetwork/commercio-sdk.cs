@@ -7,7 +7,6 @@
 // 
 ///Wrapper of the Ed25519_hd_key
 //
-
 using System;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;

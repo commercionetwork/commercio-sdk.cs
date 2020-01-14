@@ -7,13 +7,11 @@
 // 
 /// Allows to easily perform signature-related operations.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using commercio.sacco.lib;
 using Newtonsoft.Json;
-
 
 namespace commercio.sdk
 {

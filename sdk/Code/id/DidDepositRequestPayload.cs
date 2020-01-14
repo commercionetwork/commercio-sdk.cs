@@ -9,8 +9,8 @@
 /// inside a [MsgRequestDidDeposit] as its payload.
 //
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
 

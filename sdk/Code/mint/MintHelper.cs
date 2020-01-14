@@ -5,26 +5,79 @@
 // Dec. 30, 2019
 // BlockIt s.r.l.
 // 
+/// Allows to easily perform CommercioMINT related transactions.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
     public class MintHelper
     {
-            #region Properties
-            #endregion
+        #region Properties
+        #endregion
 
-            #region Constructors
-            #endregion
+        #region Constructors
+        #endregion
 
-            #region Public Methods
-            #endregion
+        #region Public Methods
 
-            #region Helpers
-            #endregion
+        /// Opens a new CDP depositing the given Commercio Token [amount].
+        public static async Task<TransactionResult> openCdp(int amount, Wallet wallet)
+        {
+            MsgOpenCdp msg = new MsgOpenCdp(
+                depositAmount: new List<StdCoin> { new StdCoin("ucommercio", (amount * 1000000).ToString()) },
+                signerDid: wallet.bech32Address
+            );
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
         }
+
+        /// Closes the CDP having the given [timestamp].
+        public static async Task<TransactionResult> closeCdp(int timestamp, Wallet wallet)
+        {
+            MsgCloseCdp msg = new MsgCloseCdp(
+                timeStamp: timestamp,
+                signerDid: wallet.bech32Address
+            );
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+        }
+
+        #endregion
+
+        #region Helpers
+        #endregion
+
+    /*
+    class MintHelper {
+      /// Opens a new CDP depositing the given Commercio Token [amount].
+      static Future<TransactionResult> openCdp(int amount, Wallet wallet) {
+        final msg = MsgOpenCdp(
+          depositAmount: [
+            StdCoin(
+              denom: "ucommercio",
+              amount: (amount * 1000000).toString(),
+            )
+          ],
+          signerDid: wallet.bech32Address,
+        );
+        return TxHelper.createSignAndSendTx([msg], wallet);
+      }
+
+      /// Closes the CDP having the given [timestamp].
+      static Future<TransactionResult> closeCdp(int timestamp, Wallet wallet) {
+        final msg = MsgCloseCdp(
+          timeStamp: timestamp,
+          signerDid: wallet.bech32Address,
+        );
+        return TxHelper.createSignAndSendTx([msg], wallet);
+      }
+    }
+
+    */
+}
 }

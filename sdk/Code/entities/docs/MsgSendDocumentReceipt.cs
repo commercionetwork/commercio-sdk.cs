@@ -8,11 +8,10 @@
 /// Message that should be used when wanting to send a document
 /// receipt transaction.
 //
-
 using System;
+using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -24,7 +23,7 @@ namespace commercio.sdk
         public CommercioDocReceipt receipt { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
-        public new Dictionary<String, Object> value
+        public override Dictionary<String, Object> value
         {
             get
             {

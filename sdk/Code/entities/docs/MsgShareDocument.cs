@@ -6,11 +6,10 @@
 // BlockIt s.r.l.
 // 
 //
-
 using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -22,7 +21,7 @@ namespace commercio.sdk
         public CommercioDoc document { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
-        public new Dictionary<String, Object> value
+        public override Dictionary<String, Object> value
         {
             get
             {
@@ -35,9 +34,9 @@ namespace commercio.sdk
         #region Constructors
 
         /// Public constructor.
-        public MsgShareDocument(CommercioDocReceipt receipt)
+        public MsgShareDocument(CommercioDoc document)
         {
-            Trace.Assert(receipt != null);
+            Trace.Assert(document != null);
             // Assigns the properties
             this.document = document;
             base.setProperties("commercio/MsgShareDocument", _toJson());

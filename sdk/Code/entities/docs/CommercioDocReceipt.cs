@@ -9,11 +9,10 @@
 /// the given [documentUuid] present inside the transaction with has [txHash]
 /// and sent by [recipientDid] has been received from the [senderDid].
 //
-
 using System;
+using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace commercio.sdk

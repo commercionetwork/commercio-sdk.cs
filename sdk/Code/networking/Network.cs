@@ -9,13 +9,13 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -24,7 +24,7 @@ namespace commercio.sdk
         #region Properties
 
         // Use static HttpClient to avoid exhausting system resources for network connections.
-        private static HttpClient client = new HttpClient();
+        public static HttpClient client = new HttpClient();
 
         #endregion
 
@@ -37,20 +37,24 @@ namespace commercio.sdk
         /// or `null` if some error raised.
         public static async Task<Object> queryChain(String url)
         {
+            Object outValue = null;
             try
             {
                 // Get the response
                 HttpResponseMessage response = await client.GetAsync(url);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    System.ArgumentException argEx = new System.ArgumentException($"Expected status code OK (200) but got ${response.StatusCode} - ${response.ReasonPhrase} - ${response.Content}");
+                    System.ArgumentException argEx = new System.ArgumentException($"Expected status code OK (200) but got {response.StatusCode} - {response.ReasonPhrase} - {response.Content}");
                     throw argEx;
                 }
                 // Convert the response
                 String encodedJson = await response.Content.ReadAsStringAsync();
-                Dictionary<String, Object> json = JsonConvert.DeserializeObject<Dictionary<String, Object>>(encodedJson);
+                // Dictionary<String, Object> json = JsonConvert.DeserializeObject<Dictionary<String, Object>>(encodedJson);
                 // Return the result part of the response
-                json.TryGetValue("result", out Object outValue);
+                // json.TryGetValue("result", out Object outValue);
+                JObject json = JObject.Parse(encodedJson);
+                JArray jArray = (JArray)json["result"];
+                outValue = jArray.ToObject<List<Dictionary<String, Object>>>();
                 return outValue;
             }
             catch (Exception e)
@@ -71,7 +75,7 @@ namespace commercio.sdk
                 HttpResponseMessage response = await client.GetAsync(url);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
-                    System.ArgumentException argEx = new System.ArgumentException($"Expected status code OK (200) but got ${response.StatusCode} - ${response.ReasonPhrase} - ${response.Content}");
+                    System.ArgumentException argEx = new System.ArgumentException($"Expected status code OK (200) but got {response.StatusCode} - {response.ReasonPhrase} - {response.Content}");
                     throw argEx;
                 }
                 // Convert the response

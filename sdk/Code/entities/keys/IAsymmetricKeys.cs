@@ -7,10 +7,9 @@
 // 
 // Interfaces for asymmetric public and private keys
 // 
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 
 namespace commercio.sdk
 {

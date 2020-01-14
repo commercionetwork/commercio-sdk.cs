@@ -94,5 +94,27 @@ namespace sdk_test.TestResources {
                 return ResourceManager.GetString("RSAPublicText", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a {
+        ///  &quot;height&quot;: &quot;0&quot;,
+        ///  &quot;result&quot;: [
+        ///    {
+        ///      &quot;sender&quot;: &quot;did:com:1zfhgwfgex8rc9t00pk6jm6xj6vx5cjr4ngy32v&quot;,
+        ///      &quot;recipient&quot;: &quot;did:com:1g5cxz9p7dqux80sw5tljwg2pwz6x7zlq84km56&quot;,
+        ///      &quot;uuid&quot;: &quot;6a881ef0-04da-4524-b7ca-6e5e3b7e61dc&quot;,
+        ///      &quot;metadata&quot;: {
+        ///        &quot;content_uri&quot;: &quot;https://www.vargroup.it/managed-security-services/&quot;,
+        ///        &quot;schema_type&quot;: &quot;&quot;,
+        ///        &quot;schema&quot;: {
+        ///          &quot;uri&quot;: &quot;https://www.vargroup.it/managed-security-services/metadata/schema&quot;,
+        ///          &quot;version&quot;: &quot;1.0.0&quot;
+        ///        }, [stringa troncata]&quot;;.
+        /// </summary>
+        internal static string SentDocumentResponseJson {
+            get {
+                return ResourceManager.GetString("SentDocumentResponseJson", resourceCulture);
+            }
+        }
     }
 }

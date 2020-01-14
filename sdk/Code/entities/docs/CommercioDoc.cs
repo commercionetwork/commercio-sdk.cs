@@ -8,13 +8,11 @@
 /// Contains all the data related to a document that is sent to the chain when
 /// a user wants to share a document with another user.
 //
-
 using System;
+using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
-
 
 namespace commercio.sdk
 {

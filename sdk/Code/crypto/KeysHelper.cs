@@ -9,9 +9,8 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto;
@@ -19,11 +18,7 @@ using Org.BouncyCastle.Crypto.Prng;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Asn1.X9;
-using Org.BouncyCastle.Asn1.X509;
-
-
 
 namespace commercio.sdk
 {
@@ -52,7 +47,7 @@ namespace commercio.sdk
 
         /// Generates a new RSA key pair having the given [bytes] length.
         /// If no length is specified, the default is going to be 2048.
-        // public static async Task<KeyPair<RSAPublicKey, RSAPrivateKey>> generateRsaKeyPair(int bytes = 2048)
+        // public static async Task<KeyPair> generateRsaKeyPair(int bytes = 2048)
         public static KeyPair generateRsaKeyPair(int bytes = 2048)
         {
             SecureRandom secureRandom = _getSecureRandom();
@@ -72,7 +67,7 @@ namespace commercio.sdk
         }
 
         /// Generates a new random EC key pair.
-        // public static async Task<KeyPair<ECPublicKey, ECPrivateKey>> generateEcKeyPair()
+        // public static async Task<KeyPair> generateEcKeyPair()
         public static KeyPair generateEcKeyPair()
         {
             var curve = ECNamedCurveTable.GetByName("secp256k1");
