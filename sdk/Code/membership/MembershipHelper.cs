@@ -45,33 +45,5 @@ namespace commercio.sdk
         #region Helpers
         #endregion
 
-    /*
-    class MembershipHelper {
-      /// Sends a new transaction in order to invite the given [userDid].
-      static Future<TransactionResult> inviteUser(
-        String userDid,
-        Wallet wallet,
-      ) async {
-        final msg = MsgInviteUser(
-          recipientDid: userDid,
-          senderDid: wallet.bech32Address,
-        );
-        return TxHelper.createSignAndSendTx([msg], wallet);
-      }
-
-      /// Buys the membership with the given [membershipType].
-      static Future<TransactionResult> buyMembership(
-        MembershipType membershipType,
-        Wallet wallet,
-      ) async {
-        final msg = MsgBuyMembership(
-          membershipType: membershipType,
-          buyerDid: wallet.bech32Address,
-        );
-        return TxHelper.createSignAndSendTx([msg], wallet);
-      }
     }
-
-    */
-}
 }

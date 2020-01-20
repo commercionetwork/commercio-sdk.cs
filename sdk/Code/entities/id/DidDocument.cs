@@ -72,7 +72,6 @@ namespace commercio.sdk
             Trace.Assert(publicKeys != null);
             Trace.Assert(authentication != null);
             Trace.Assert(proof != null);
-            Trace.Assert(services != null);
             this.context = context;
             this.id = id;
             this.publicKeys = publicKeys;
