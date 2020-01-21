@@ -6,7 +6,6 @@
 // BlockIt s.r.l.
 // 
 //
-
 using System;
 
 namespace commercio.sdk

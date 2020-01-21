@@ -8,19 +8,14 @@
 /// Commercio network's did document is described here:
 /// https://scw-gitlab.zotsell.com/Commercio.network/Cosmos-application/blob/master/Commercio%20Decentralized%20ID%20framework.md
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Crypto.Parameters;
-
-
-
-
 
 namespace commercio.sdk
 {
@@ -31,7 +26,7 @@ namespace commercio.sdk
     public class DidDocument
     {
         #region Properties
-        [JsonProperty("context")]
+        [JsonProperty("@context")]
         public String context { get; set; }
 
         [JsonProperty("id")]
@@ -77,7 +72,6 @@ namespace commercio.sdk
             Trace.Assert(publicKeys != null);
             Trace.Assert(authentication != null);
             Trace.Assert(proof != null);
-            Trace.Assert(services != null);
             this.context = context;
             this.id = id;
             this.publicKeys = publicKeys;
@@ -90,7 +84,7 @@ namespace commercio.sdk
         public DidDocument(Dictionary<String, Object> json)
         {
             Object outValue;
-            if (json.TryGetValue("context", out outValue))
+            if (json.TryGetValue("@context", out outValue))
                 this.context = outValue as String;
             if (json.TryGetValue("id", out outValue))
                 this.id = outValue as String;
@@ -113,7 +107,7 @@ namespace commercio.sdk
             Dictionary<String, Object> output;
 
             output = new Dictionary<String, Object>();
-            output.Add("context", this.context);
+            output.Add("@context", this.context);
             output.Add("id", this.id);
             output.Add("publicKey", this.publicKeys?.Select(elem => elem?.toJson()?.ToList()));
             output.Add("authentication", this.authentication);

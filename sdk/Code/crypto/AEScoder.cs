@@ -8,21 +8,12 @@
 /// AES Encryption/Decritpion Engine
 //
 //
-
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text;
-using Org.BouncyCastle.Asn1;
-using Org.BouncyCastle.Asn1.X509;
-using Org.BouncyCastle.Asn1.Pkcs;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Paddings;
 using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Security;
-
-
 
 namespace commercio.sdk
 {

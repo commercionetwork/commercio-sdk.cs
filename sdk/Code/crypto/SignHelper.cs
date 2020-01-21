@@ -7,13 +7,11 @@
 // 
 /// Allows to easily perform signature-related operations.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using commercio.sacco.lib;
 using Newtonsoft.Json;
-
 
 namespace commercio.sdk
 {
@@ -49,21 +47,5 @@ namespace commercio.sdk
         #region Helpers
         #endregion
 
-        /*
-        /// Allows to easily perform signature-related operations.
-        class SignHelper {
-          /// Takes the given [data], converts it to an alphabetically sorted
-          /// JSON object and signs its content using the given [wallet].
-          static Uint8List signSorted(dynamic data, Wallet wallet) {
-            var sorted = data;
-            if (data is Map<String, dynamic>) {
-              sorted = MapSorter.sort(data);
-            }
-
-            return wallet.sign(utf8.encode(json.encode(sorted)));
-          }
-        }
-
-        */
     }
 }

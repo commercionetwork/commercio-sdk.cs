@@ -7,7 +7,6 @@
 // 
 // Wrapper for Bouncycastle EC keys
 //
-
 using System;
 using Org.BouncyCastle.Crypto.Parameters;
 

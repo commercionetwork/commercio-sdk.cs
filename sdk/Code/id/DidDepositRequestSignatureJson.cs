@@ -9,8 +9,8 @@
 /// inside a [DidDepositRequestPayload] as the signature value.
 //
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
 

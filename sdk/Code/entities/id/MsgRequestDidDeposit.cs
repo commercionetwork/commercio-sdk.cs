@@ -9,10 +9,9 @@
 /// when wanting to deposit a specific amount of tokens that can later
 /// be used to power up private DIDs.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using commercio.sacco.lib;
@@ -29,7 +28,7 @@ namespace commercio.sdk
         public String senderDid { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
-        public new Dictionary<String, Object> value
+        public override Dictionary<String, Object> value
         {
             get
             {

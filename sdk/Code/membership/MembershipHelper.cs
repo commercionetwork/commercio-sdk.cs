@@ -5,26 +5,45 @@
 // Dec. 30, 2019
 // BlockIt s.r.l.
 // 
+/// Allows to easily perform CommercioMEMBERSHIP related operations.
 //
-
 using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
     public class MembershipHelper
     {
-            #region Properties
-            #endregion
+        #region Properties
+        #endregion
 
-            #region Constructors
-            #endregion
+        #region Constructors
+        #endregion
 
-            #region Public Methods
-            #endregion
-
-            #region Helpers
-            #endregion
+        #region Public Methods
+        /// Sends a new transaction in order to invite the given [userDid].
+        public static async Task<TransactionResult> inviteUser(String userDid, Wallet wallet)
+        {
+            MsgInviteUser msg = new MsgInviteUser(recipientDid: userDid, senderDid: wallet.bech32Address);
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
         }
+
+        /// Buys the membership with the given [membershipType].
+        public static async Task<TransactionResult> buyMembership(MembershipType membershipType, Wallet wallet)
+        {
+            MsgBuyMembership msg = new MsgBuyMembership(membershipType: membershipType, buyerDid: wallet.bech32Address);
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+        }
+
+        #endregion
+
+        #region Helpers
+        #endregion
+
+    }
 }
