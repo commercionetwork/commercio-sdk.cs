@@ -12,21 +12,24 @@ using System;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace commercio.sdk
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum CommercioDocChecksumAlgorithm
     {
-        [JsonProperty("md5")]
+        [EnumMember(Value = "md5")]
         MD5,
-        [JsonProperty("sha-1")]
+        [EnumMember(Value = "sha-1")]
         SHA1,
-        [JsonProperty("sha-224")]
+        [EnumMember(Value = "sha-224")]
         SHA224,
-        [JsonProperty("sha-384")]
+        [EnumMember(Value = "sha-384")]
         SHA384,
-        [JsonProperty("sha-512")]
+        [EnumMember(Value = "sha-512")]
         SHA512
     }
 
@@ -240,9 +243,9 @@ namespace commercio.sdk
     public class CommercioDocChecksum
     {
         #region Properties
-        [JsonProperty("value")]
+        [JsonProperty("value", Order = 2)]
         public String value { get; set; }
-        [JsonProperty("algorithm")]
+        [JsonProperty("algorithm", Order = 1)]
         public CommercioDocChecksumAlgorithm algorithm { get; set; }
 
         #endregion
