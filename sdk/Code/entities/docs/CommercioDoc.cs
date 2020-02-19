@@ -143,8 +143,10 @@ namespace commercio.sdk
                             String schemaType)
         {
             Trace.Assert(contentUri != null);
-            Trace.Assert(schema != null);
-            Trace.Assert(!String.IsNullOrEmpty(schemaType));
+            //Trace.Assert(schema != null);
+            // Trace.Assert(!String.IsNullOrEmpty(schemaType));
+            Trace.Assert(schemaType != null);
+            Trace.Assert((schema != null) || (!String.IsNullOrEmpty(schemaType)));
             this.contentUri = contentUri;
             this.schema = schema;
             this.schemaType = schemaType;
