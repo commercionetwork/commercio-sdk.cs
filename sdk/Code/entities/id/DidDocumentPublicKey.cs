@@ -11,17 +11,20 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace commercio.sdk
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum DidDocumentPubKeyType
     {
-        [JsonProperty("RsaVerificationKey2018")]
+        [EnumMember(Value = "RsaVerificationKey2018")]
         RSA,
-        [JsonProperty("Ed25519VerificationKey2018")]
+        [EnumMember(Value = "Ed25519VerificationKey2018")]
         ED25519,
-        [JsonProperty("Secp256k1VerificationKey2018")]
+        [EnumMember(Value = "Secp256k1VerificationKey2018")]
         SECP256K1
     }
 
