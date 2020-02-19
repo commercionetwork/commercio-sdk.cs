@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Axe.SimpleHttpMock" Version="1.0.2" />
-    <PackageReference Include="commercio.sacco.lib" Version="0.1.0" />
+    <PackageReference Include="CompareNETObjects" Version="4.65.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
@@ -16,6 +16,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\sdk\sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="commercio.sacco.lib">
+      <HintPath>..\..\sacco.cs\sacco\bin\Debug\netcoreapp2.1\commercio.sacco.lib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
