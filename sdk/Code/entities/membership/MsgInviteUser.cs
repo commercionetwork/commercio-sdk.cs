@@ -16,13 +16,17 @@ using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using commercio.sacco.lib;
+using Newtonsoft.Json;
+
 
 namespace commercio.sdk
 {
     public class MsgInviteUser : StdMsg
     {
         #region Properties
+        [JsonProperty("recipientDid", Order = 1)]
         public String recipientDid { get; private set; }
+        [JsonProperty("senderDid", Order = 2)]
         public String senderDid { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json

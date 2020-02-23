@@ -26,27 +26,28 @@ namespace commercio.sdk
     public class DidDocument
     {
         #region Properties
-        [JsonProperty("@context")]
+        [JsonProperty("@context", Order = 1)]
         public String context { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty("id", Order = 4)]
         public String id { get; set; }
 
-        [JsonProperty("publicKey")]
+        [JsonProperty("publicKey", Order = 6)]
         public List<DidDocumentPublicKey> publicKeys { get; set; }
 
-        [JsonProperty("authentication")]
+        [JsonProperty("authentication", Order = 2)]
         public List<String> authentication { get; set; }
 
-        [JsonProperty("proof")]
+        [JsonProperty("proof", Order = 5)]
         public DidDocumentProof proof { get; set; }
 
-        [JsonProperty("service")]
+        [JsonProperty("service", Order = 7)]
         public List<DidDocumentService> services { get; set; }
 
         /// Returns the [PublicKey] that should be used as the public encryption
         /// key when encrypting data that can later be read only by the owner of
         /// this Did Document.
+        [JsonProperty("encryptionKey", Order = 3)]
         public RSAPublicKey encryptionKey
         {
             get

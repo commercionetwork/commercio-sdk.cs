@@ -12,13 +12,16 @@ using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using commercio.sacco.lib;
+using Newtonsoft.Json;
 
 namespace commercio.sdk
 {
     public class MsgBuyMembership : StdMsg
     {
         #region Properties
+        [JsonProperty("membershipType", Order = 2)]
         public MembershipType membershipType { get; private set; }
+        [JsonProperty("buyerDid", Order = 1)]
         public String buyerDid { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json

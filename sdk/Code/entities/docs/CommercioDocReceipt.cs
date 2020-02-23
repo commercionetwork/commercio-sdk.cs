@@ -22,23 +22,23 @@ namespace commercio.sdk
     public class CommercioDocReceipt
     {
         #region Properties
-        [JsonProperty("uuid")]
+        [JsonProperty("uuid", Order = 6)]
         public String uuid { get; set; }
 
-        [JsonProperty("sender")]
+        [JsonProperty("sender", Order = 4)]
         public String senderDid { get; set; }
 
-        [JsonProperty("recipient")]
+        [JsonProperty("recipient", Order = 3)]
         public String recipientDid { get; set; }
 
-        [JsonProperty("tx_hash")]
+        [JsonProperty("tx_hash", Order = 5)]
         public String txHash { get; set; }
 
-        [JsonProperty("document_uuid")]
+        [JsonProperty("document_uuid", Order = 1)]
         public String documentUuid { get; set; }
 
          /// Optional reading proof
-        [JsonProperty("proof")]
+        [JsonProperty("proof", Order = 2)]
         public String proof { get; set; }
 
         #endregion

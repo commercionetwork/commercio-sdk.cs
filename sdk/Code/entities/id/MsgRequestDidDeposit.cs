@@ -14,6 +14,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -21,10 +22,15 @@ namespace commercio.sdk
     public class MsgRequestDidDeposit : StdMsg
     {
         #region Properties
+        [JsonProperty("recipientDid", Order = 4)]
         public String recipientDid { get; private set; }
+        [JsonProperty("amount", Order = 1)]
         public List<StdCoin> amount { get; private set; }
+        [JsonProperty("depositProof", Order = 2)]
         public String depositProof { get; private set; }
+        [JsonProperty("encryptionKey", Order = 3)]
         public String encryptionKey { get; private set; }
+        [JsonProperty("senderDid", Order = 5)]
         public String senderDid { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json

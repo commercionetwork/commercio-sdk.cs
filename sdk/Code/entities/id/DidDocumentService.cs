@@ -21,13 +21,13 @@ namespace commercio.sdk
     public class DidDocumentService
     {
         #region Properties
-        [JsonProperty("id")]
+        [JsonProperty("id", Order = 2)]
         public String id { get; set; }
 
-        [JsonProperty("type")]
+        [JsonProperty("type", Order = 3)]
         public String type { get; set; }
 
-        [JsonProperty("serviceEndpoint")]
+        [JsonProperty("serviceEndpoint", Order = 1)]
         public String endpoint { get; set; }
 
         #endregion
