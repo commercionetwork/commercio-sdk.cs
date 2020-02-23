@@ -22,10 +22,10 @@ namespace commercio.sdk
     public class DidPowerUpRequestSignatureJson
     {
         #region Properties
-        [JsonProperty("pairwise_did")]
+        [JsonProperty("pairwise_did", Order = 1)]
         public String pairwiseDid { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonProperty("timestamp", Order = 2)]
         public String timeStamp { get; set; }
 
         #endregion

@@ -42,16 +42,16 @@ namespace commercio.sdk
         };
 
         #region Properties
-        [JsonProperty("id")]
+        [JsonProperty("id", Order = 2)]
         public String id { get; set; }
 
-        [JsonProperty("type")]
+        [JsonProperty("type", Order = 4)]
         public DidDocumentPubKeyType type { get; set; }
 
-        [JsonProperty("controller")]
+        [JsonProperty("controller", Order = 1)]
         public String controller { get; set; }
 
-        [JsonProperty("publicKeyHex")]
+        [JsonProperty("publicKeyHex", Order = 3)]
         public String publicKeyHex { get; set; }
 
         #endregion

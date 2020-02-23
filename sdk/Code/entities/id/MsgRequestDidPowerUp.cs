@@ -13,6 +13,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -20,9 +21,13 @@ namespace commercio.sdk
     public class MsgRequestDidPowerUp : StdMsg
     {
         #region Properties
+        [JsonProperty("claimantDid", Order = 2)]
         public String claimantDid { get; private set; }
+        [JsonProperty("amount", Order = 1)]
         public List<StdCoin> amount { get; private set; }
+        [JsonProperty("powerUpProof", Order = 4)]
         public String powerUpProof { get; private set; }
+        [JsonProperty("encryptionKey", Order = 3)]
         public String encryptionKey { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json

@@ -21,10 +21,10 @@ namespace commercio.sdk
     public class DidDepositRequestSignatureJson
     {
         #region Properties
-        [JsonProperty("recipient")]
+        [JsonProperty("recipient", Order = 1)]
         public String recipient { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonProperty("timestamp", Order = 2)]
         public String timeStamp { get; set; }
 
         #endregion

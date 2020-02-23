@@ -12,6 +12,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -19,6 +20,7 @@ namespace commercio.sdk
     public class MsgSetDidDocument : StdMsg
     {
         #region Properties
+        [JsonProperty("didDocument", Order = 1)]
         public DidDocument didDocument { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json

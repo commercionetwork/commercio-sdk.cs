@@ -21,16 +21,16 @@ namespace commercio.sdk
     public class DidDocumentProof
     {
         #region Properties
-        [JsonProperty("type")]
+        [JsonProperty("type", Order = 4)]
         public String type { get; set; }
 
-        [JsonProperty("created")]
+        [JsonProperty("created", Order = 2)]
         public String iso8601creationTimestamp { get; set; }
 
-        [JsonProperty("creator")]
+        [JsonProperty("creator", Order = 1)]
         public String creatorKeyId { get; set; }
 
-        [JsonProperty("signatureValue")]
+        [JsonProperty("signatureValue", Order = 3)]
         public String signatureValue { get; set; }
 
         #endregion

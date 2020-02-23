@@ -38,19 +38,19 @@ namespace commercio.sdk
     public class CommercioDoc
     {
         #region Properties
-        [JsonProperty("sender")]
+        [JsonProperty("sender", Order = 6)]
         public String senderDid { get; set; }
-        [JsonProperty("recipients")]
+        [JsonProperty("recipients", Order = 5)]
         public List<String> recipientDids { get; set; }
-        [JsonProperty("uuid")]
+        [JsonProperty("uuid", Order = 7)]
         public String uuid { get; set; }
-        [JsonProperty("content_uri")]
+        [JsonProperty("content_uri", Order = 2)]
         public String contentUri { get; set; }
-        [JsonProperty("metadata")]
+        [JsonProperty("metadata", Order = 4)]
         public CommercioDocMetadata metadata { get; set; }
-        [JsonProperty("checksum")]
+        [JsonProperty("checksum", Order = 1)]
         public CommercioDocChecksum checksum { get; set; }
-        [JsonProperty("encryption_data")]
+        [JsonProperty("encryption_data", Order = 3)]
         public CommercioDocEncryptionData encryptionData { get; set; }
 
         #endregion
@@ -130,11 +130,11 @@ namespace commercio.sdk
     public class CommercioDocMetadata
     {
         #region Properties
-        [JsonProperty("content_uri")]
+        [JsonProperty("content_uri", Order = 1)]
         public String contentUri { get; set; }
-        [JsonProperty("schema")]
+        [JsonProperty("schema", Order = 2)]
         public CommercioDocMetadataSchema schema { get; set; }
-        [JsonProperty("schema_type")]
+        [JsonProperty("schema_type", Order = 3)]
         public String schemaType { get; set; }
 
         #endregion
@@ -192,9 +192,9 @@ namespace commercio.sdk
     public class CommercioDocMetadataSchema
     {
         #region Properties
-        [JsonProperty("uri")]
+        [JsonProperty("uri", Order = 1)]
         public String uri { get; set; }
-        [JsonProperty("version")]
+        [JsonProperty("version", Order = 2)]
         public String version { get; set; }
 
         #endregion
@@ -294,9 +294,9 @@ namespace commercio.sdk
     public class CommercioDocEncryptionData
     {
         #region Properties
-        [JsonProperty("keys")]
+        [JsonProperty("keys", Order = 2)]
         public List<CommercioDocEncryptionDataKey> keys { get; set; }
-        [JsonProperty("encrypted_data")]
+        [JsonProperty("encrypted_data", Order = 1)]
         public List<String> encryptedData { get; set; }
 
         #endregion
@@ -345,9 +345,9 @@ namespace commercio.sdk
     public class CommercioDocEncryptionDataKey
     {
         #region Properties
-        [JsonProperty("recipient")]
+        [JsonProperty("recipient", Order = 1)]
         public String recipientDid { get; set; }
-        [JsonProperty("value")]
+        [JsonProperty("value", Order = 2)]
         public String value { get; set; }
 
         #endregion

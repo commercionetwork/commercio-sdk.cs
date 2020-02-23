@@ -20,16 +20,16 @@ namespace commercio.sdk
     public class DidDocumentProofSignatureContent
     {
         #region Properties
-        [JsonProperty("@context")]
+        [JsonProperty("@context", Order = 1)]
         public String context { get; set; }
 
-        [JsonProperty("id")]
+        [JsonProperty("id", Order = 3)]
         public String did { get; set; }
 
-        [JsonProperty("publicKey")]
+        [JsonProperty("publicKey", Order = 4)]
         public List<DidDocumentPublicKey> publicKeys { get; set; }
 
-        [JsonProperty("authentication")]
+        [JsonProperty("authentication", Order = 2)]
         public List<String> authentication { get; set; }
 
         #endregion

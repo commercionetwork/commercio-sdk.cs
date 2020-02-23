@@ -22,13 +22,13 @@ namespace commercio.sdk
     public class DidPowerUpRequestPayload
     {
         #region Properties
-        [JsonProperty("pairwise_did")]
+        [JsonProperty("pairwise_did", Order = 1)]
         public String pairwiseDid { get; set; }
 
-        [JsonProperty("timestamp")]
+        [JsonProperty("timestamp", Order = 3)]
         public String timeStamp { get; set; }
 
-        [JsonProperty("signature")]
+        [JsonProperty("signature", Order = 2)]
         public String signature { get; set; }
 
         #endregion
