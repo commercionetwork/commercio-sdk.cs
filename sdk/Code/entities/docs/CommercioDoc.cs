@@ -30,7 +30,10 @@ namespace commercio.sdk
         [EnumMember(Value = "sha-384")]
         SHA384,
         [EnumMember(Value = "sha-512")]
-        SHA512
+        SHA512,
+        [EnumMember(Value = "sha-256")]     // RC 20200311 - Added checksum type per user request
+        SHA256,
+
     }
 
     // *** This is inherited by Equatable in Dart Package!
