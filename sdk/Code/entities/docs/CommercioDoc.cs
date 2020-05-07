@@ -27,34 +27,53 @@ namespace commercio.sdk
         SHA1,
         [EnumMember(Value = "sha-224")]
         SHA224,
+        [EnumMember(Value = "sha-256")]     // RC 20200311 - Added checksum type per user request
+        SHA256,
         [EnumMember(Value = "sha-384")]
         SHA384,
         [EnumMember(Value = "sha-512")]
-        SHA512,
-        [EnumMember(Value = "sha-256")]     // RC 20200311 - Added checksum type per user request
-        SHA256,
-
+        SHA512
     }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum CommercioSdnData
+    {
+        [EnumMember(Value = "common_name")]
+        COMMON_NAME,
+        [EnumMember(Value = "surname")]
+        SURNAME,
+        [EnumMember(Value = "serial_number")]
+        SERIAL_NUMBER,
+        [EnumMember(Value = "given_name")]
+        GIVEN_NAME,
+        [EnumMember(Value = "organization")]
+        ORGANIZATION,
+        [EnumMember(Value = "country")]
+        COUNTRY
+    }
+
 
     // *** This is inherited by Equatable in Dart Package!
     //  There is no such Class in C# - we include Compare-Net-Objects Nuget package for the purpose - see https://github.com/GregFinzer/Compare-Net-Objects
     public class CommercioDoc
     {
         #region Properties
-        [JsonProperty("sender", Order = 6)]
+        [JsonProperty("sender", Order = 7)]
         public String senderDid { get; set; }
-        [JsonProperty("recipients", Order = 5)]
+        [JsonProperty("recipients", Order = 6)]
         public List<String> recipientDids { get; set; }
-        [JsonProperty("uuid", Order = 7)]
+        [JsonProperty("uuid", Order = 8)]
         public String uuid { get; set; }
         [JsonProperty("content_uri", Order = 2)]
         public String contentUri { get; set; }
-        [JsonProperty("metadata", Order = 4)]
+        [JsonProperty("metadata", Order = 5)]
         public CommercioDocMetadata metadata { get; set; }
         [JsonProperty("checksum", Order = 1)]
         public CommercioDocChecksum checksum { get; set; }
-        [JsonProperty("encryption_data", Order = 3)]
+        [JsonProperty("encryption_data", Order = 4)]
         public CommercioDocEncryptionData encryptionData { get; set; }
+        [JsonProperty("do_sign", Order = 3)]
+        public CommercioDoSign doSign { get; set; }
 
         #endregion
 
@@ -66,7 +85,8 @@ namespace commercio.sdk
                             String contentUri,
                             CommercioDocMetadata metadata,
                             CommercioDocChecksum checksum,
-                            CommercioDocEncryptionData encryptionData)
+                            CommercioDocEncryptionData encryptionData,
+                            CommercioDoSign doSign = null)
         {
             Trace.Assert(uuid != null);
             Trace.Assert(senderDid != null);
@@ -81,6 +101,7 @@ namespace commercio.sdk
             this.metadata = metadata;
             this.checksum = checksum;
             this.encryptionData = encryptionData;
+            this.doSign = doSign;
         }
 
         // Alternate constructor from Json Dictionary
@@ -101,6 +122,8 @@ namespace commercio.sdk
                 this.checksum = outValue as CommercioDocChecksum;
             if (json.TryGetValue("encryption_data", out outValue))
                 this.encryptionData = outValue as CommercioDocEncryptionData;
+            if (json.TryGetValue("do_sign", out outValue))
+                this.doSign = outValue as CommercioDoSign;
         }
 
         #endregion
@@ -119,6 +142,7 @@ namespace commercio.sdk
             output.Add("metadata", this.metadata);
             output.Add("checksum", this.checksum);
             output.Add("encryption_data", this.encryptionData);
+            output.Add("do_sign", this.doSign);
             return (output);
         }
 
@@ -394,4 +418,73 @@ namespace commercio.sdk
         #endregion
     }
 
+    // *** This is inherited by Equatable in Dart Package!
+    //  There is no such Class in C# - we include Compare-Net-Objects Nuget package for the purpose - see https://github.com/GregFinzer/Compare-Net-Objects
+    public class CommercioDoSign
+    {
+        #region Properties
+        [JsonProperty("storage_uri", Order = 4)]
+        public String storageUri { get; set; }
+        [JsonProperty("signer_instance", Order = 3)]
+        public String signerInstance { get; set; }
+        [JsonProperty("sdn_data", Order = 2)]
+        public List<CommercioSdnData> sdnData { get; set; }
+        [JsonProperty("vcrId", Order = 5)]
+        public String vcrId { get; set; }
+        [JsonProperty("certificateProfile", Order = 1)]
+        public String certificateProfile { get; set; }
+
+        #endregion
+
+        #region Constructors
+        [JsonConstructor]
+        public CommercioDoSign(String storageUri, String signerInstance, List<CommercioSdnData> sdnData, String vcrId, String certificateProfile)
+        {
+            Trace.Assert(storageUri != null);
+            Trace.Assert(signerInstance != null);
+            Trace.Assert(vcrId != null);
+            this.storageUri = storageUri;
+            this.signerInstance = signerInstance;
+            this.sdnData = sdnData;
+            this.vcrId = vcrId;
+            this.certificateProfile = certificateProfile;
+        }
+
+        // Alternate constructor from Json Dictionary
+        public CommercioDoSign(Dictionary<String, Object> json)
+        {
+            Object outValue;
+            if (json.TryGetValue("storage_uri", out outValue))
+                this.storageUri = outValue as String;
+            if (json.TryGetValue("signer_instance", out outValue))
+                this.signerInstance = outValue as String;
+            if (json.TryGetValue("sdn_data", out outValue))
+                this.sdnData = outValue as List<CommercioSdnData>;
+            if (json.TryGetValue("vcrId", out outValue))
+                this.vcrId = vcrId as String;
+            if (json.TryGetValue("certificateProfile", out outValue))
+                this.certificateProfile = outValue as String;
+        }
+
+        #endregion
+
+        #region Public Methods
+        public Dictionary<String, Object> toJson()
+        {
+            Dictionary<String, Object> output;
+
+            output = new Dictionary<String, Object>();
+            output.Add("storage_uri", this.storageUri);
+            output.Add("signer_instance", this.signerInstance);
+            output.Add("sdn_data", this.sdnData);
+            output.Add("vcrId", this.vcrId);
+            output.Add("certificateProfile", this.certificateProfile);
+            return (output);
+        }
+
+        #endregion
+
+        #region Helpers
+        #endregion
+    }
 }

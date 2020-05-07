@@ -49,7 +49,8 @@ namespace commercio.sdk
             Wallet wallet,
             CommercioDocChecksum checksum,
             KeyParameter aesKey,
-            List<EncryptedData> encryptedData = null
+            List<EncryptedData> encryptedData = null,
+            CommercioDoSign doSign = null
         )
         {
             if (encryptedData == null)
@@ -70,7 +71,8 @@ namespace commercio.sdk
                 contentUri: contentUri,
                 metadata: metadata,
                 checksum: checksum,
-                encryptionData: null
+                encryptionData: null,
+                doSign: doSign
             );
 
             // Encrypt its contents, if necessary
@@ -120,7 +122,8 @@ namespace commercio.sdk
             String txHash,
             String documentId,
             Wallet wallet,
-            String proof = ""
+            String proof = "",
+            StdFee fee  = null
         )
         {
             MsgSendDocumentReceipt msg = new MsgSendDocumentReceipt(
@@ -134,7 +137,7 @@ namespace commercio.sdk
                 )
             );
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee : fee);
         }
 
         /// Returns the list of all the [CommercioDocReceipt] that

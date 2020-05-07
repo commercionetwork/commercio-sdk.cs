@@ -25,19 +25,19 @@ namespace commercio.sdk
 
         #region Public Methods
         /// Sends a new transaction in order to invite the given [userDid].
-        public static async Task<TransactionResult> inviteUser(String userDid, Wallet wallet)
+        public static async Task<TransactionResult> inviteUser(String userDid, Wallet wallet, StdFee fee = null)
         {
             MsgInviteUser msg = new MsgInviteUser(recipientDid: userDid, senderDid: wallet.bech32Address);
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
         /// Buys the membership with the given [membershipType].
-        public static async Task<TransactionResult> buyMembership(MembershipType membershipType, Wallet wallet)
+        public static async Task<TransactionResult> buyMembership(MembershipType membershipType, Wallet wallet, StdFee fee = null)
         {
             MsgBuyMembership msg = new MsgBuyMembership(membershipType: membershipType, buyerDid: wallet.bech32Address);
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
         #endregion

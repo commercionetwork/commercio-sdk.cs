@@ -26,25 +26,25 @@ namespace commercio.sdk
         #region Public Methods
 
         /// Opens a new CDP depositing the given Commercio Token [amount].
-        public static async Task<TransactionResult> openCdp(int amount, Wallet wallet)
+        public static async Task<TransactionResult> openCdp(int amount, Wallet wallet, StdFee fee = null)
         {
             MsgOpenCdp msg = new MsgOpenCdp(
                 depositAmount: new List<StdCoin> { new StdCoin("ucommercio", (amount * 1000000).ToString()) },
                 signerDid: wallet.bech32Address
             );
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee : fee);
         }
 
         /// Closes the CDP having the given [timestamp].
-        public static async Task<TransactionResult> closeCdp(int timestamp, Wallet wallet)
+        public static async Task<TransactionResult> closeCdp(int timestamp, Wallet wallet, StdFee fee = null)
         {
             MsgCloseCdp msg = new MsgCloseCdp(
                 timeStamp: timestamp,
                 signerDid: wallet.bech32Address
             );
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
         #endregion
