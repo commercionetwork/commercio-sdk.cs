@@ -17,6 +17,10 @@ namespace commercio.sdk
 {
     public class TxHelper
     {
+        private static readonly String defaultGas = "200000";
+        private static readonly String defaultDenom = "ucommercio";
+        private static readonly String defaultAmount = "10000";
+
         #region Properties
         #endregion
 
@@ -31,7 +35,7 @@ namespace commercio.sdk
             if (fee == null)
             {
                 // Set the default value for fee
-                fee = new StdFee(gas: "200000", amount: new List<StdCoin> { new StdCoin(denom: "ucommercio", amount: "100") });
+                fee = new StdFee(gas: defaultGas, amount: new List<StdCoin> { new StdCoin(denom: defaultDenom, amount: defaultAmount) });
             }
             StdTx stdTx = TxBuilder.buildStdTx(stdMsgs: msgs, fee: fee);
             StdTx signedTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);

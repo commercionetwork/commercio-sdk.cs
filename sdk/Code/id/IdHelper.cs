@@ -40,17 +40,17 @@ namespace commercio.sdk
 
         /// Performs a transaction setting the specified [didDocument] as being
         /// associated with the address present inside the specified [wallet].
-        public static Task<TransactionResult> setDidDocument(DidDocument didDocument, Wallet wallet)
+        public static Task<TransactionResult> setDidDocument(DidDocument didDocument, Wallet wallet, StdFee fee = null)
         {
             MsgSetDidDocument msg = new MsgSetDidDocument(didDocument: didDocument);
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
         /// Creates a new Did deposit request for the given [recipient] and of the given [amount].
         /// Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
         /// private key contained inside the given [wallet].
-        public static async Task<TransactionResult> requestDidDeposit(String recipient, List<StdCoin> amount, Wallet wallet)
+        public static async Task<TransactionResult> requestDidDeposit(String recipient, List<StdCoin> amount, Wallet wallet, StdFee fee = null)
         {
             // Get the timestamp
             String timestamp = GenericUtils.getTimeStamp();
@@ -82,13 +82,13 @@ namespace commercio.sdk
                 senderDid: wallet.bech32Address
             );
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
         /// Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
         /// Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
         /// private key contained inside the given [wallet].
-        public static async Task<TransactionResult> requestDidPowerUp(String pairwiseDid, List<StdCoin> amount, Wallet wallet)
+        public static async Task<TransactionResult> requestDidPowerUp(String pairwiseDid, List<StdCoin> amount, Wallet wallet, StdFee fee = null)
         {
             // Get the timestamp
             String timestamp = GenericUtils.getTimeStamp();
@@ -119,7 +119,7 @@ namespace commercio.sdk
                 encryptionKey: HexEncDec.ByteArrayToString(result.encryptedAesKey)
             );
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
      }
 
     #endregion
