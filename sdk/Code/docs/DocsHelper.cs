@@ -42,15 +42,15 @@ namespace commercio.sdk
         /// to the blockchain.
         public static async Task<TransactionResult> shareDocument(
             String id,
-            String contentUri,
             CommercioDocMetadata metadata,
             List<String> recipients,
-            List<StdCoin> fees,
             Wallet wallet,
-            CommercioDocChecksum checksum,
-            KeyParameter aesKey,
+            CommercioDoSign doSign = null,
+            CommercioDocChecksum checksum = null,
+            KeyParameter aesKey = null,
             List<EncryptedData> encryptedData = null,
-            CommercioDoSign doSign = null
+            StdFee fee = null,
+            String contentUri = null
         )
         {
             if (encryptedData == null)
@@ -64,7 +64,7 @@ namespace commercio.sdk
             }
 
             // Build a generic document
-            CommercioDoc document = new CommercioDoc(
+            CommercioDoc commercioDocument = new CommercioDoc(
                 senderDid: wallet.bech32Address,
                 recipientDids: recipients,
                 uuid: id,
@@ -76,11 +76,11 @@ namespace commercio.sdk
             );
 
             // Encrypt its contents, if necessary
-            CommercioDoc finalDoc = document;
+            CommercioDoc finalDoc = commercioDocument;
             if (encryptedData.Count > 0)
             {
                 finalDoc = await DocsUtils.encryptField(
-                    document,
+                    commercioDocument,
                     aesKey,
                     encryptedData,
                     recipients,
@@ -92,7 +92,7 @@ namespace commercio.sdk
             MsgShareDocument msg = new MsgShareDocument(document: finalDoc);
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, new StdFee(gas: "200000", amount: fees));
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
         /// Returns the list of all the [CommercioDoc] that the
