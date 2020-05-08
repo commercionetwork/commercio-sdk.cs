@@ -28,14 +28,23 @@ namespace commercio.sdk
         /// or `null` if no Did Document was found.
         public static async Task<DidDocument> getDidDocument(String did, Wallet wallet) 
         {
+            Object outValue;
+            DidDocument DidDoc;
+
             String url = $"{wallet.networkInfo.lcdUrl}/identities/{did}";
             // This needs to be checked...
-            List<Dictionary<String, Object>> response = (List<Dictionary<String, Object>>)(await Network.queryChain(url));
+            // List<Dictionary<String, Object>> response = (List<Dictionary<String, Object>>)(await Network.queryChain(url));
+            Dictionary<String, Object> response = (Dictionary<String, Object>)(await Network.queryChain(url));
             if (response == null)
             {
                 return null;
             }
-            return new DidDocument(response[0]);
+            bool DidFound = response.TryGetValue("did_document", out outValue);
+            if (DidFound)
+                DidDoc = new DidDocument(outValue as Dictionary<String, Object>);
+            else
+                DidDoc = null;
+            return DidDoc;
         }
 
         /// Performs a transaction setting the specified [didDocument] as being

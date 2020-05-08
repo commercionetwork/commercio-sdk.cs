@@ -79,21 +79,21 @@ namespace commercio.sdk
 
         #region Constructors
         [JsonConstructor]
-        public CommercioDoc(String uuid,
-                            String senderDid,
-                            List<String> recipientDids, 
-                            String contentUri,
+        public CommercioDoc(String senderDid,
+                            List<String> recipientDids,
+                            String uuid,
                             CommercioDocMetadata metadata,
-                            CommercioDocChecksum checksum,
-                            CommercioDocEncryptionData encryptionData,
+                            String contentUri = null,
+                            CommercioDocChecksum checksum = null,
+                            CommercioDocEncryptionData encryptionData = null,
                             CommercioDoSign doSign = null)
         {
-            Trace.Assert(uuid != null);
             Trace.Assert(senderDid != null);
             Trace.Assert(recipientDids != null);
             Trace.Assert(recipientDids.Count > 0);
-            Trace.Assert(contentUri != null);
+            Trace.Assert(uuid != null);
             Trace.Assert(metadata != null);
+            // Trace.Assert(contentUri != null); Removed - conflict with opt param
             this.uuid = uuid;
             this.senderDid = senderDid;
             this.recipientDids = recipientDids;
@@ -429,20 +429,20 @@ namespace commercio.sdk
         public String signerInstance { get; set; }
         [JsonProperty("sdn_data", Order = 2)]
         public List<CommercioSdnData> sdnData { get; set; }
-        [JsonProperty("vcrId", Order = 5)]
+        [JsonProperty("vcr_Id", Order = 5)]
         public String vcrId { get; set; }
-        [JsonProperty("certificateProfile", Order = 1)]
+        [JsonProperty("certificate_Profile", Order = 1)]
         public String certificateProfile { get; set; }
 
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public CommercioDoSign(String storageUri, String signerInstance, List<CommercioSdnData> sdnData, String vcrId, String certificateProfile)
+        public CommercioDoSign(String storageUri, String signerInstance, List<CommercioSdnData> sdnData = null, String vcrId = null, String certificateProfile = null)
         {
             Trace.Assert(storageUri != null);
             Trace.Assert(signerInstance != null);
-            Trace.Assert(vcrId != null);
+            // Trace.Assert(vcrId != null); // RC 20200508 - Commented this, as it conflicts with optional param - different from Dart version, maybe a bug there.
             this.storageUri = storageUri;
             this.signerInstance = signerInstance;
             this.sdnData = sdnData;
@@ -460,9 +460,9 @@ namespace commercio.sdk
                 this.signerInstance = outValue as String;
             if (json.TryGetValue("sdn_data", out outValue))
                 this.sdnData = outValue as List<CommercioSdnData>;
-            if (json.TryGetValue("vcrId", out outValue))
+            if (json.TryGetValue("vcr_Id", out outValue))
                 this.vcrId = vcrId as String;
-            if (json.TryGetValue("certificateProfile", out outValue))
+            if (json.TryGetValue("certificate_Profile", out outValue))
                 this.certificateProfile = outValue as String;
         }
 
@@ -477,8 +477,8 @@ namespace commercio.sdk
             output.Add("storage_uri", this.storageUri);
             output.Add("signer_instance", this.signerInstance);
             output.Add("sdn_data", this.sdnData);
-            output.Add("vcrId", this.vcrId);
-            output.Add("certificateProfile", this.certificateProfile);
+            output.Add("vcr_Id", this.vcrId);
+            output.Add("certificate_Profile", this.certificateProfile);
             return (output);
         }
 
