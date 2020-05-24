@@ -25,8 +25,10 @@ namespace commercio.sdk
         public String claimantDid { get; private set; }
         [JsonProperty("amount", Order = 1)]
         public List<StdCoin> amount { get; private set; }
-        [JsonProperty("powerUpProof", Order = 4)]
+        [JsonProperty("powerUpProof", Order = 5)]
         public String powerUpProof { get; private set; }
+        [JsonProperty("id", Order = 4)]
+        public String uuid { get; private set; }
         [JsonProperty("encryptionKey", Order = 3)]
         public String encryptionKey { get; private set; }
 
@@ -44,17 +46,19 @@ namespace commercio.sdk
         #region Constructors
 
         /// Public constructor.
-        public MsgRequestDidPowerUp(String claimantDid, List<StdCoin> amount, String powerUpProof, String encryptionKey)
+        public MsgRequestDidPowerUp(String claimantDid, List<StdCoin> amount, String powerUpProof, String uuid, String encryptionKey)
         {
             Trace.Assert(claimantDid != null);
             Trace.Assert(amount != null);
             Trace.Assert(amount.Count > 0);
             Trace.Assert(powerUpProof != null);
+            Trace.Assert(uuid != null);
             Trace.Assert(encryptionKey != null);
             // Assigns the properties
             this.claimantDid = claimantDid;
             this.amount = amount;
             this.powerUpProof = powerUpProof;
+            this.uuid = uuid;
             this.encryptionKey = encryptionKey;
             base.setProperties("commercio/MsgRequestDidPowerUp", _toJson());
         }
@@ -72,6 +76,7 @@ namespace commercio.sdk
             wk.Add("claimant", this.claimantDid);
             wk.Add("amount", this.amount?.Select(elem => elem?.toJson()?.ToList()));
             wk.Add("proof", this.powerUpProof);
+            wk.Add("id", this.uuid);
             wk.Add("encryption_key", this.encryptionKey);
             return wk;
         }

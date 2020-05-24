@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>commercio.sdk</RootNamespace>
-    <Version>0.1.0.1</Version>
+    <Version>2.1.0.0</Version>
     <Authors>commercio.network, Blockit S.r.l.</Authors>
     <Company>commercio.network</Company>
     <Product />
@@ -17,9 +17,9 @@ https://commercio.network</Description>
     <PackageTags>commercio.network, sdk</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/45789950?s=200&amp;v=4</PackageIconUrl>
-    <PackageReleaseNotes>First version - ported from Dart to C#.</PackageReleaseNotes>
-    <AssemblyVersion>0.1.0.1</AssemblyVersion>
-    <FileVersion>0.1.0.1</FileVersion>
+    <PackageReleaseNotes>Porting in C# of commercio-sdk.dart.. Aligned to version 2.1.0 sdk dart.</PackageReleaseNotes>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,8 +28,8 @@ https://commercio.network</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.5" />
-    <PackageReference Include="NBitcoin" Version="5.0.14" />
+    <PackageReference Include="BouncyCastle.NetCore" Version="1.8.6" />
+    <PackageReference Include="NBitcoin" Version="5.0.36" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 

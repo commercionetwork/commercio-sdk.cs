@@ -429,9 +429,9 @@ namespace commercio.sdk
         public String signerInstance { get; set; }
         [JsonProperty("sdn_data", Order = 2)]
         public List<CommercioSdnData> sdnData { get; set; }
-        [JsonProperty("vcr_Id", Order = 5)]
+        [JsonProperty("vcr_id", Order = 5)]
         public String vcrId { get; set; }
-        [JsonProperty("certificate_Profile", Order = 1)]
+        [JsonProperty("certificate_profile", Order = 1)]
         public String certificateProfile { get; set; }
 
         #endregion
@@ -460,9 +460,9 @@ namespace commercio.sdk
                 this.signerInstance = outValue as String;
             if (json.TryGetValue("sdn_data", out outValue))
                 this.sdnData = outValue as List<CommercioSdnData>;
-            if (json.TryGetValue("vcr_Id", out outValue))
+            if (json.TryGetValue("vcr_id", out outValue))
                 this.vcrId = vcrId as String;
-            if (json.TryGetValue("certificate_Profile", out outValue))
+            if (json.TryGetValue("certificate_profile", out outValue))
                 this.certificateProfile = outValue as String;
         }
 
@@ -477,8 +477,8 @@ namespace commercio.sdk
             output.Add("storage_uri", this.storageUri);
             output.Add("signer_instance", this.signerInstance);
             output.Add("sdn_data", this.sdnData);
-            output.Add("vcr_Id", this.vcrId);
-            output.Add("certificate_Profile", this.certificateProfile);
+            output.Add("vcr_id", this.vcrId);
+            output.Add("certificate_profile", this.certificateProfile);
             return (output);
         }
 

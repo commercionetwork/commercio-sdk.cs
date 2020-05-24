@@ -29,36 +29,38 @@ namespace commercio.sdk
         [JsonProperty("@context", Order = 1)]
         public String context { get; set; }
 
-        [JsonProperty("id", Order = 4)]
+        [JsonProperty("id", Order = 3)]
         public String id { get; set; }
 
-        [JsonProperty("publicKey", Order = 6)]
+        [JsonProperty("publicKey", Order = 5)]
         public List<DidDocumentPublicKey> publicKeys { get; set; }
 
-        [JsonProperty("authentication", Order = 2)]
-        public List<String> authentication { get; set; }
+        // No more present in 2.1. package
+        //[JsonProperty("authentication", Order = 2)]
+        //public List<String> authentication { get; set; }
 
-        [JsonProperty("proof", Order = 5)]
+        [JsonProperty("proof", Order = 4)]
         public DidDocumentProof proof { get; set; }
 
-        [JsonProperty("service", Order = 7)]
-        public List<DidDocumentService> services { get; set; }
+        [JsonProperty("service", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
+        public List<DidDocumentService> service { get; set; }
 
         /// Returns the [PublicKey] that should be used as the public encryption
         /// key when encrypting data that can later be read only by the owner of
         /// this Did Document.
-        [JsonProperty("encryptionKey", Order = 3)]
+        [JsonProperty("encryptionKey", Order = 2)]
         public RSAPublicKey encryptionKey
         {
             get
             {
-                DidDocumentPublicKey pubKey = publicKeys.FirstOrDefault(key => key.type == DidDocumentPubKeyType.RSA);
+                DidDocumentPublicKey pubKey = publicKeys.FirstOrDefault(key => key.type == "RsaVerificationKey2018");
                 if (pubKey == null)
                     return null;
-                // If existent, creates the RSA public key
-                BigInteger modulus = new BigInteger(pubKey.publicKeyHex, radix: 16);
-                BigInteger exponent = new BigInteger("65537", radix: 10);
-                return new RSAPublicKey(new RsaKeyParameters(false, modulus, exponent));
+                return new RSAPublicKey(RSAKeyParser.parsePublicKeyFromPem(pubKey.publicKeyPem));
+                //// If existent, creates the RSA public key
+                //BigInteger modulus = new BigInteger(pubKey.publicKeyHex, radix: 16);
+                //BigInteger exponent = new BigInteger("65537", radix: 10);
+                //return new RSAPublicKey(new RsaKeyParameters(false, modulus, exponent));
             }
         }
 
@@ -66,19 +68,17 @@ namespace commercio.sdk
 
         #region Constructors
         [JsonConstructor]
-        public DidDocument(String context, String id, List<DidDocumentPublicKey> publicKeys, List<String> authentication, DidDocumentProof proof, List<DidDocumentService> services)
+        public DidDocument(String context, String id, List<DidDocumentPublicKey> publicKeys, DidDocumentProof proof, List<DidDocumentService> service)
         {
             Trace.Assert(context != null);
             Trace.Assert(id != null);
             Trace.Assert(publicKeys != null);
-            Trace.Assert(authentication != null);
             Trace.Assert(proof != null);
             this.context = context;
             this.id = id;
             this.publicKeys = publicKeys;
-            this.authentication = authentication;
             this.proof = proof;
-            this.services = services;
+            this.service = service;
         }
 
         // Alternate constructor from Json Dictionary
@@ -91,12 +91,10 @@ namespace commercio.sdk
                 this.id = outValue as String;
             if (json.TryGetValue("publicKey", out outValue))
                 this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();
-            if (json.TryGetValue("authentication", out outValue))
-                this.authentication = outValue as List<String>; // *** To be checked - The List of Strings are not passed to Json Dictionaries
             if (json.TryGetValue("proof", out outValue))
                this.proof = (outValue == null ? null : new DidDocumentProof( (Dictionary<String, Object>) outValue));
             if (json.TryGetValue("service", out outValue))
-                this.services = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentService(elem)).ToList();
+                this.service = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentService(elem)).ToList();
         }
 
         #endregion
@@ -111,9 +109,8 @@ namespace commercio.sdk
             output.Add("@context", this.context);
             output.Add("id", this.id);
             output.Add("publicKey", this.publicKeys?.Select(elem => elem?.toJson()?.ToList()));
-            output.Add("authentication", this.authentication);
             output.Add("proof", this.proof?.toJson());
-            output.Add("service", this.services?.Select(elem => elem?.toJson()?.ToList()));
+            output.Add("service", this.service?.Select(elem => elem?.toJson()?.ToList()));
             return (output);
         }
 

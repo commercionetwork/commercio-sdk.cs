@@ -19,22 +19,31 @@ namespace commercio.sdk
 
         public ECPublicKeyParameters pubKey { get; set; }
 
+        public String keyType { get; set; }
+
         #endregion
 
         #region Constructors
 
-        public ECPublicKey(ECPublicKeyParameters ecPublicKey)
+        public ECPublicKey(ECPublicKeyParameters ecPublicKey, String keyType = "Secp256k1VerificationKey2018")
         {
             this.pubKey = ecPublicKey;
+            this.keyType = keyType;
         }
 
         #endregion
 
         #region Public Methods
 
-        public byte[] getEncoded()
+        public String getType()
         {
-            return this.pubKey.Q.GetEncoded();
+            return (keyType);
+        }
+
+
+        public String getEncoded()
+        {
+            return Convert.ToBase64String(this.pubKey.Q.GetEncoded());
         }
 
         #endregion

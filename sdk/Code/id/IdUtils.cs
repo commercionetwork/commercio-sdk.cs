@@ -8,6 +8,7 @@
 /// Contains the data that is returned from the [generateProof] method.
 //
 using System;
+using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,13 +23,13 @@ namespace commercio.sdk
     public class ProofGenerationResult
     {
         #region Properties
-        public byte[] encryptedProof { get; set; }
-        public byte[] encryptedAesKey { get; set; }
+        public String encryptedProof { get; set; }
+        public String encryptedAesKey { get; set; }
 
         #endregion
 
         #region Constructors
-        ProofGenerationResult(byte[] encryptedProof, byte[] encryptedAesKey)
+        ProofGenerationResult(String encryptedProof, String encryptedAesKey)
         {
             Trace.Assert(encryptedProof != null);
             Trace.Assert(encryptedAesKey != null);
@@ -43,7 +44,7 @@ namespace commercio.sdk
         /// Given a [payload], creates a new AES-256 key and uses that to encrypt
         /// the payload itself.
         /// This is now a static method of the class - we cannot have function outside class in C#, while Dart can...
-        public static async Task<ProofGenerationResult> generateProof(Object payload)
+        public static async Task<ProofGenerationResult> generateProof(Object payload, String lcdUrl)
         {
             // Generate the AES key - no await here...
             KeyParameter aesKey = KeysHelper.generateAesKey();
@@ -52,11 +53,18 @@ namespace commercio.sdk
             String encryptionData = JsonConvert.SerializeObject(payload);
             byte[] encryptedPayload = EncryptionHelper.encryptStringWithAes(encryptionData, aesKey);
 
-            // Encrypt the AES key
-            RSAPublicKey rsaKey = await EncryptionHelper.getGovernmentRsaPubKey();
-            byte[] encryptedAesKey = EncryptionHelper.encryptBytesWithRsa(aesKey.GetKey(), rsaKey);
+            // Generate nonce, concatenate with payload and encode(?)
+            //*** 20200524 - I am not sure of encoding - I am already working with arrays...No encode until extensive testing
+            byte[] nonce = KeysHelper.generateRandomNonce(12);
+            String encodedProof = Convert.ToBase64String(encryptedPayload.Concat(nonce).ToArray());
 
-            return new ProofGenerationResult(encryptedProof: encryptedPayload, encryptedAesKey: encryptedAesKey);
+            // Encrypt the AES key
+            RSAPublicKey rsaKey = await EncryptionHelper.getGovernmentRsaPubKey(lcdUrl);
+            byte[] encryptedAesKey = EncryptionHelper.encryptBytesWithRsa(aesKey.GetKey(), rsaKey);
+            String encodedAesKey = Convert.ToBase64String(encryptedAesKey);
+
+
+            return new ProofGenerationResult(encryptedProof: encodedProof, encryptedAesKey: encodedAesKey);
         }
 
         #endregion

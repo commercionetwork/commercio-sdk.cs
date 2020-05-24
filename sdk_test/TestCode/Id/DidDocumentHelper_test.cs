@@ -15,7 +15,8 @@ namespace sdk_test
         [TestMethod]
         public void DidDocumentWellFormedFromWalletTest()
         {
-
+            /* All these tests are removed from SDK Dart 2.1
+            
             NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "");
             String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
@@ -49,9 +50,9 @@ namespace sdk_test
                 context: "https://www.w3.org/ns/did/v1",
                 id: wallet.bech32Address,
                 publicKeys: new List<DidDocumentPublicKey> { expectedAuthKey, expectedPubKey },
-                authentication: new List<string> { expectedAuthKey.id },
+                // authentication: new List<string> { expectedAuthKey.id },
                 proof: expectedComputedProof,
-                services: new List<DidDocumentService>()
+                service: new List<DidDocumentService>()
             );
 
             DidDocument didDocument = DidDocumentHelper.fromWallet(wallet, new List<PublicKey> { rsaPubKey });
@@ -63,7 +64,8 @@ namespace sdk_test
             Assert.AreEqual(compareLogic.Compare(didDocument.context, expectedDidDocument.context).AreEqual, true);
             Assert.AreEqual(compareLogic.Compare(didDocument.id, expectedDidDocument.id).AreEqual, true);
             Assert.AreEqual(compareLogic.Compare(didDocument.publicKeys, expectedDidDocument.publicKeys).AreEqual, true);
-            Assert.AreEqual(compareLogic.Compare(didDocument.authentication, expectedDidDocument.authentication).AreEqual, true);
+            // Assert.AreEqual(compareLogic.Compare(didDocument.authentication, expectedDidDocument.authentication).AreEqual, true);
+        */
         }
     }
 

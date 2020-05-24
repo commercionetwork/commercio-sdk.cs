@@ -11,6 +11,8 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Crypto.Parameters;
+using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -56,79 +58,67 @@ namespace commercio.sdk
             return TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
         }
 
-        /// Creates a new Did deposit request for the given [recipient] and of the given [amount].
-        /// Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-        /// private key contained inside the given [wallet].
-        public static async Task<TransactionResult> requestDidDeposit(String recipient, List<StdCoin> amount, Wallet wallet, StdFee fee = null)
-        {
-            // Get the timestamp
-            String timestamp = GenericUtils.getTimeStamp();
-
-            // Build the signature
-            DidDepositRequestSignatureJson signatureJson = new DidDepositRequestSignatureJson(
-                recipient: recipient,
-                timeStamp: timestamp
-            );
-
-            byte[] signedJson = SignHelper.signSorted(signatureJson.toJson(), wallet);
-
-            // Build the payload
-            DidDepositRequestPayload payload = new DidDepositRequestPayload(
-                recipient: recipient,
-                timeStamp: timestamp,
-                signature: HexEncDec.ByteArrayToString(signedJson)
-            );
-
-            // Build the proof
-            ProofGenerationResult result = await ProofGenerationResult.generateProof(payload);
-
-            // Build the message and send the tx
-            MsgRequestDidDeposit msg = new MsgRequestDidDeposit(
-                recipientDid: recipient,
-                amount: amount,
-                depositProof: HexEncDec.ByteArrayToString(result.encryptedProof),
-                encryptionKey: HexEncDec.ByteArrayToString(result.encryptedAesKey),
-                senderDid: wallet.bech32Address
-            );
-            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
-        }
-
         /// Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
         /// Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
-        /// private key contained inside the given [wallet].
-        public static async Task<TransactionResult> requestDidPowerUp(String pairwiseDid, List<StdCoin> amount, Wallet wallet, StdFee fee = null)
+        /// private key contained inside the given  [senderWallet] and the [privateKey].
+        public static async Task<TransactionResult> requestDidPowerUp(Wallet senderWallet, String pairwiseDid, List<StdCoin> amount, RSAPrivateKey privateKey, StdFee fee = null)
         {
             // Get the timestamp
             String timestamp = GenericUtils.getTimeStamp();
+            String senderDid = senderWallet.bech32Address;
 
-            // Build the signature
-            DidPowerUpRequestSignatureJson signatureJson = new DidPowerUpRequestSignatureJson(
+            // Build and sign the signature
+            byte[] signedSignatureHash = SignHelper.signPowerUpSignature(
+                senderDid: senderDid,
                 pairwiseDid: pairwiseDid,
-                timeStamp: timestamp 
-            );
+                timestamp: timestamp,
+                rsaPrivateKey: privateKey);
 
-            byte[] signedJson = SignHelper.signSorted(signatureJson.toJson(), wallet);
+            //// Build the signature
+            //DidPowerUpRequestSignatureJson signatureJson = new DidPowerUpRequestSignatureJson(
+            //    pairwiseDid: pairwiseDid,
+            //    timeStamp: timestamp 
+            //);
 
-            // Build the payload
+            //byte[] signedJson = SignHelper.signSorted(signatureJson.toJson(), wallet);
+
+            // Build the payload -*
             DidPowerUpRequestPayload payload = new DidPowerUpRequestPayload(
+                senderDid: senderDid,
                 pairwiseDid: pairwiseDid,
                 timeStamp: timestamp,
-                signature: HexEncDec.ByteArrayToString(signedJson)
+                signature: Convert.ToBase64String(signedSignatureHash)
             );
 
-            // Build the proof
-            ProofGenerationResult result = await ProofGenerationResult.generateProof(payload);
+            // =============
+            // Encrypt proof
+            // =============
 
+            // Generate an AES-256 key
+            KeyParameter aesKey =  KeysHelper.generateAesKey(); // await ?
+
+            // Encrypt the payload
+            byte[] encryptedProof = EncryptionHelper.encryptStringWithAesGCM(JsonConvert.SerializeObject(payload), aesKey);
+
+            // =================
+            // Encrypt proof key
+            // =================
+
+            // Encrypt the key using the Tumbler public RSA key
+            RSAPublicKey rsaPubTkKey = await EncryptionHelper.getGovernmentRsaPubKey(senderWallet.networkInfo.lcdUrl);
+            byte[] encryptedProofKey = EncryptionHelper.encryptBytesWithRsa(aesKey.GetKey(), rsaPubTkKey);
+            
             // Build the message and send the tx
             MsgRequestDidPowerUp msg = new MsgRequestDidPowerUp(
-                claimantDid: wallet.bech32Address,
+                claimantDid: senderDid,
                 amount: amount,
-                powerUpProof: HexEncDec.ByteArrayToString(result.encryptedProof),
-                encryptionKey: HexEncDec.ByteArrayToString(result.encryptedAesKey)
+                powerUpProof: Convert.ToBase64String(encryptedProof),
+                uuid: Guid.NewGuid().ToString(),
+                encryptionKey: Convert.ToBase64String(encryptedProofKey)
             );
+
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, senderWallet, fee: fee);
      }
 
     #endregion

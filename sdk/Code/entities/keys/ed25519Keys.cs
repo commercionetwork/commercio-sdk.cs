@@ -23,22 +23,31 @@ namespace commercio.sdk
 
         public String Seed { get; }
 
+        public String keyType { get; set; }
+
         #endregion
 
         #region Constructors
 
-        public Ed25519PublicKey(String seed)
+        public Ed25519PublicKey(String seed, String keyType = "Ed25519VerificationKey2018")
         {
             this.Seed = seed;
+            this.keyType = keyType;
         }
 
         #endregion
 
         #region Public Methods
 
+        public String getType()
+        {
+            return (keyType);
+        }
+
+
         // **** Code to be reviewed - it compiles, but he has little if any relationship with the Dart code...
         // ****
-        public byte[] getEncoded()
+        public String getEncoded()
         {
             byte[] seedBytes = HexEncDec.StringToByteArray(Seed);
             Ed25519KeyPairGenerator wkGen = new Ed25519KeyPairGenerator();
@@ -48,7 +57,7 @@ namespace commercio.sdk
             AsymmetricCipherKeyPair keys = wkGen.GenerateKeyPair();
             Ed25519PublicKeyParameters key = (Ed25519PublicKeyParameters) keys.Public;
             byte[] output = key.GetEncoded();
-            return output;
+            return Convert.ToBase64String(output);
         }
 
         #endregion

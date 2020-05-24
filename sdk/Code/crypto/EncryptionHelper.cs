@@ -10,10 +10,14 @@
 //
 using System;
 using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Newtonsoft.Json;
 
 namespace commercio.sdk
 {
@@ -29,16 +33,31 @@ namespace commercio.sdk
 
         /// Returns the RSA public key associated to the government that should be used when
         /// encrypting the data that only it should see.
-        public static async Task<RSAPublicKey> getGovernmentRsaPubKey()
+        public static async Task<RSAPublicKey> getGovernmentRsaPubKey(String lcdUrl)
         // public static RSAPublicKey getGovernmentRsaPubKey()
         {
-            Object response = await Network.query("http://localhost:8080/government/publicKey");
-            if (response == null)
+            Object tumblerResponse = await Network.query($"{lcdUrl}/government/tumbler");
+            if (tumblerResponse == null)
             {
-                System.ArgumentException argEx = new System.ArgumentException("Cannot get government RSA public key");
+                System.ArgumentException argEx = new System.ArgumentException("getGovernmentRsaPubKey: Cannot get tumbler address");
                 throw argEx;
             }
-            RsaKeyParameters rsaPublicKey = RSAKeyParser.parsePublicKeyFromPem(response.ToString());
+
+            TumblerResponse tumbler = new TumblerResponse(JsonConvert.DeserializeObject<Dictionary<String, Object>>(tumblerResponse.ToString()));
+            String tumblerAddress = tumbler.result.tumblerAddress;
+
+            Object identityResponseRaw = await Network.query($"{lcdUrl}/identities/$tumblerAddress");
+            if (identityResponseRaw == null)
+            {
+                System.ArgumentException argEx = new System.ArgumentException("getGovernmentRsaPubKey: Cannot get government RSA public key");
+                throw argEx;
+            }
+
+            IdentityResponse identityResponse = new IdentityResponse(JsonConvert.DeserializeObject<Dictionary<String, Object>>(identityResponseRaw.ToString()));
+            String publicSignatureKeyPem = identityResponse.result.didDocument.publicKeys[1].publicKeyPem;
+
+            RsaKeyParameters rsaPublicKey = RSAKeyParser.parsePublicKeyFromPem(publicSignatureKeyPem);
+
             return new RSAPublicKey(rsaPublicKey);
         }
 
@@ -48,6 +67,33 @@ namespace commercio.sdk
             AEScoder coder = new AEScoder(key);
             return coder.encode(System.Text.Encoding.UTF8.GetBytes(data));
         }
+
+        //*** 20200524 - This one needs to be checked for consistency with Dart code!
+        public static byte[] encryptStringWithAesGCM(String data, KeyParameter key)
+        {
+            // Generate a random 96-bit nonce N
+            byte[] nonce = KeysHelper.generateRandomNonceUtf8(12);
+
+            GcmBlockCipher cipher = new GcmBlockCipher(new AesEngine());
+            //*** 20200524 - Is 96 the right number?
+            AeadParameters parameters = new AeadParameters(key, 96, nonce);
+            cipher.Init(true, parameters);
+            byte[] utf8Data = Encoding.UTF8.GetBytes(data);
+            int bufSize = utf8Data.Length;
+            byte[] cipherText = new byte[cipher.GetOutputSize(bufSize)];
+            int len = cipher.ProcessBytes(utf8Data, 0, bufSize, cipherText, 0);
+            cipher.DoFinal(cipherText, len);
+            using (MemoryStream combinedStream = new MemoryStream())
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(combinedStream))
+                {
+                    binaryWriter.Write(nonce);
+                    binaryWriter.Write(cipherText);
+                }
+                return combinedStream.ToArray();
+            }
+        }
+
 
         /// Encrypts the given [data] with AES using the specified [key].
         public static byte[] encryptBytesWithAes(byte[] data, KeyParameter key)
