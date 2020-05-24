@@ -19,7 +19,8 @@ namespace commercio.sdk
 
     public interface PublicKey
     {
-        byte[] getEncoded();
+        String getEncoded();
+        String getType();
     }
 
 }

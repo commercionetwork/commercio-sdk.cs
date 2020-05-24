@@ -21,31 +21,41 @@ namespace commercio.sdk
     public class DidDocumentProof
     {
         #region Properties
-        [JsonProperty("type", Order = 4)]
+        [JsonProperty("type", Order = 5)]
         public String type { get; set; }
 
-        [JsonProperty("created", Order = 2)]
+        [JsonProperty("created", Order = 1)]
         public String iso8601creationTimestamp { get; set; }
 
-        [JsonProperty("creator", Order = 1)]
-        public String creatorKeyId { get; set; }
+        [JsonProperty("proofPurpose", Order = 3)]
+        public String proofPurpose { get; set; }
 
-        [JsonProperty("signatureValue", Order = 3)]
+        [JsonProperty("controller", Order = 2)]
+        public String controller { get; set; }
+
+        [JsonProperty("verificationMethod", Order = 6)]
+        public String verificationMethod { get; set; }
+
+        [JsonProperty("signatureValue", Order = 4)]
         public String signatureValue { get; set; }
 
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public DidDocumentProof(String type, String iso8601creationTimestamp, String creatorKeyId, String signatureValue)
+        public DidDocumentProof(String type, String iso8601creationTimestamp, String proofPurpose, String controller, String verificationMethod, String signatureValue)
         {
             Trace.Assert(type != null);
             Trace.Assert(iso8601creationTimestamp != null);
-            Trace.Assert(creatorKeyId != null);
+            Trace.Assert(proofPurpose != null);
+            Trace.Assert(controller != null);
+            Trace.Assert(verificationMethod != null);
             Trace.Assert(signatureValue != null);
             this.type = type;
             this.iso8601creationTimestamp = iso8601creationTimestamp;
-            this.creatorKeyId = creatorKeyId;
+            this.proofPurpose = proofPurpose;
+            this.controller = controller;
+            this.verificationMethod = verificationMethod;
             this.signatureValue = signatureValue;
         }
 
@@ -57,8 +67,12 @@ namespace commercio.sdk
                 this.type = outValue as String;
             if (json.TryGetValue("created", out outValue))
                 this.iso8601creationTimestamp = outValue as String;
-            if (json.TryGetValue("creator", out outValue))
-                this.creatorKeyId = outValue as String;
+            if (json.TryGetValue("proofPurpose", out outValue))
+                this.proofPurpose = outValue as String;
+            if (json.TryGetValue("controller", out outValue))
+                this.controller = outValue as String;
+            if (json.TryGetValue("verificationMethod", out outValue))
+                this.verificationMethod = outValue as String;
             if (json.TryGetValue("signatureValue", out outValue))
                 this.signatureValue = outValue as String;
         }
@@ -74,7 +88,9 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("type", this.type);
             output.Add("created", this.iso8601creationTimestamp);
-            output.Add("creator", this.creatorKeyId);
+            output.Add("proofPurpose", this.proofPurpose);
+            output.Add("controller", this.controller);
+            output.Add("verificationMethod", this.verificationMethod);
             output.Add("signatureValue", this.signatureValue);
             return (output);
         }

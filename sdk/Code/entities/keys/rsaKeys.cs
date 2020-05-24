@@ -8,8 +8,10 @@
 /// Wrapper of the pointyCastle RSAPublicKey
 //
 using System;
+using System.IO;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.OpenSsl;
 
 namespace commercio.sdk
 {
@@ -20,26 +22,35 @@ namespace commercio.sdk
 
         public RsaKeyParameters pubKey { get; set; }
 
+        public String keyType { get; set; }
+
         #endregion
 
         #region Constructors
 
-        public RSAPublicKey(RsaKeyParameters ecPublicKey)
+        public RSAPublicKey(RsaKeyParameters ecPublicKey, String keyType = "RsaVerificationKey2018")
         {
             this.pubKey = ecPublicKey;
+            this.keyType = keyType;
         }
 
         #endregion
 
         #region Public Methods
 
-        public byte[] getEncoded()
+        public String getType()
         {
-            Asn1EncodableVector asn1Vect = new Asn1EncodableVector();
-            asn1Vect.Add(new DerInteger(this.pubKey.Modulus));
-            asn1Vect.Add(new DerInteger(this.pubKey.Exponent));
-            DerSequence sequence = new DerSequence(asn1Vect);
-            return sequence.GetEncoded();
+            return (keyType);
+        }
+
+        public String getEncoded()
+        {
+            TextWriter textWriter = new StringWriter();
+            PemWriter pemWriter = new PemWriter(textWriter);
+            pemWriter.WriteObject(pubKey);
+            pemWriter.Writer.Flush();
+            return textWriter.ToString();
+            //*** 20200524 RC: Encoding to be checked against rel. 2.1 Dart!
         }
 
         #endregion
@@ -69,6 +80,18 @@ namespace commercio.sdk
         #endregion
 
         #region Public Methods
+
+        String encodePrivateKeyToPemPKCS1()
+        {
+
+            TextWriter textWriter = new StringWriter();
+            PemWriter pemWriter = new PemWriter(textWriter);
+            pemWriter.WriteObject(secretKey);
+            pemWriter.Writer.Flush();
+            return textWriter.ToString();
+            //*** 20200524 RC: Encoding to be checked against rel. 2.1 Dart!
+        }
+
         #endregion
 
         #region Helpers

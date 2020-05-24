@@ -24,28 +24,23 @@ namespace commercio.sdk
         public String context { get; set; }
 
         [JsonProperty("id", Order = 3)]
-        public String did { get; set; }
+        public String id { get; set; }
 
         [JsonProperty("publicKey", Order = 4)]
         public List<DidDocumentPublicKey> publicKeys { get; set; }
-
-        [JsonProperty("authentication", Order = 2)]
-        public List<String> authentication { get; set; }
 
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public DidDocumentProofSignatureContent(String context, String did, List<DidDocumentPublicKey> publicKeys, List<String> authentication)
+        public DidDocumentProofSignatureContent(String context, String id, List<DidDocumentPublicKey> publicKeys)
         {
             Trace.Assert(context != null);
-            Trace.Assert(did != null);
+            Trace.Assert(id != null);
             Trace.Assert(publicKeys != null);
-            Trace.Assert(authentication != null);
             this.context = context;
-            this.did = did;
+            this.id = id;
             this.publicKeys = publicKeys;
-            this.authentication = authentication;
         }
 
         // Alternate constructor from Json Dictionary
@@ -55,11 +50,9 @@ namespace commercio.sdk
             if (json.TryGetValue("@context", out outValue))
                 this.context = outValue as String;
             if (json.TryGetValue("id", out outValue))
-                this.did = outValue as String;
-            if (json.TryGetValue("timestamp", out outValue))
+                this.id = outValue as String;
+            if (json.TryGetValue("publicKey", out outValue))
                 this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();
-            if (json.TryGetValue("authentication", out outValue))
-                this.authentication = outValue as List<String>; // *** To be checked - The List of Strings are not passed to Json Dictionaries
         }
 
         #endregion
@@ -72,9 +65,8 @@ namespace commercio.sdk
 
             output = new Dictionary<String, Object>();
             output.Add("@context", this.context);
-            output.Add("id", this.did);
+            output.Add("id", this.id);
             output.Add("publicKey", this.publicKeys);
-            output.Add("authentication", this.authentication);
             return (output);
         }
 

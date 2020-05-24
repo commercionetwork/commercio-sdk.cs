@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto.Parameters;
 using commercio.sacco.lib;
@@ -18,9 +19,12 @@ namespace commercio.sdk
 {
     public enum EncryptedData
     {
-        CONTENT,
+
+        [Description("content_uri")]
         CONTENT_URI,
+        [Description("metadata.content_uri")]
         METADATA_CONTENT_URI,
+        [Description("metadata.schema.uri")]
         METADATA_SCHEMA_URI
     };
 
@@ -165,7 +169,7 @@ namespace commercio.sdk
                 ),
                 encryptionData: new CommercioDocEncryptionData(
                     keys: encryptionKeys,
-                    encryptedData: encryptedData.Select((e) => e.ToString()).ToList()
+                    encryptedData: encryptedData.Select((e) => e.ToDescriptionString()).ToList()
                 )
             );
         }

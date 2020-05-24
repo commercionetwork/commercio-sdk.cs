@@ -29,7 +29,7 @@ namespace commercio.sdk
         public static async Task<TransactionResult> openCdp(int amount, Wallet wallet, StdFee fee = null)
         {
             MsgOpenCdp msg = new MsgOpenCdp(
-                depositAmount: new List<StdCoin> { new StdCoin("ucommercio", (amount * 1000000).ToString()) },
+                depositAmount: new List<StdCoin> { new StdCoin("ucommercio", amount.ToString()) },
                 signerDid: wallet.bech32Address
             );
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg

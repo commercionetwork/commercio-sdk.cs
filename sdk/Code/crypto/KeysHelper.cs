@@ -9,6 +9,7 @@
 //
 using System;
 using System.Text;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Security;
@@ -32,6 +33,24 @@ namespace commercio.sdk
 
         #region Public Methods
 
+        /// Generate a random nonce
+        public static byte[] generateRandomNonce(int length, int bit = 256) 
+        {
+            DigestRandomGenerator wkRandomGenerator = new Org.BouncyCastle.Crypto.Prng.DigestRandomGenerator(new Sha512Digest());
+            SecureRandom secureRandomGenerator = new SecureRandom(wkRandomGenerator);
+            List<byte> wkNonce = new List<byte>();
+            for (int i = 0; i < length; i++)
+            {
+                wkNonce.Add((byte) secureRandomGenerator.Next(0, bit));
+            }
+            byte[] nonce = wkNonce.ToArray();
+            return nonce;
+        }
+
+        public static byte[] generateRandomNonceUtf8(int length)
+        {
+            return generateRandomNonce(length, bit: 128);
+        }
 
         /// Generates a new AES key having the desired [length].
         // public static async Task<KeyParameter> generateAesKey(int length = 256)
@@ -97,7 +116,7 @@ namespace commercio.sdk
             firstRandomGenerator.AddSeedMaterial(randomBytes);
             byte[] seed = new byte[32];
             firstRandomGenerator.NextBytes(seed, 0, 32);
-            // Create and seed the final Randon Generator
+            // Create and seed the final Random Generator
             DigestRandomGenerator wkRandomGenerator = new Org.BouncyCastle.Crypto.Prng.DigestRandomGenerator(new Sha512Digest());
             SecureRandom secureRandomGenerator = new SecureRandom(wkRandomGenerator);
             secureRandomGenerator.SetSeed(seed);

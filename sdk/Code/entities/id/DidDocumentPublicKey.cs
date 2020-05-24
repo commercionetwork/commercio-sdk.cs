@@ -46,28 +46,28 @@ namespace commercio.sdk
         public String id { get; set; }
 
         [JsonProperty("type", Order = 4)]
-        public DidDocumentPubKeyType type { get; set; }
+        public String type { get; set; }
 
         [JsonProperty("controller", Order = 1)]
         public String controller { get; set; }
 
-        [JsonProperty("publicKeyHex", Order = 3)]
-        public String publicKeyHex { get; set; }
+        [JsonProperty("publicKeyPem", Order = 3)]
+        public String publicKeyPem { get; set; }
 
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public DidDocumentPublicKey(String id, DidDocumentPubKeyType type, String controller, String publicKeyHex)
+        public DidDocumentPublicKey(String id, String type, String controller, String publicKeyPem)
         {
             Trace.Assert(id != null);
-            // Trace.Assert(type != null);
+            Trace.Assert(type != null);
             Trace.Assert(controller != null);
-            Trace.Assert(publicKeyHex != null);
+            Trace.Assert(publicKeyPem != null);
             this.id = id;
             this.type = type;
             this.controller = controller;
-            this.publicKeyHex = publicKeyHex;
+            this.publicKeyPem = publicKeyPem;
         }
 
         // Alternate constructor from Json Dictionary
@@ -77,34 +77,11 @@ namespace commercio.sdk
             if (json.TryGetValue("id", out outValue))
                 this.id = outValue as String;
             if (json.TryGetValue("type", out outValue))
-            {
-                try
-                {
-                    // See if the type of Public Key is OK
-                    if (didDocumentPubKeyType.TryGetValue((DidDocumentPubKeyType)outValue, out String keyValue))
-                    {
-                        // OK - The keyType string is OK
-                        this.type = (DidDocumentPubKeyType)outValue;
-                    }
-                    else
-                    {
-                        // Error - We cannot recognizee the key type
-                        System.ArgumentException argEx = new System.ArgumentException($"Unsupported key type value {keyValue} - Supported types: {String.Join(',', (new List<String>(didDocumentPubKeyType.Values)))} ");
-                        throw argEx;
-                    }
-                }
-                catch
-                {
-                    // Error in getting key type
-                    // Error - We cannot recognizee the key type
-                    System.ArgumentException argEx = new System.ArgumentException($"Invalid key type value - Supported types: {String.Join(',', (new List<String>(didDocumentPubKeyType.Values)))} ");
-                    throw argEx;
-                }
-            }
+                this.type = outValue as String;
             if (json.TryGetValue("controller", out outValue))
                 this.controller = outValue as String;
-            if (json.TryGetValue("publicKeyHex", out outValue))
-                this.publicKeyHex = outValue as String;
+            if (json.TryGetValue("publicKeyPem", out outValue))
+                this.publicKeyPem = outValue as String;
         }
 
         #endregion
@@ -116,9 +93,9 @@ namespace commercio.sdk
 
             output = new Dictionary<String, Object>();
             output.Add("id", this.id);
-            output.Add("type", didDocumentPubKeyType[this.type]);
+            output.Add("type", this.type);
             output.Add("controller", this.controller);
-            output.Add("publicKeyHex", this.publicKeyHex);
+            output.Add("publicKeyPem", this.publicKeyPem);
             return (output);
         }
 

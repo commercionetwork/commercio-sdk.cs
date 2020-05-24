@@ -22,24 +22,29 @@ namespace commercio.sdk
     public class DidPowerUpRequestPayload
     {
         #region Properties
+        [JsonProperty("sender_did", Order = 2)]
+        public String senderDid { get; set; }
+
         [JsonProperty("pairwise_did", Order = 1)]
         public String pairwiseDid { get; set; }
 
-        [JsonProperty("timestamp", Order = 3)]
+        [JsonProperty("timestamp", Order = 4)]
         public String timeStamp { get; set; }
 
-        [JsonProperty("signature", Order = 2)]
+        [JsonProperty("signature", Order = 3)]
         public String signature { get; set; }
 
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public DidPowerUpRequestPayload(String pairwiseDid, String timeStamp, String signature)
+        public DidPowerUpRequestPayload(String senderDid, String pairwiseDid, String timeStamp, String signature)
         {
+            Trace.Assert(senderDid != null);
             Trace.Assert(pairwiseDid != null);
             Trace.Assert(timeStamp != null);
             Trace.Assert(signature != null);
+            this.senderDid = senderDid;
             this.pairwiseDid = pairwiseDid;
             this.timeStamp = timeStamp;
             this.signature = signature;
@@ -49,6 +54,8 @@ namespace commercio.sdk
         public DidPowerUpRequestPayload(Dictionary<String, Object> json)
         {
             Object outValue;
+            if (json.TryGetValue("sender_did", out outValue))
+                this.senderDid = outValue as String;
             if (json.TryGetValue("pairwise_did", out outValue))
                 this.pairwiseDid = outValue as String;
             if (json.TryGetValue("timestamp", out outValue))
@@ -66,6 +73,7 @@ namespace commercio.sdk
             Dictionary<String, Object> output;
 
             output = new Dictionary<String, Object>();
+            output.Add("sender_did", this.senderDid);
             output.Add("pairwise_did", this.pairwiseDid);
             output.Add("timestamp", this.timeStamp);
             output.Add("signature", this.signature);
