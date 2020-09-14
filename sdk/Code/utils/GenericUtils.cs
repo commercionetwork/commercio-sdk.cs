@@ -11,6 +11,8 @@ using System;
 using System.ComponentModel;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
@@ -29,15 +31,28 @@ namespace commercio.sdk
         public static String getTimeStamp()
         {
             // return System.DateTime.UtcNow.ToString("o"); // This get a Iso8601 Time stamp - to be checked
-            return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString();
+            // return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString(); // RC 20200913: THis was a old version @@@!
+            return (DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
         }
-        #endregion
 
-        #region Helpers
-        #endregion
-    }
+        /// Calculates the default fees from
+        /// the messages number [msgsNumber] contained in the transaction
+        /// and the default values [fee], [denom] and [gas].
+        public static StdFee calculateDefaultFee(int msgsNumber, int fee, String denom, int gas)
+        {
+            return new StdFee(
+                gas: (gas * msgsNumber).ToString(), 
+                amount: new List<StdCoin> { new StdCoin(denom: denom, amount: (fee * msgsNumber).ToString())}
+            );    
+        }
 
-    public static class MyEnumExtensions
+    #endregion
+
+    #region Helpers
+    #endregion
+}
+
+public static class MyEnumExtensions
     {
         public static string ToDescriptionString(this Object val)
         {
@@ -48,4 +63,6 @@ namespace commercio.sdk
             return attributes.Length > 0 ? attributes[0].Description : string.Empty;
         }
     }
+
+
 }

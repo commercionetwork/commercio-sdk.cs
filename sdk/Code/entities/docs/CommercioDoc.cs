@@ -170,7 +170,7 @@ namespace commercio.sdk
         [JsonConstructor]
         public CommercioDocMetadata(String contentUri,
                             CommercioDocMetadataSchema schema,
-                            String schemaType)
+                            String schemaType = "")
         {
             Trace.Assert(contentUri != null);
             //Trace.Assert(schema != null);

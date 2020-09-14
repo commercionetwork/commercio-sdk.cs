@@ -25,7 +25,7 @@ namespace commercio.sdk
         public String type { get; set; }
 
         [JsonProperty("created", Order = 1)]
-        public String iso8601creationTimestamp { get; set; }
+        public String timestamp { get; set; }
 
         [JsonProperty("proofPurpose", Order = 3)]
         public String proofPurpose { get; set; }
@@ -43,16 +43,16 @@ namespace commercio.sdk
 
         #region Constructors
         [JsonConstructor]
-        public DidDocumentProof(String type, String iso8601creationTimestamp, String proofPurpose, String controller, String verificationMethod, String signatureValue)
+        public DidDocumentProof(String type, String timestamp, String proofPurpose, String controller, String verificationMethod, String signatureValue)
         {
             Trace.Assert(type != null);
-            Trace.Assert(iso8601creationTimestamp != null);
+            Trace.Assert(timestamp != null);
             Trace.Assert(proofPurpose != null);
             Trace.Assert(controller != null);
             Trace.Assert(verificationMethod != null);
             Trace.Assert(signatureValue != null);
             this.type = type;
-            this.iso8601creationTimestamp = iso8601creationTimestamp;
+            this.timestamp = timestamp;
             this.proofPurpose = proofPurpose;
             this.controller = controller;
             this.verificationMethod = verificationMethod;
@@ -66,7 +66,7 @@ namespace commercio.sdk
             if (json.TryGetValue("type", out outValue))
                 this.type = outValue as String;
             if (json.TryGetValue("created", out outValue))
-                this.iso8601creationTimestamp = outValue as String;
+                this.timestamp = outValue as String;
             if (json.TryGetValue("proofPurpose", out outValue))
                 this.proofPurpose = outValue as String;
             if (json.TryGetValue("controller", out outValue))
@@ -87,7 +87,7 @@ namespace commercio.sdk
 
             output = new Dictionary<String, Object>();
             output.Add("type", this.type);
-            output.Add("created", this.iso8601creationTimestamp);
+            output.Add("created", this.timestamp);
             output.Add("proofPurpose", this.proofPurpose);
             output.Add("controller", this.controller);
             output.Add("verificationMethod", this.verificationMethod);

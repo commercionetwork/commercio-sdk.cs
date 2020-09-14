@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace commercio.sdk
 {
-    class IdentityResponse
+    public class IdentityResponse
     {
         #region Properties
 
@@ -79,7 +79,7 @@ namespace commercio.sdk
 
     }
 
-    class ResultId
+    public class ResultId
     {
         #region Properties
 

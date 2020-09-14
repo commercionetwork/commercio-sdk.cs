@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 
 namespace commercio.sdk
 {
-    class TumblerResponse
+    public class TumblerResponse
     {
         #region Properties
 
@@ -79,7 +79,7 @@ namespace commercio.sdk
 
     }
 
-    class Result
+    public class Result
     {
         #region Properties
 

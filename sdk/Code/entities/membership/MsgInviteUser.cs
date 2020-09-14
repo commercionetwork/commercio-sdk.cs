@@ -24,6 +24,47 @@ namespace commercio.sdk
     public class MsgInviteUser : StdMsg
     {
         #region Properties
+        [JsonProperty("inviteUser", Order = 1)]
+        public InviteUser inviteUser { get; private set; }
+
+        // The override of the value getter is mandatory to obtain a correct codified Json
+        public override Dictionary<String, Object> value
+        {
+            get
+            {
+                return _toJson();
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// Public constructor.
+        public MsgInviteUser(InviteUser inviteUser)
+        {
+            Trace.Assert(inviteUser != null);
+            // Assigns the properties
+            this.inviteUser = inviteUser;
+            base.setProperties("commercio/MsgInviteUser", _toJson());
+        }
+
+        #endregion
+
+        #region Public Methods
+        #endregion
+
+        #region Helpers
+
+        private Dictionary<String, Object> _toJson()
+        {
+            Dictionary<String, Object> wk = this.inviteUser.toJson();
+            return wk;
+        }
+        #endregion
+
+        /*
+        #region Properties
         [JsonProperty("recipientDid", Order = 1)]
         public String recipientDid { get; private set; }
         [JsonProperty("senderDid", Order = 2)]
@@ -68,5 +109,6 @@ namespace commercio.sdk
             return wk;
         }
         #endregion
+        */
     }
 }

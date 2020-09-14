@@ -13,12 +13,56 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
     public class MsgCloseCdp : StdMsg
     {
+
+
+        #region Properties
+        [JsonProperty("closeCdp", Order = 1)]
+        public CloseCdp closeCdp { get; private set; }
+
+        // The override of the value getter is mandatory to obtain a correct codified Json
+        public override Dictionary<String, Object> value
+        {
+            get
+            {
+                return _toJson();
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// Public constructor.
+        public MsgCloseCdp(CloseCdp closeCdp)
+        {
+            Trace.Assert(closeCdp != null);
+            // Assigns the properties
+            this.closeCdp = closeCdp;
+            base.setProperties("commercio/MsgCloseCdp", _toJson());
+        }
+
+        #endregion
+
+        #region Public Methods
+        #endregion
+
+        #region Helpers
+
+        private Dictionary<String, Object> _toJson()
+        {
+            Dictionary<String, Object> wk = this.closeCdp.toJson();
+            return wk;
+        }
+        #endregion
+
+        /*
         #region Properties
         public String signerDid { get; private set; }
         public int timeStamp { get; private set; }
@@ -62,5 +106,6 @@ namespace commercio.sdk
             return wk;
         }
         #endregion
+        */
     }
 }

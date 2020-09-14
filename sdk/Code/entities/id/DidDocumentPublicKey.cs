@@ -30,16 +30,18 @@ namespace commercio.sdk
 
     // *** This is inherited by Equatable in Dart Package!
     //  There is no such Class in C# - we include Compare-Net-Objects Nuget package for the purpose - see https://github.com/GregFinzer/Compare-Net-Objects
+
     //  Dart code marks this class as @JsonSerializable(explicitToJson: true): I have no way to control the toJson behaviour like Dart does
     // I need to call directly the toJson method on the classes! 
     public class DidDocumentPublicKey
     {
-
+        /*
         private readonly Dictionary<DidDocumentPubKeyType, String> didDocumentPubKeyType = new Dictionary<DidDocumentPubKeyType, String> {
             { DidDocumentPubKeyType.RSA, "RsaVerificationKey2018" },
             { DidDocumentPubKeyType.ED25519, "Ed25519VerificationKey2018" },
             { DidDocumentPubKeyType.SECP256K1, "Secp256k1VerificationKey2018" },
         };
+        */
 
         #region Properties
         [JsonProperty("id", Order = 2)]

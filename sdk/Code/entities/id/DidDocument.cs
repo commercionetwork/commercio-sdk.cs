@@ -78,7 +78,8 @@ namespace commercio.sdk
             this.id = id;
             this.publicKeys = publicKeys;
             this.proof = proof;
-            this.service = service;
+            //RC - Force service as null if list is empty - to be compliant to specs, no empty list should be there.
+            this.service = ((service?.Count > 0) ? service : null);
         }
 
         // Alternate constructor from Json Dictionary
@@ -90,11 +91,13 @@ namespace commercio.sdk
             if (json.TryGetValue("id", out outValue))
                 this.id = outValue as String;
             if (json.TryGetValue("publicKey", out outValue))
-                this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();
+                this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();  // RC - This need to be checked - 20200910
             if (json.TryGetValue("proof", out outValue))
                this.proof = (outValue == null ? null : new DidDocumentProof( (Dictionary<String, Object>) outValue));
             if (json.TryGetValue("service", out outValue))
                 this.service = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentService(elem)).ToList();
+            //RC - Force service as null if list is empty - to be compliant to specs, no empty list should be there.
+            this.service = ((this.service?.Count > 0) ? service : null);
         }
 
         #endregion
@@ -108,7 +111,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("@context", this.context);
             output.Add("id", this.id);
-            output.Add("publicKey", this.publicKeys?.Select(elem => elem?.toJson()?.ToList()));
+            output.Add("publicKey", this.publicKeys?.Select(elem => elem?.toJson()?.ToList()));  // RC - This need to be checked - 20200910
             output.Add("proof", this.proof?.toJson());
             output.Add("service", this.service?.Select(elem => elem?.toJson()?.ToList()));
             return (output);

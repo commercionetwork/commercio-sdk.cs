@@ -10,7 +10,7 @@ using commercio.sacco.lib;
 using sdk_test.TestResources;
 
 
-namespace commercio.sdk_test
+namespace sdk_test
 {
     [TestClass]
     public class EncryptionHelper_test

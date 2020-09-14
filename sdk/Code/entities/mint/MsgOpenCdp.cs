@@ -14,12 +14,55 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
     public class MsgOpenCdp : StdMsg
     {
+
+        #region Properties
+        [JsonProperty("openCdp", Order = 1)]
+        public OpenCdp openCdp { get; private set; }
+
+        // The override of the value getter is mandatory to obtain a correct codified Json
+        public override Dictionary<String, Object> value
+        {
+            get
+            {
+                return _toJson();
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// Public constructor.
+        public MsgOpenCdp(OpenCdp openCdp)
+        {
+            Trace.Assert(openCdp != null);
+            // Assigns the properties
+            this.openCdp = openCdp;
+            base.setProperties("commercio/MsgOpenCdp", _toJson());
+        }
+
+        #endregion
+
+        #region Public Methods
+        #endregion
+
+        #region Helpers
+
+        private Dictionary<String, Object> _toJson()
+        {
+            Dictionary<String, Object> wk = this.openCdp.toJson();
+            return wk;
+        }
+        #endregion
+
+        /*
         #region Properties
         public List<StdCoin> depositAmount { get; private set; }
         public String signerDid { get; private set; }
@@ -63,5 +106,6 @@ namespace commercio.sdk
             return wk;
         }
         #endregion
+        */
     }
 }

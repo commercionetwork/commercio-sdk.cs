@@ -89,8 +89,8 @@ namespace commercio.sdk
         {
 
             return new DidDocumentProof(
-              type: "LinkedDataSignature2015",
-              iso8601creationTimestamp: GenericUtils.getTimeStamp(),
+              type: "EcdsaSecp256k1VerificationKey2019",
+              timestamp: GenericUtils.getTimeStamp(),
               proofPurpose: proofPurpose,
               controller: controller,
               verificationMethod: verificationMethod,
