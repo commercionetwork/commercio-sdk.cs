@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -53,20 +54,26 @@ namespace commercio.sdk
             this.encryptionKey = encryptionKey;
         }
 
-        // Alternate constructor from Json Dictionary
-        public RequestDidPowerUp(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public RequestDidPowerUp(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("claimant", out outValue))
-                this.claimantDid = outValue as String;
-            if (json.TryGetValue("amount", out outValue))
-                this.amount = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new StdCoin(elem)).ToList();  // RC - This need to be checked - 20200910
-            if (json.TryGetValue("proof", out outValue))
-                this.powerUpProof = outValue as String;
-            if (json.TryGetValue("id", out outValue))
-                this.uuid = outValue as String;
-            if (json.TryGetValue("proof_key", out outValue))
-                this.encryptionKey = outValue as String;
+            this.claimantDid = (String)json["claimant"];
+            this.amount = ((JArray)json["amount"]).Select(elem => (new StdCoin((JObject) elem))).ToList();
+            this.powerUpProof = (String)json["proof"];
+            this.uuid = (String)json["id"];
+            this.encryptionKey = (String)json["proof_key"];
+
+            //Object outValue;
+            //if (json.TryGetValue("claimant", out outValue))
+            //    this.claimantDid = outValue as String;
+            //if (json.TryGetValue("amount", out outValue))
+            //    this.amount = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new StdCoin(elem)).ToList();  // RC - This need to be checked - 20200910
+            //if (json.TryGetValue("proof", out outValue))
+            //    this.powerUpProof = outValue as String;
+            //if (json.TryGetValue("id", out outValue))
+            //    this.uuid = outValue as String;
+            //if (json.TryGetValue("proof_key", out outValue))
+            //    this.encryptionKey = outValue as String;
         }
 
         #endregion

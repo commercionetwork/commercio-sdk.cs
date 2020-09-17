@@ -11,8 +11,9 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
-using commercio.sacco.lib;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
@@ -36,14 +37,17 @@ namespace commercio.sdk
             this.buyerDid = buyerDid;
         }
 
-        // Alternate constructor from Json Dictionary
-        public BuyMembership(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public BuyMembership(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("membership_type", out outValue))
-                this.membershipType = outValue as String;
-            if (json.TryGetValue("buyer", out outValue))
-                this.buyerDid = outValue as String;
+            this.membershipType = (String)json["membership_type"];
+            this.buyerDid = (String)json["buyer"];
+
+            //Object outValue;
+            //if (json.TryGetValue("membership_type", out outValue))
+            //    this.membershipType = outValue as String;
+            //if (json.TryGetValue("buyer", out outValue))
+            //    this.buyerDid = outValue as String;
         }
 
         #endregion

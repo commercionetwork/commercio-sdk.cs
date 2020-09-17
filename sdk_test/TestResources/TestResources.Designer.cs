@@ -116,5 +116,40 @@ namespace sdk_test.TestResources {
                 return ResourceManager.GetString("SentDocumentResponseJson", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a {
+        ///  &quot;height&quot;: &quot;0&quot;,
+        ///  &quot;result&quot;: {
+        ///    &quot;tumbler_address&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;
+        ///  }
+        ///}.
+        /// </summary>
+        internal static string tumblerAddressJson {
+            get {
+                return ResourceManager.GetString("tumblerAddressJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a {
+        ///  &quot;height&quot;: &quot;0&quot;,
+        ///  &quot;result&quot;: {
+        ///    &quot;owner&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;,
+        ///    &quot;did_document&quot;: {
+        ///      &quot;@context&quot;: &quot;https://www.w3.org/ns/did/v1&quot;,
+        ///      &quot;id&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;,
+        ///      &quot;publicKey&quot;: [
+        ///        {
+        ///          &quot;id&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau#keys-1&quot;,
+        ///          &quot;type&quot;: &quot;RsaVerificationKey2018&quot;,
+        ///          &quot;controller&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;,
+        ///          &quot;publicKeyPem&quot;: &quot;-----BEGIN PUBLIC [stringa troncata]&quot;;.
+        /// </summary>
+        internal static string tumblerIdentityJson {
+            get {
+                return ResourceManager.GetString("tumblerIdentityJson", resourceCulture);
+            }
+        }
     }
 }

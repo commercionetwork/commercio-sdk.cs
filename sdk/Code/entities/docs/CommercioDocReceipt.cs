@@ -14,6 +14,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -61,22 +62,29 @@ namespace commercio.sdk
             this.proof = proof;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDocReceipt(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDocReceipt(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("uuid", out outValue))
-                this.uuid = outValue as String;
-            if (json.TryGetValue("sender", out outValue))
-                this.senderDid = outValue as String;
-            if (json.TryGetValue("recipient", out outValue))
-                this.recipientDid = outValue as String;
-            if (json.TryGetValue("tx_hash", out outValue))
-                this.txHash = outValue as String;
-            if (json.TryGetValue("document_uuid", out outValue))
-                this.documentUuid = outValue as String;
-            if (json.TryGetValue("proof", out outValue))
-                this.proof = outValue as String;
+            this.uuid = (String)json["uuid"];
+            this.senderDid = (String)json["sender"];
+            this.recipientDid = (String)json["recipient"];
+            this.txHash = (String)json["tx_hash"];
+            this.documentUuid = (String)json["document_uuid"];
+            this.proof = (String)json["proof"];
+
+            //Object outValue;
+            //if (json.TryGetValue("uuid", out outValue))
+            //    this.uuid = outValue as String;
+            //if (json.TryGetValue("sender", out outValue))
+            //    this.senderDid = outValue as String;
+            //if (json.TryGetValue("recipient", out outValue))
+            //    this.recipientDid = outValue as String;
+            //if (json.TryGetValue("tx_hash", out outValue))
+            //    this.txHash = outValue as String;
+            //if (json.TryGetValue("document_uuid", out outValue))
+            //    this.documentUuid = outValue as String;
+            //if (json.TryGetValue("proof", out outValue))
+            //    this.proof = outValue as String;
         }
 
         #endregion

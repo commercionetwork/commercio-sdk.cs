@@ -11,6 +11,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -44,16 +45,20 @@ namespace commercio.sdk
             this.endpoint = endpoint;
         }
 
-        // Alternate constructor from Json Dictionary
-        public DidDocumentService(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public DidDocumentService(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("id", out outValue))
-                this.id = outValue as String;
-            if (json.TryGetValue("type", out outValue))
-                this.type = outValue as String;
-            if (json.TryGetValue("serviceEndpoint", out outValue))
-                this.endpoint = outValue as String;
+            this.id = (String)json["id"];
+            this.type = (String)json["type"];
+            this.endpoint = (String)json["serviceEndpoint"];
+
+            //Object outValue;
+            //if (json.TryGetValue("id", out outValue))
+            //    this.id = outValue as String;
+            //if (json.TryGetValue("type", out outValue))
+            //    this.type = outValue as String;
+            //if (json.TryGetValue("serviceEndpoint", out outValue))
+            //    this.endpoint = outValue as String;
         }
 
         #endregion

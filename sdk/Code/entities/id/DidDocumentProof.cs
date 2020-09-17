@@ -11,6 +11,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -59,22 +60,29 @@ namespace commercio.sdk
             this.signatureValue = signatureValue;
         }
 
-        // Alternate constructor from Json Dictionary
-        public DidDocumentProof(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public DidDocumentProof(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("type", out outValue))
-                this.type = outValue as String;
-            if (json.TryGetValue("created", out outValue))
-                this.timestamp = outValue as String;
-            if (json.TryGetValue("proofPurpose", out outValue))
-                this.proofPurpose = outValue as String;
-            if (json.TryGetValue("controller", out outValue))
-                this.controller = outValue as String;
-            if (json.TryGetValue("verificationMethod", out outValue))
-                this.verificationMethod = outValue as String;
-            if (json.TryGetValue("signatureValue", out outValue))
-                this.signatureValue = outValue as String;
+            this.type = (String) json["type"];
+            this.timestamp = (String)json["created"];
+            this.proofPurpose = (String)json["proofPurpose"];
+            this.controller = (String)json["controller"];
+            this.verificationMethod = (String)json["verificationMethod"];
+            this.signatureValue = (String)json["signatureValue"];
+
+            //Object outValue;
+            //if (json.TryGetValue("type", out outValue))
+            //    this.type = outValue as String;
+            //if (json.TryGetValue("created", out outValue))
+            //    this.timestamp = outValue as String;
+            //if (json.TryGetValue("proofPurpose", out outValue))
+            //    this.proofPurpose = outValue as String;
+            //if (json.TryGetValue("controller", out outValue))
+            //    this.controller = outValue as String;
+            //if (json.TryGetValue("verificationMethod", out outValue))
+            //    this.verificationMethod = outValue as String;
+            //if (json.TryGetValue("signatureValue", out outValue))
+            //    this.signatureValue = outValue as String;
         }
 
         #endregion

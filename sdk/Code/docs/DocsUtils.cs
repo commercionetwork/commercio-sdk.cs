@@ -170,7 +170,7 @@ namespace commercio.sdk
                 ),
                 encryptionData: new CommercioDocEncryptionData(
                     keys: encryptionKeys,
-                    encryptedData: encryptedData.Select((e) => e.ToDescriptionString()).ToList()
+                    encryptedData: encryptedData.Select((e) => e.ToEnumMemberAttrValue()).ToList()
                 )
             );
         }

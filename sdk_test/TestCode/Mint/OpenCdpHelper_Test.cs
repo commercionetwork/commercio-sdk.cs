@@ -10,15 +10,32 @@ using KellermanSoftware.CompareNetObjects;
 namespace sdk_test
 {
     [TestClass]
-    class OpenCdpHelper_Test
+    public class OpenCdpHelper_Test
     {
 
         [TestMethod]
         // '"fromWallet()" returns a well-formed "OpenCdp" object.'
         public void WellFormedOpenCdpFromWallet()
         {
+            //This is the comparison class
+            CompareLogic compareLogic = new CompareLogic();
 
-            Assert.IsTrue(true);
+            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "");
+            String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
+            List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+            Wallet wallet = Wallet.derive(mnemonic, networkInfo);
+
+            List<StdCoin> depositAmount = new List<StdCoin> { new StdCoin(denom: "commercio", amount: "10") };
+
+            OpenCdp expectedOpenCdp = new OpenCdp(
+                depositAmount: depositAmount,
+                signerDid: wallet.bech32Address
+            );
+
+            OpenCdp openCdp = OpenCdpHelper.fromWallet(wallet, depositAmount);
+
+            Assert.AreEqual(compareLogic.Compare(openCdp.toJson(), expectedOpenCdp.toJson()).AreEqual, true);
+
         }
     }
 }

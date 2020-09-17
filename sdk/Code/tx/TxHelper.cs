@@ -55,7 +55,7 @@ namespace commercio.sdk
 
             StdTx stdTx = TxBuilder.buildStdTx(stdMsgs: msgs, fee: fee);
             StdTx signedTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
-            String modeStr = MyEnumExtensions.ToDescriptionString(mode);
+            String modeStr = MyEnumExtensions.ToEnumMemberAttrValue(mode);
             return await TxSender.broadcastStdTx(wallet: wallet, stdTx: signedTx, mode: modeStr);
         }
 

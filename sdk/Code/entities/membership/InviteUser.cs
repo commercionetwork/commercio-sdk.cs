@@ -11,8 +11,9 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
-using commercio.sacco.lib;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
@@ -36,14 +37,17 @@ namespace commercio.sdk
             this.senderDid = senderDid;
         }
 
-        // Alternate constructor from Json Dictionary
-        public InviteUser(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public InviteUser(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("recipient", out outValue))
-                this.recipientDid = outValue as String;
-            if (json.TryGetValue("sender", out outValue))
-                this.senderDid = outValue as String;
+            this.recipientDid = (String)json["recipient"];
+            this.senderDid = (String)json["sender"];
+
+            //Object outValue;
+            //if (json.TryGetValue("recipient", out outValue))
+            //    this.recipientDid = outValue as String;
+            //if (json.TryGetValue("sender", out outValue))
+            //    this.senderDid = outValue as String;
         }
 
         #endregion

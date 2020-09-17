@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Crypto.Parameters;
 using commercio.sacco.lib;
 
@@ -98,8 +100,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDoc>> getSendDocuments(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/docs/{address}/sent";
-            List <Dictionary<String, Object >> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDoc(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDoc((JObject) json)).ToList();
         }
 
         /// Returns the list of all the [CommercioDoc] that the
@@ -107,8 +109,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDoc>> getReceivedDocuments(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/docs/{address}/received";
-            List<Dictionary<String, Object>> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDoc(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDoc((JObject)json)).ToList();
         }
 
         /// Creates a new transaction which tells the [recipient] that the document
@@ -162,8 +164,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDocReceipt>> getSentReceipts(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/receipts/{address}/sent";
-            List<Dictionary<String, Object>> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDocReceipt(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDocReceipt((JObject)json)).ToList();
         }
 
         /// Returns the list of all the [CommercioDocReceipt] that
@@ -171,8 +173,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDocReceipt>> getReceivedReceipts(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/receipts/{address}/received";
-            List<Dictionary<String, Object>> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDocReceipt(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDocReceipt((JObject)json)).ToList();
         }
 
         #endregion

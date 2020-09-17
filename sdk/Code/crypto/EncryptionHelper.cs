@@ -18,6 +18,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -43,17 +44,17 @@ namespace commercio.sdk
                 throw argEx;
             }
 
-            TumblerResponse tumbler = new TumblerResponse(JsonConvert.DeserializeObject<Dictionary<String, Object>>(tumblerResponse.ToString()));
+            TumblerResponse tumbler = new TumblerResponse(JObject.Parse(tumblerResponse.ToString()));
             String tumblerAddress = tumbler.result.tumblerAddress;
 
-            Object identityResponseRaw = await Network.query($"{lcdUrl}/identities/$tumblerAddress");
+            Object identityResponseRaw = await Network.query($"{lcdUrl}/identities/{tumblerAddress}");
             if (identityResponseRaw == null)
             {
                 System.ArgumentException argEx = new System.ArgumentException("getGovernmentRsaPubKey: Cannot get government RSA public key");
                 throw argEx;
             }
 
-            IdentityResponse identityResponse = new IdentityResponse(JsonConvert.DeserializeObject<Dictionary<String, Object>>(identityResponseRaw.ToString()));
+            IdentityResponse identityResponse = new IdentityResponse(JObject.Parse(identityResponseRaw.ToString()));
             String publicSignatureKeyPem = identityResponse.result.didDocument.publicKeys[1].publicKeyPem;
 
             RsaKeyParameters rsaPublicKey = RSAKeyParser.parsePublicKeyFromPem(publicSignatureKeyPem);

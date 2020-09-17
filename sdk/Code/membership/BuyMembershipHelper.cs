@@ -23,7 +23,7 @@ namespace commercio.sdk
         /// Creates a BuyMembership from the given [wallet] and [membershipType].
         public static BuyMembership fromWallet(Wallet wallet, MembershipType membershipType)
         {
-            return new BuyMembership(buyerDid: wallet.bech32Address, membershipType: MyEnumExtensions.ToDescriptionString(membershipType));
+            return new BuyMembership(buyerDid: wallet.bech32Address, membershipType: MyEnumExtensions.ToEnumMemberAttrValue(membershipType));
         }
     }
 }

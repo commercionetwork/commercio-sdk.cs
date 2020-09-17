@@ -13,6 +13,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 
 namespace commercio.sdk
@@ -72,18 +73,23 @@ namespace commercio.sdk
             this.publicKeyPem = publicKeyPem;
         }
 
-        // Alternate constructor from Json Dictionary
-        public DidDocumentPublicKey(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public DidDocumentPublicKey(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("id", out outValue))
-                this.id = outValue as String;
-            if (json.TryGetValue("type", out outValue))
-                this.type = outValue as String;
-            if (json.TryGetValue("controller", out outValue))
-                this.controller = outValue as String;
-            if (json.TryGetValue("publicKeyPem", out outValue))
-                this.publicKeyPem = outValue as String;
+            this.id = (String)json["id"]; ;
+            this.type = (String)json["type"];
+            this.controller = (String)json["controller"];
+            this.publicKeyPem = (String)json["publicKeyPem"];
+            
+            //Object outValue;
+            //if (json.TryGetValue("id", out outValue))
+            //    this.id = outValue as String;
+            //if (json.TryGetValue("type", out outValue))
+            //    this.type = outValue as String;
+            //if (json.TryGetValue("controller", out outValue))
+            //    this.controller = outValue as String;
+            //if (json.TryGetValue("publicKeyPem", out outValue))
+            //    this.publicKeyPem = outValue as String;
         }
 
         #endregion

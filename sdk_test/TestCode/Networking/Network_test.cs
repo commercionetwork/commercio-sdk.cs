@@ -40,9 +40,9 @@ namespace sdk_test
             Network.client = client;
 
             // Test response
-            List<Dictionary<String, Object>> resultList = (List<Dictionary<String, Object>>) Network.queryChain(localTestUrl).Result;
+            JArray resultList = Network.queryChain(localTestUrl).Result as JArray;
 
-            List<NetworkTestData> testDataList = resultList.Select(json => new NetworkTestData(json)).ToList();
+            List<NetworkTestData> testDataList = resultList.Select(json => new NetworkTestData((JObject) json)).ToList();
 
             Assert.IsTrue(testDataList.Count == 4);
             Assert.IsTrue("did:com:1zfhgwfgex8rc9t00pk6jm6xj6vx5cjr4ngy32v" == testDataList[0].sender);
@@ -65,13 +65,10 @@ namespace sdk_test
             this.uuid = uuid;
         }
 
-        public NetworkTestData(Dictionary<String, Object> json)
+        public NetworkTestData(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("sender", out outValue))
-                this.sender = outValue as String;
-            if (json.TryGetValue("uuid", out outValue))
-                this.uuid = outValue as String;
+            this.sender = (String)json["sender"];
+            this.uuid = (String)json["uuid"];
         }
     }
 }

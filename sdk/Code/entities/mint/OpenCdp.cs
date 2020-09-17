@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -37,14 +38,17 @@ namespace commercio.sdk
             this.signerDid = signerDid;
         }
 
-        // Alternate constructor from Json Dictionary
-        public OpenCdp(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public OpenCdp(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("deposit_amount", out outValue))
-                this.depositAmount = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new StdCoin(elem)).ToList();  // RC - This need to be checked - 20200910;
-            if (json.TryGetValue("depositor", out outValue))
-                this.signerDid = outValue as String;
+            this.depositAmount = ((JArray)json["deposit_amount"]).Select(elem => (new StdCoin((JObject)elem))).ToList();
+            this.signerDid = (String)json["depositor"];
+
+            //Object outValue;
+            //if (json.TryGetValue("deposit_amount", out outValue))
+            //    this.depositAmount = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new StdCoin(elem)).ToList();  // RC - This need to be checked - 20200910;
+            //if (json.TryGetValue("depositor", out outValue))
+            //    this.signerDid = outValue as String;
         }
 
         #endregion

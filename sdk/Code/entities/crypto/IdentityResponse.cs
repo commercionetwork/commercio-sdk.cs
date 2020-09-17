@@ -10,6 +10,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -24,12 +25,12 @@ namespace commercio.sdk
 
         #endregion
 
-        // Static contructor from raw json 
-        static public TumblerResponse fromRawJson(String rawJson)
-        {
-            Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
-            return new TumblerResponse(ObjClassDeJsoned);
-        }
+        //// Static contructor from raw json 
+        //static public TumblerResponse fromRawJson(String rawJson)
+        //{
+        //    Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
+        //    return new TumblerResponse(ObjClassDeJsoned);
+        //}
 
         #region Constructors
 
@@ -41,14 +42,13 @@ namespace commercio.sdk
             this.result = result;
         }
 
-        // Alternate constructor from Json Dictionary
-        public IdentityResponse(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public IdentityResponse(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("height", out outValue))
-                this.height = outValue as String;
-            if (json.TryGetValue("result", out outValue))
-                this.result = new ResultId(outValue as Dictionary<String, Object>);
+            JObject outValue;
+            this.height = (String)json["height"];
+            outValue = (JObject)json["result"];
+            this.result = new ResultId(outValue);
         }
 
         #endregion
@@ -93,11 +93,11 @@ namespace commercio.sdk
         // Static contructor from raw json 
         // was: Constructor from encoded json
         //      factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
-        static public ResultId fromRawJson(String rawJson)
-        {
-            Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
-            return new ResultId(ObjClassDeJsoned);
-        }
+        //static public ResultId fromRawJson(String rawJson)
+        //{
+        //    Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
+        //    return new ResultId(ObjClassDeJsoned);
+        //}
 
         #region Constructors
 
@@ -109,15 +109,22 @@ namespace commercio.sdk
             this.didDocument = didDocument;
         }
 
-        // Alternate constructor from Json Dictionary
-        public ResultId(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public ResultId(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("owner", out outValue))
-                this.owner = outValue as String;
-            if (json.TryGetValue("did_document", out outValue))
-                this.didDocument = new DidDocument(outValue as Dictionary<String, Object>);
+            this.owner = (String)json["owner"];
+            this.didDocument = new DidDocument((JObject)json["did_document"]);
         }
+
+        // Alternate constructor from Json Dictionary
+        //public ResultId(Dictionary<String, Object> json)
+        //{
+        //    Object outValue;
+        //    if (json.TryGetValue("owner", out outValue))
+        //        this.owner = outValue as String;
+        //    if (json.TryGetValue("did_document", out outValue))
+        //        this.didDocument = new DidDocument(outValue as Dictionary<String, Object>);
+        //}
 
         #endregion
 

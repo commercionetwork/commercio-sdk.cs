@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -50,18 +51,23 @@ namespace commercio.sdk
             this.signature = signature;
         }
 
-        // Alternate constructor from Json Dictionary
-        public DidPowerUpRequestPayload(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public DidPowerUpRequestPayload(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("sender_did", out outValue))
-                this.senderDid = outValue as String;
-            if (json.TryGetValue("pairwise_did", out outValue))
-                this.pairwiseDid = outValue as String;
-            if (json.TryGetValue("timestamp", out outValue))
-                this.timeStamp = outValue as String;
-            if (json.TryGetValue("signature", out outValue))
-                this.signature = outValue as String;
+            this.senderDid = (String)json["sender_did"];
+            this.pairwiseDid = (String)json["pairwise_did"];
+            this.timeStamp = (String)json["timestamp"];
+            this.signature = (String)json["signature"];
+
+            //Object outValue;
+            //if (json.TryGetValue("sender_did", out outValue))
+            //    this.senderDid = outValue as String;
+            //if (json.TryGetValue("pairwise_did", out outValue))
+            //    this.pairwiseDid = outValue as String;
+            //if (json.TryGetValue("timestamp", out outValue))
+            //    this.timeStamp = outValue as String;
+            //if (json.TryGetValue("signature", out outValue))
+            //    this.signature = outValue as String;
         }
 
         #endregion

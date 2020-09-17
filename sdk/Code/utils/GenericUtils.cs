@@ -10,6 +10,8 @@
 using System;
 using System.ComponentModel;
 using System.Text;
+using System.Reflection;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using commercio.sacco.lib;
@@ -54,15 +56,15 @@ namespace commercio.sdk
 
 public static class MyEnumExtensions
     {
-        public static string ToDescriptionString(this Object val)
+        public static string ToEnumMemberAttrValue(this Enum @enum)
         {
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])val
-               .GetType()
-               .GetField(val.ToString())
-               .GetCustomAttributes(typeof(DescriptionAttribute), false);
-            return attributes.Length > 0 ? attributes[0].Description : string.Empty;
+            var attr =
+                @enum.GetType().GetMember(@enum.ToString()).FirstOrDefault()?.
+                    GetCustomAttributes(false).OfType<EnumMemberAttribute>().
+                    FirstOrDefault();
+            if (attr == null)
+                return @enum.ToString();
+            return attr.Value;
         }
     }
-
-
 }

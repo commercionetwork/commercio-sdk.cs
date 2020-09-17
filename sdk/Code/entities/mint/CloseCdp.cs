@@ -11,8 +11,9 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 using System.Diagnostics;
-using commercio.sacco.lib;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
@@ -36,14 +37,17 @@ namespace commercio.sdk
             this.timeStamp = timeStamp;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CloseCdp(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CloseCdp(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("signer", out outValue))
-                this.signerDid = outValue as String;
-            if (json.TryGetValue("cdp_timestamp", out outValue))
-                this.timeStamp = outValue as String;
+            this.signerDid = (String)json["signer"];
+            this.timeStamp = (String)json["cdp_timestamp"];
+
+            //Object outValue;
+            //if (json.TryGetValue("signer", out outValue))
+            //    this.signerDid = outValue as String;
+            //if (json.TryGetValue("cdp_timestamp", out outValue))
+            //    this.timeStamp = outValue as String;
         }
 
         #endregion
