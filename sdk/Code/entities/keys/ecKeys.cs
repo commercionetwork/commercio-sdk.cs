@@ -28,7 +28,9 @@ namespace commercio.sdk
         public ECPublicKey(ECPublicKeyParameters ecPublicKey, String keyType = "Secp256k1VerificationKey2018")
         {
             this.pubKey = ecPublicKey;
-            this.keyType = keyType;
+            // I need to manage this this way due to the way C# treats optional values...
+            this.keyType = (keyType is null ? "Secp256k1VerificationKey2018" : keyType);
+            // this.keyType = keyType;
         }
 
         #endregion

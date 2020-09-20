@@ -85,7 +85,7 @@ namespace commercio.sdk
 
             output = new Dictionary<String, Object>();
             output.Add("claimant", this.claimantDid);
-            output.Add("amount", this.amount?.Select(elem => elem?.toJson()?.ToList()));  // RC - This need to be checked - 20200910
+            output.Add("amount", (this.amount?.Select(elem => elem?.toJson())?.ToList()));  // RC - This need to be checked - 20200910
             output.Add("proof", this.powerUpProof);
             output.Add("id", this.uuid);
             output.Add("proof_key", this.encryptionKey);

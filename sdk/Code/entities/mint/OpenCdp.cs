@@ -59,7 +59,7 @@ namespace commercio.sdk
             Dictionary<String, Object> output;
 
             output = new Dictionary<String, Object>();
-            output.Add("deposit_amount", this.depositAmount?.Select(elem => elem?.toJson()?.ToList()));  // RC - This need to be checked - 20200910
+            output.Add("deposit_amount", (this.depositAmount?.Select(elem => elem?.toJson())?.ToList()));  // RC - This need to be checked - 20200910
             output.Add("depositor", this.signerDid);
             return (output);
         }

@@ -31,7 +31,9 @@ namespace commercio.sdk
         public RSAPublicKey(RsaKeyParameters ecPublicKey, String keyType = "RsaVerificationKey2018")
         {
             this.pubKey = ecPublicKey;
-            this.keyType = keyType;
+            // I need to manage this this way due to the way C# treats optional values...
+            this.keyType = (keyType is null ? "RsaVerificationKey2018" : keyType);
+            // this.keyType = keyType;
         }
 
         #endregion

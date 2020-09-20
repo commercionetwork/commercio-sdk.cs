@@ -70,7 +70,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("@context", this.context);
             output.Add("id", this.id);
-            output.Add("publicKey", this.publicKeys?.Select(elem => elem?.toJson()?.ToList()));  // RC - This need to be checked - 20200910
+            output.Add("publicKey", (this.publicKeys?.Select(elem => elem?.toJson())?.ToList()));  // RC - This need to be checked - 20200910
             return (output);
         }
 
