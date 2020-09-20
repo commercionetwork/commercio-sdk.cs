@@ -62,7 +62,6 @@ namespace commercio.sdk
         #endregion
 
         #region Public Methods
-        // No toJson problem here, all simple types
         public Dictionary<String, Object> toJson()
         {
             Dictionary<String, Object> output;
