@@ -42,7 +42,8 @@ namespace commercio.sdk
                 sorted = MapSorter.sort((Dictionary < String, Object >) data);
             }
             // Encode the sorted JSON to a string
-            String jsonData = JsonConvert.SerializeObject(sorted);
+            // String jsonData = JsonConvert.SerializeObject(sorted);
+            String jsonData = JsonConvert.SerializeObject(data);
             // Create a Sha256 of the message
             byte[] utf8Bytes = Encoding.UTF8.GetBytes(jsonData);
             // Sign and return the message

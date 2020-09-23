@@ -39,9 +39,9 @@ namespace sdk_test
             );
 
             // Numbers are different from Dart version as BouncyCastle didn't like the Dart ones (namely 135 and 136)
-            BigInteger modulusSignature = new BigInteger("135", 10);
+            BigInteger modulusSignature = new BigInteger("8707", 10);
             BigInteger exponentSignature = new BigInteger("139", 10);
-            RSAPublicKey rsaPubKeySignature = new RSAPublicKey(new RsaKeyParameters(isPrivate: false, modulus: modulusVerification, exponent: exponentVerification), keyType: "RsaSignatureKey2018");
+            RSAPublicKey rsaPubKeySignature = new RSAPublicKey(new RsaKeyParameters(isPrivate: false, modulus: modulusSignature, exponent: exponentSignature), keyType: "RsaSignatureKey2018");
 
             DidDocumentPublicKey signaturePubKey = new DidDocumentPublicKey(
                 id: $"{wallet.bech32Address}#keys-2",

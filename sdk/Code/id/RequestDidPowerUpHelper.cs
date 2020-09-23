@@ -25,7 +25,7 @@ namespace commercio.sdk
         public static async Task<RequestDidPowerUp> fromWallet(Wallet senderWallet, String pairwiseDid, List<StdCoin> amount, RSAPrivateKey privateKey)
         {
             // Get the timestamp
-            String timestamp = GenericUtils.getTimeStamp(); // RC 20200913: Be careful, the Dart version uses a different timestamp format non ISO-8601 - Why?
+            String timestamp = GenericUtils.getTimeStampEpoch(); // RC 20200913: Be careful, the Dart version uses a different timestamp format non ISO-8601 - Why?
             String senderDid = senderWallet.bech32Address;
 
             // Build and sign the signature
