@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -23,10 +24,10 @@ namespace commercio.sdk
         [JsonProperty("@context", Order = 1)]
         public String context { get; set; }
 
-        [JsonProperty("id", Order = 3)]
+        [JsonProperty("id", Order = 2)]
         public String id { get; set; }
 
-        [JsonProperty("publicKey", Order = 4)]
+        [JsonProperty("publicKey", Order = 3)]
         public List<DidDocumentPublicKey> publicKeys { get; set; }
 
         #endregion
@@ -43,22 +44,24 @@ namespace commercio.sdk
             this.publicKeys = publicKeys;
         }
 
-        // Alternate constructor from Json Dictionary
-        public DidDocumentProofSignatureContent(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public DidDocumentProofSignatureContent(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("@context", out outValue))
-                this.context = outValue as String;
-            if (json.TryGetValue("id", out outValue))
-                this.id = outValue as String;
-            if (json.TryGetValue("publicKey", out outValue))
-                this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();
+            this.context = (String)json["@context"];
+            this.id = (String)json["id"];
+            this.publicKeys = ((JArray) json["publicKey"]).Select(elem => (new DidDocumentPublicKey((JObject)elem))).ToList();
+            //Object outValue;
+            //if (json.TryGetValue("@context", out outValue))
+            //    this.context = outValue as String;
+            //if (json.TryGetValue("id", out outValue))
+            //    this.id = outValue as String;
+            //if (json.TryGetValue("publicKey", out outValue))
+            //    this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();  // RC - This need to be checked - 20200910;
         }
 
         #endregion
 
         #region Public Methods
-        // No toJson problem here, all simple types
         public Dictionary<String, Object> toJson()
         {
             Dictionary<String, Object> output;
@@ -66,7 +69,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("@context", this.context);
             output.Add("id", this.id);
-            output.Add("publicKey", this.publicKeys);
+            output.Add("publicKey", (this.publicKeys?.Select(elem => elem?.toJson())?.ToList()));  // RC - This need to be checked - 20200910
             return (output);
         }
 

@@ -10,10 +10,11 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
-    class TumblerResponse
+    public class TumblerResponse
     {
         #region Properties
 
@@ -24,12 +25,12 @@ namespace commercio.sdk
 
         #endregion
 
-        // Static contructor from raw json 
-        static public TumblerResponse fromRawJson(String rawJson)
-        {
-            Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
-            return new TumblerResponse(ObjClassDeJsoned);
-        }
+        //// Static contructor from raw json 
+        //static public TumblerResponse fromRawJson(String rawJson)
+        //{
+        //    Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
+        //    return new TumblerResponse(ObjClassDeJsoned);
+        //}
 
         #region Constructors
 
@@ -41,14 +42,11 @@ namespace commercio.sdk
             this.result = result;
         }
 
-        // Alternate constructor from Json Dictionary
-        public TumblerResponse(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public TumblerResponse(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("height", out outValue))
-                this.height = outValue as String;
-            if (json.TryGetValue("result", out outValue))
-                this.result = new Result(outValue as Dictionary<String, Object>);
+            this.height = (String) json["height"];
+            this.result = new Result((JObject) json["result"]);
         }
 
         #endregion
@@ -79,7 +77,7 @@ namespace commercio.sdk
 
     }
 
-    class Result
+    public class Result
     {
         #region Properties
 
@@ -91,11 +89,11 @@ namespace commercio.sdk
         // Static contructor from raw json 
         // was: Constructor from encoded json
         //      factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
-        static public Result fromRawJson(String rawJson)
-        {
-            Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
-            return new Result(ObjClassDeJsoned);
-        }
+        //static public Result fromRawJson(String rawJson)
+        //{
+        //    Dictionary<String, Object> ObjClassDeJsoned = JsonConvert.DeserializeObject<Dictionary<String, Object>>(rawJson);
+        //    return new Result(ObjClassDeJsoned);
+        //}
 
         #region Constructors
 
@@ -105,13 +103,17 @@ namespace commercio.sdk
             this.tumblerAddress = tumblerAddress;
         }
 
-        // Alternate constructor from Json Dictionary
-        public Result(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public Result(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("tumbler_address", out outValue))
-                this.tumblerAddress = outValue as String;
+            this.tumblerAddress = (String) json["tumbler_address"];
         }
+        //public Result(Dictionary<String, Object> json)
+        //{
+        //    Object outValue;
+        //    if (json.TryGetValue("tumbler_address", out outValue))
+        //        this.tumblerAddress = outValue as String;
+        //}
 
         #endregion
 

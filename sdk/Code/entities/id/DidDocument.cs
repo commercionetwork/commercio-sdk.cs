@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.Crypto.Parameters;
 
@@ -78,23 +79,36 @@ namespace commercio.sdk
             this.id = id;
             this.publicKeys = publicKeys;
             this.proof = proof;
-            this.service = service;
+            //RC - Force service as null if list is empty - to be compliant to specs, no empty list should be there.
+            this.service = ((service?.Count > 0) ? service : null);
         }
 
-        // Alternate constructor from Json Dictionary
-        public DidDocument(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public DidDocument(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("@context", out outValue))
-                this.context = outValue as String;
-            if (json.TryGetValue("id", out outValue))
-                this.id = outValue as String;
-            if (json.TryGetValue("publicKey", out outValue))
-                this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();
-            if (json.TryGetValue("proof", out outValue))
-               this.proof = (outValue == null ? null : new DidDocumentProof( (Dictionary<String, Object>) outValue));
-            if (json.TryGetValue("service", out outValue))
-                this.service = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentService(elem)).ToList();
+            this.context = (String) json["@context"];
+            this.id = (String) json["id"];
+
+            this.publicKeys = ((JArray)json["publicKey"])?.Select(elem => (new DidDocumentPublicKey((JObject)elem))).ToList();
+
+            this.proof = (json["proof"] == null ? null : new DidDocumentProof(json["proof"] as JObject));
+
+            this.service = ((JArray)json["service"])?.Select(elem => (new DidDocumentService((JObject)elem))).ToList();
+            this.service = ((this.service?.Count > 0) ? service : null);
+
+            //Object outValue;
+            //if (json.TryGetValue("@context", out outValue))
+            //    this.context = outValue as String;
+            //if (json.TryGetValue("id", out outValue))
+            //    this.id = outValue as String;
+            //if (json.TryGetValue("publicKey", out outValue))
+            //    this.publicKeys = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentPublicKey(elem)).ToList();  // RC - This need to be checked - 20200910
+            //if (json.TryGetValue("proof", out outValue))
+            //   this.proof = (outValue == null ? null : new DidDocumentProof( (Dictionary<String, Object>) outValue));
+            //if (json.TryGetValue("service", out outValue))
+            //    this.service = (outValue as List<Dictionary<String, Object>>)?.Select(elem => new DidDocumentService(elem)).ToList();
+            ////RC - Force service as null if list is empty - to be compliant to specs, no empty list should be there.
+            //this.service = ((this.service?.Count > 0) ? service : null);
         }
 
         #endregion
@@ -108,9 +122,10 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("@context", this.context);
             output.Add("id", this.id);
-            output.Add("publicKey", this.publicKeys?.Select(elem => elem?.toJson()?.ToList()));
+            output.Add("publicKey", (this.publicKeys?.Select(elem => elem?.toJson())?.ToList()));  // RC - This need to be checked - 20200910 *****
             output.Add("proof", this.proof?.toJson());
-            output.Add("service", this.service?.Select(elem => elem?.toJson()?.ToList()));
+            if (this.service != null)
+                output.Add("service", this.service?.Select(elem => elem?.toJson()?.ToList()));
             return (output);
         }
 

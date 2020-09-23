@@ -61,6 +61,28 @@ namespace sdk_test.TestResources {
         }
         
         /// <summary>
+        ///   Cerca una stringa localizzata simile a {
+        ///	&quot;height&quot;:&quot;72644&quot;,
+        ///		&quot;result&quot;:{&quot;type&quot;:&quot;cosmos-sdk/Account&quot;,
+        ///			&quot;value&quot;:{&quot;address&quot;:&quot;did:com:1gkfhddf8hxj38x74zjxla072wyppej7xv9psfg&quot;,
+        ///			&quot;coins&quot;:
+        ///			[
+        ///				{&quot;denom&quot;:&quot;ucommercio&quot;,&quot;amount&quot;:&quot;1200200&quot;}
+        ///			],
+        ///			&quot;public_key&quot;:&quot;&quot;,
+        ///			&quot;account_number&quot;:23,
+        ///			&quot;sequence&quot;:0
+        ///		}
+        ///	}
+        ///}.
+        /// </summary>
+        internal static string accountResponse {
+            get {
+                return ResourceManager.GetString("accountResponse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Cerca una stringa localizzata simile a 00c1a1018effde47c68134995a237bc05cc703c3fee22ac721175547f542951e97785c92a7c330dff8aab6a2374cf1858af9a7cf5a8732000c52d6ae73597e5b702fafce43480b21811d8e7a90b300ff758df5b0c6337da14dc9c4959fd937c5f9d2ca1b19199e2f89018e06443a0cf347ea0d7f486c6dea46b037d748c7cc7703e686cdf4314b17ca263d5aba273905c5925a043c09e542425a33e0850d284584d3c1760ec1d9ad03e32f7e6593e7ec123306e87e252281d7a799cab516138f76212c31d0888b0345d1726ae49b17b19d48b80ed0af48cff0ff7eadf12a60d4cb4df3789363da9fc2a6635fe1152ba4e32e6b05fb972e8ae6e8b6c733582eb2 [stringa troncata]&quot;;.
         /// </summary>
         internal static string EncodedHexPubModulus {
@@ -114,6 +136,41 @@ namespace sdk_test.TestResources {
         internal static string SentDocumentResponseJson {
             get {
                 return ResourceManager.GetString("SentDocumentResponseJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a {
+        ///  &quot;height&quot;: &quot;0&quot;,
+        ///  &quot;result&quot;: {
+        ///    &quot;tumbler_address&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;
+        ///  }
+        ///}.
+        /// </summary>
+        internal static string tumblerAddressJson {
+            get {
+                return ResourceManager.GetString("tumblerAddressJson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una stringa localizzata simile a {
+        ///  &quot;height&quot;: &quot;0&quot;,
+        ///  &quot;result&quot;: {
+        ///    &quot;owner&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;,
+        ///    &quot;did_document&quot;: {
+        ///      &quot;@context&quot;: &quot;https://www.w3.org/ns/did/v1&quot;,
+        ///      &quot;id&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;,
+        ///      &quot;publicKey&quot;: [
+        ///        {
+        ///          &quot;id&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau#keys-1&quot;,
+        ///          &quot;type&quot;: &quot;RsaVerificationKey2018&quot;,
+        ///          &quot;controller&quot;: &quot;did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau&quot;,
+        ///          &quot;publicKeyPem&quot;: &quot;-----BEGIN PUBLIC [stringa troncata]&quot;;.
+        /// </summary>
+        internal static string tumblerIdentityJson {
+            get {
+                return ResourceManager.GetString("tumblerIdentityJson", resourceCulture);
             }
         }
     }

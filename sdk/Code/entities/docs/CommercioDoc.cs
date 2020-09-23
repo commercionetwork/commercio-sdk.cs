@@ -13,7 +13,9 @@ using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 
 namespace commercio.sdk
@@ -21,6 +23,7 @@ namespace commercio.sdk
     [JsonConverter(typeof(StringEnumConverter))]
     public enum CommercioDocChecksumAlgorithm
     {
+        // Be careful - if updated, also ParseCommercioDocChecksumAlgorithm needs to be aligned!
         [EnumMember(Value = "md5")]
         MD5,
         [EnumMember(Value = "sha-1")]
@@ -38,6 +41,7 @@ namespace commercio.sdk
     [JsonConverter(typeof(StringEnumConverter))]
     public enum CommercioSdnData
     {
+        // Be careful - if updated, also ParseCommercioSdnData needs to be aligned!
         [EnumMember(Value = "common_name")]
         COMMON_NAME,
         [EnumMember(Value = "surname")]
@@ -57,6 +61,74 @@ namespace commercio.sdk
     //  There is no such Class in C# - we include Compare-Net-Objects Nuget package for the purpose - see https://github.com/GregFinzer/Compare-Net-Objects
     public class CommercioDoc
     {
+        // Recover the enum from the string value - CommercioDocChecksumAlgorithm
+        public static CommercioDocChecksumAlgorithm ParseCommercioDocChecksumAlgorithm(String algoritm)
+        {
+            CommercioDocChecksumAlgorithm res = CommercioDocChecksumAlgorithm.MD5;
+
+            switch (algoritm)
+            {
+                case "md5":
+                    res = CommercioDocChecksumAlgorithm.MD5;
+                    break;
+                case "sha-1":
+                    res = CommercioDocChecksumAlgorithm.SHA1;
+                    break;
+                case "sha-224":
+                    res = CommercioDocChecksumAlgorithm.SHA224;
+                    break;
+                case "sha-256":
+                    res = CommercioDocChecksumAlgorithm.SHA256;
+                    break;
+                case "sha-384":
+                    res = CommercioDocChecksumAlgorithm.SHA384;
+                    break;
+                case "sha-512":
+                    res = CommercioDocChecksumAlgorithm.SHA512;
+                    break;
+                default:
+                    // EXception - Unknown
+                    System.ArgumentException argEx = new System.ArgumentException($"CommercioDocChecksumAlgorithm: unknown Algoritm '{algoritm}'");
+                    throw argEx;
+            }
+
+            return res;
+        }
+
+        // Recover the enum from the string value - CommercioSdnData
+        public static CommercioSdnData ParseCommercioSdnData(String snd)
+        {
+            CommercioSdnData res = CommercioSdnData.COMMON_NAME;
+
+            switch (snd)
+            {
+                case "common_name":
+                    res = CommercioSdnData.COMMON_NAME;
+                    break;
+                case "surname":
+                    res = CommercioSdnData.SURNAME;
+                    break;
+                case "serial_number":
+                    res = CommercioSdnData.SERIAL_NUMBER;
+                    break;
+                case "given_name":
+                    res = CommercioSdnData.GIVEN_NAME;
+                    break;
+                case "organization":
+                    res = CommercioSdnData.ORGANIZATION;
+                    break;
+                case "country":
+                    res = CommercioSdnData.COUNTRY;
+                    break;
+                default:
+                    // EXception - Unknown
+                    System.ArgumentException argEx = new System.ArgumentException($"CommercioSdnData: unknown sndData '{snd}'");
+                    throw argEx;
+            }
+
+            return res;
+        }
+
         #region Properties
         [JsonProperty("sender", Order = 7)]
         public String senderDid { get; set; }
@@ -104,26 +176,35 @@ namespace commercio.sdk
             this.doSign = doSign;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDoc(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDoc(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("sender", out outValue))
-                this.senderDid = outValue as String;
-            if (json.TryGetValue("recipients", out outValue))
-                this.recipientDids = outValue as List<String>;
-            if (json.TryGetValue("uuid", out outValue))
-                this.uuid = outValue as String;
-            if (json.TryGetValue("content_uri", out outValue))
-                this.contentUri = outValue as String;
-            if (json.TryGetValue("metadata", out outValue))
-                this.metadata = outValue as CommercioDocMetadata;
-            if (json.TryGetValue("checksum", out outValue))
-                this.checksum = outValue as CommercioDocChecksum;
-            if (json.TryGetValue("encryption_data", out outValue))
-                this.encryptionData = outValue as CommercioDocEncryptionData;
-            if (json.TryGetValue("do_sign", out outValue))
-                this.doSign = outValue as CommercioDoSign;
+            this.uuid = (String)json["uuid"];
+            this.senderDid = (String)json["sender"];
+            this.recipientDids = ((JArray)json["recipients"]).Select(elem => (elem.ToString())).ToList();
+            this.contentUri = (String)json["content_uri"];
+            this.metadata = new CommercioDocMetadata(json["metadata"] as JObject);
+            this.checksum = new CommercioDocChecksum(json["checksum"] as JObject);
+            this.encryptionData = new CommercioDocEncryptionData(json["encryption_data"] as JObject);
+            this.doSign = new CommercioDoSign(json["do_sign"] as JObject);
+
+            //Object outValue;
+            //if (json.TryGetValue("sender", out outValue))
+            //    this.senderDid = outValue as String;
+            //if (json.TryGetValue("recipients", out outValue))
+            //    this.recipientDids = outValue as List<String>;
+            //if (json.TryGetValue("uuid", out outValue))
+            //    this.uuid = outValue as String;
+            //if (json.TryGetValue("content_uri", out outValue))
+            //    this.contentUri = outValue as String;
+            //if (json.TryGetValue("metadata", out outValue))
+            //    this.metadata = outValue as CommercioDocMetadata;
+            //if (json.TryGetValue("checksum", out outValue))
+            //    this.checksum = outValue as CommercioDocChecksum;
+            //if (json.TryGetValue("encryption_data", out outValue))
+            //    this.encryptionData = outValue as CommercioDocEncryptionData;
+            //if (json.TryGetValue("do_sign", out outValue))
+            //    this.doSign = outValue as CommercioDoSign;
         }
 
         #endregion
@@ -170,7 +251,7 @@ namespace commercio.sdk
         [JsonConstructor]
         public CommercioDocMetadata(String contentUri,
                             CommercioDocMetadataSchema schema,
-                            String schemaType)
+                            String schemaType = "")
         {
             Trace.Assert(contentUri != null);
             //Trace.Assert(schema != null);
@@ -182,22 +263,26 @@ namespace commercio.sdk
             this.schemaType = schemaType;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDocMetadata(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDocMetadata(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("content_uri", out outValue))
-                this.contentUri = outValue as String;
-            if (json.TryGetValue("schema", out outValue))
-                this.schema = outValue as CommercioDocMetadataSchema;
-            if (json.TryGetValue("schema_type", out outValue))
-                this.schemaType = outValue as String;
+            this.contentUri = (String)json["content_uri"];
+            this.schema = new CommercioDocMetadataSchema(json["schema"] as JObject);
+            this.schemaType = (String)json["schema_type"];
+
+            //Object outValue;
+            //if (json.TryGetValue("content_uri", out outValue))
+            //    this.contentUri = outValue as String;
+            //if (json.TryGetValue("schema", out outValue))
+            //    this.schema = outValue as CommercioDocMetadataSchema;
+            //if (json.TryGetValue("schema_type", out outValue))
+            //    this.schemaType = outValue as String;
         }
 
         #endregion
 
         #region Public Methods
-                public Dictionary<String, Object> toJson()
+        public Dictionary<String, Object> toJson()
         {
             Dictionary<String, Object> output;
 
@@ -236,14 +321,17 @@ namespace commercio.sdk
             this.version = version;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDocMetadataSchema(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDocMetadataSchema(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("uri", out outValue))
-                this.uri = outValue as String;
-            if (json.TryGetValue("version", out outValue))
-                this.version = outValue as String;
+            this.uri = (String)json["uri"];
+            this.version = (String)json["version"];
+
+            //Object outValue;
+            //if (json.TryGetValue("uri", out outValue))
+            //    this.uri = outValue as String;
+            //if (json.TryGetValue("version", out outValue))
+            //    this.version = outValue as String;
         }
 
         #endregion
@@ -287,14 +375,17 @@ namespace commercio.sdk
             this.algorithm = algorithm;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDocChecksum(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDocChecksum(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("value", out outValue))
-                this.value = outValue as String;
-            if (json.TryGetValue("algorithm", out outValue))
-                this.algorithm = (CommercioDocChecksumAlgorithm) outValue;
+            this.value = (String)json["value"];
+            this.algorithm = CommercioDoc.ParseCommercioDocChecksumAlgorithm((String)json["algorithm"]);
+
+            //Object outValue;
+            //if (json.TryGetValue("value", out outValue))
+            //    this.value = outValue as String;
+            //if (json.TryGetValue("algorithm", out outValue))
+            //    this.algorithm = (CommercioDocChecksumAlgorithm) outValue;
         }
 
         #endregion
@@ -338,14 +429,17 @@ namespace commercio.sdk
             this.encryptedData = encryptedData;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDocEncryptionData(Dictionary<String, Object> json)
+        // Alternate constructor from Json Jobject
+        public CommercioDocEncryptionData(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("keys", out outValue))
-                this.keys = outValue as List<CommercioDocEncryptionDataKey>;
-            if (json.TryGetValue("encrypted_data", out outValue))
-                this.encryptedData = outValue as List<String>;
+            this.keys = ((JArray)json["keys"]).Select(elem => (new CommercioDocEncryptionDataKey((JObject)elem))).ToList();
+            this.encryptedData = ((JArray)json["encrypted_data"]).Select(elem => (elem.ToString())).ToList();
+
+            //Object outValue;
+            //if (json.TryGetValue("keys", out outValue))
+            //    this.keys = outValue as List<CommercioDocEncryptionDataKey>;
+            //if (json.TryGetValue("encrypted_data", out outValue))
+            //    this.encryptedData = outValue as List<String>;
         }
 
         #endregion
@@ -389,14 +483,17 @@ namespace commercio.sdk
             this.value = value;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDocEncryptionDataKey(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDocEncryptionDataKey(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("recipient", out outValue))
-                this.recipientDid = outValue as String;
-            if (json.TryGetValue("value", out outValue))
-                this.value = outValue as String;
+            this.recipientDid = (String)json["recipient"];
+            this.value = (String)json["value"];
+
+            //Object outValue;
+            //if (json.TryGetValue("recipient", out outValue))
+            //    this.recipientDid = outValue as String;
+            //if (json.TryGetValue("value", out outValue))
+            //    this.value = outValue as String;
         }
 
         #endregion
@@ -450,20 +547,26 @@ namespace commercio.sdk
             this.certificateProfile = certificateProfile;
         }
 
-        // Alternate constructor from Json Dictionary
-        public CommercioDoSign(Dictionary<String, Object> json)
+        // Alternate constructor from Json JObject
+        public CommercioDoSign(JObject json)
         {
-            Object outValue;
-            if (json.TryGetValue("storage_uri", out outValue))
-                this.storageUri = outValue as String;
-            if (json.TryGetValue("signer_instance", out outValue))
-                this.signerInstance = outValue as String;
-            if (json.TryGetValue("sdn_data", out outValue))
-                this.sdnData = outValue as List<CommercioSdnData>;
-            if (json.TryGetValue("vcr_id", out outValue))
-                this.vcrId = vcrId as String;
-            if (json.TryGetValue("certificate_profile", out outValue))
-                this.certificateProfile = outValue as String;
+            this.storageUri = (String)json["storage_uri"];
+            this.signerInstance = (String)json["signer_instance"];
+            this.sdnData = ((JArray)json["sdn_data"]).Select(elem => (CommercioDoc.ParseCommercioSdnData(elem.ToString()))).ToList();
+            this.vcrId = (String)json["vcr_id"];
+            this.certificateProfile = (String)json["certificate_profile"];
+
+            //Object outValue;
+            //if (json.TryGetValue("storage_uri", out outValue))
+            //    this.storageUri = outValue as String;
+            //if (json.TryGetValue("signer_instance", out outValue))
+            //    this.signerInstance = outValue as String;
+            //if (json.TryGetValue("sdn_data", out outValue))
+            //    this.sdnData = outValue as List<CommercioSdnData>;
+            //if (json.TryGetValue("vcr_id", out outValue))
+            //    this.vcrId = vcrId as String;
+            //if (json.TryGetValue("certificate_profile", out outValue))
+            //    this.certificateProfile = outValue as String;
         }
 
         #endregion

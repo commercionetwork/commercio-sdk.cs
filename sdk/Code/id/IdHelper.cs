@@ -9,10 +9,12 @@
 //
 using System;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Org.BouncyCastle.Crypto.Parameters;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -30,20 +32,19 @@ namespace commercio.sdk
         /// or `null` if no Did Document was found.
         public static async Task<DidDocument> getDidDocument(String did, Wallet wallet) 
         {
-            Object outValue;
             DidDocument DidDoc;
 
             String url = $"{wallet.networkInfo.lcdUrl}/identities/{did}";
             // This needs to be checked...
             // List<Dictionary<String, Object>> response = (List<Dictionary<String, Object>>)(await Network.queryChain(url));
-            Dictionary<String, Object> response = (Dictionary<String, Object>)(await Network.queryChain(url));
+            JArray response = await Network.queryChain(url) as JArray;
             if (response == null)
-            {
                 return null;
-            }
-            bool DidFound = response.TryGetValue("did_document", out outValue);
-            if (DidFound)
-                DidDoc = new DidDocument(outValue as Dictionary<String, Object>);
+            // Use Linq to query the JArray for value searched
+            JObject DidFound = (JObject) response.Where(v => v["did_document"] != null); 
+
+            if (DidFound != null)
+                DidDoc = new DidDocument(DidFound);
             else
                 DidDoc = null;
             return DidDoc;
@@ -51,80 +52,75 @@ namespace commercio.sdk
 
         /// Performs a transaction setting the specified [didDocument] as being
         /// associated with the address present inside the specified [wallet].
-        public static Task<TransactionResult> setDidDocument(DidDocument didDocument, Wallet wallet, StdFee fee = null)
+        public static Task<TransactionResult> setDidDocument(DidDocument didDocument, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
             MsgSetDidDocument msg = new MsgSetDidDocument(didDocument: didDocument);
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
+            return TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee, mode: mode);
+        }
+
+        /// Performs a transaction setting the [didDocuments] list as being
+        /// associated with the address present inside the specified [wallet].
+        /// Optionally [fee] and broadcasting [mode] parameters can be specified.
+        public static Task<TransactionResult> setDidDocumentsList(List<DidDocument> didDocuments, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
+        {
+            List <MsgSetDidDocument> msgs = didDocuments
+                .Select (x => new MsgSetDidDocument(x))
+                .ToList();
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            // And I need to declare the thing explicitly in C#!
+            return TxHelper.createSignAndSendTx( msgs.ToList<StdMsg>(), wallet, fee: fee, mode: mode);
         }
 
         /// Creates a new Did power up request for the given [pairwiseDid] and of the given [amount].
         /// Signs everything that needs to be signed (i.e. the signature JSON inside the payload) with the
         /// private key contained inside the given  [senderWallet] and the [privateKey].
-        public static async Task<TransactionResult> requestDidPowerUp(Wallet senderWallet, String pairwiseDid, List<StdCoin> amount, RSAPrivateKey privateKey, StdFee fee = null)
+        public static async Task<TransactionResult> requestDidPowerUp(
+            Wallet senderWallet, 
+            String pairwiseDid, 
+            List<StdCoin> amount, 
+            RSAPrivateKey privateKey, 
+            StdFee fee = null, 
+            BroadcastingMode mode = BroadcastingMode.SYNC
+        )
         {
-            // Get the timestamp
-            String timestamp = GenericUtils.getTimeStamp();
-            String senderDid = senderWallet.bech32Address;
 
-            // Build and sign the signature
-            byte[] signedSignatureHash = SignHelper.signPowerUpSignature(
-                senderDid: senderDid,
-                pairwiseDid: pairwiseDid,
-                timestamp: timestamp,
-                rsaPrivateKey: privateKey);
-
-            //// Build the signature
-            //DidPowerUpRequestSignatureJson signatureJson = new DidPowerUpRequestSignatureJson(
-            //    pairwiseDid: pairwiseDid,
-            //    timeStamp: timestamp 
-            //);
-
-            //byte[] signedJson = SignHelper.signSorted(signatureJson.toJson(), wallet);
-
-            // Build the payload -*
-            DidPowerUpRequestPayload payload = new DidPowerUpRequestPayload(
-                senderDid: senderDid,
-                pairwiseDid: pairwiseDid,
-                timeStamp: timestamp,
-                signature: Convert.ToBase64String(signedSignatureHash)
+            RequestDidPowerUp requestDidPowerUp = await RequestDidPowerUpHelper.fromWallet(
+                senderWallet,
+                pairwiseDid,
+                amount,
+                privateKey
             );
 
-            // =============
-            // Encrypt proof
-            // =============
-
-            // Generate an AES-256 key
-            KeyParameter aesKey =  KeysHelper.generateAesKey(); // await ?
-
-            // Encrypt the payload
-            byte[] encryptedProof = EncryptionHelper.encryptStringWithAesGCM(JsonConvert.SerializeObject(payload), aesKey);
-
-            // =================
-            // Encrypt proof key
-            // =================
-
-            // Encrypt the key using the Tumbler public RSA key
-            RSAPublicKey rsaPubTkKey = await EncryptionHelper.getGovernmentRsaPubKey(senderWallet.networkInfo.lcdUrl);
-            byte[] encryptedProofKey = EncryptionHelper.encryptBytesWithRsa(aesKey.GetKey(), rsaPubTkKey);
-            
-            // Build the message and send the tx
-            MsgRequestDidPowerUp msg = new MsgRequestDidPowerUp(
-                claimantDid: senderDid,
-                amount: amount,
-                powerUpProof: Convert.ToBase64String(encryptedProof),
-                uuid: Guid.NewGuid().ToString(),
-                encryptionKey: Convert.ToBase64String(encryptedProofKey)
-            );
+            MsgRequestDidPowerUp msg = new MsgRequestDidPowerUp(requestDidPowerUp: requestDidPowerUp);
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, senderWallet, fee: fee);
-     }
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, senderWallet, fee: fee, mode: mode);
+        }
 
-    #endregion
+        /// Sends a new transaction from the sender [wallet]
+        /// to request a list of Did PowerUp [requestDidPowerUpsList].
+        /// Optionally [fee] and broadcasting [mode] parameters can be specified.
+        public static async Task<TransactionResult> requestDidPowerUpList(
+            List<RequestDidPowerUp> requestDidPowerUpsList,
+            Wallet wallet,
+            StdFee fee = null,
+            BroadcastingMode mode = BroadcastingMode.SYNC
+        )
+        {
 
-    #region Helpers
-    #endregion
+            List<MsgRequestDidPowerUp> msgs = requestDidPowerUpsList
+                .Select(x => new MsgRequestDidPowerUp(x))
+                .ToList();
+
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(msgs.ToList<StdMsg>(), wallet, fee: fee, mode: mode);
+        }
+
+        #endregion
+
+        #region Helpers
+        #endregion
 
     }
 }

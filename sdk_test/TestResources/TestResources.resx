@@ -117,6 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="accountResponse" xml:space="preserve">
+    <value>{
+	"height":"72644",
+		"result":{"type":"cosmos-sdk/Account",
+			"value":{"address":"did:com:1gkfhddf8hxj38x74zjxla072wyppej7xv9psfg",
+			"coins":
+			[
+				{"denom":"ucommercio","amount":"1200200"}
+			],
+			"public_key":"",
+			"account_number":23,
+			"sequence":0
+		}
+	}
+}</value>
+  </data>
   <data name="EncodedHexPubModulus" xml:space="preserve">
     <value>00c1a1018effde47c68134995a237bc05cc703c3fee22ac721175547f542951e97785c92a7c330dff8aab6a2374cf1858af9a7cf5a8732000c52d6ae73597e5b702fafce43480b21811d8e7a90b300ff758df5b0c6337da14dc9c4959fd937c5f9d2ca1b19199e2f89018e06443a0cf347ea0d7f486c6dea46b037d748c7cc7703e686cdf4314b17ca263d5aba273905c5925a043c09e542425a33e0850d284584d3c1760ec1d9ad03e32f7e6593e7ec123306e87e252281d7a799cab516138f76212c31d0888b0345d1726ae49b17b19d48b80ed0af48cff0ff7eadf12a60d4cb4df3789363da9fc2a6635fe1152ba4e32e6b05fb972e8ae6e8b6c733582eb2ad</value>
     <comment>String with HexEncoded  modulus of Pubkey</comment>
@@ -220,5 +236,47 @@ rQIDAQAB
   ]
 }</value>
     <comment>Test with json to test Document Response</comment>
+  </data>
+  <data name="tumblerAddressJson" xml:space="preserve">
+    <value>{
+  "height": "0",
+  "result": {
+    "tumbler_address": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau"
+  }
+}</value>
+  </data>
+  <data name="tumblerIdentityJson" xml:space="preserve">
+    <value>{
+  "height": "0",
+  "result": {
+    "owner": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau",
+    "did_document": {
+      "@context": "https://www.w3.org/ns/did/v1",
+      "id": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau",
+      "publicKey": [
+        {
+          "id": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau#keys-1",
+          "type": "RsaVerificationKey2018",
+          "controller": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau",
+          "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0LwlHDabWnycQUGoscz/\n0SRVy0r5Vf71hUpws1jxwXjRHyE3OxEhIhnfhKzkhQXBHpt7ibwju8a4ubLOBDm6\nL9rQI7isNeKfDoTvKzHZAlVWA3FfzMCkqSHY+VJE1JcxkJ2IN+7Q/mk3Av73qK43\nW2h9ygrDhDJv65cTJ8S7qHYHWNd0Y1A88AG6F90SH677PkDbCrQEjrG6YUuZQsGD\nYc0WgPqiOxQ/YvMMpl3uWyLY1Hc9D0lhHEPS/Fyre9kMqpcNt9CM0cAmJSvLi6g1\nEEqJx6PWVrrw2WKJBMvuo4OMt6JTkdPISmq8MI5BNWOZzQpkeJeNPN8v6KNbZ7gz\nkwIDAQAB\n-----END PUBLIC KEY-----\n"
+        },
+        {
+          "id": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau#keys-2",
+          "type": "RsaSignatureKey2018",
+          "controller": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau",
+          "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqlaQEW4FrAH6P9pzEmo9\nr0ytKQMmFrQ/HAYK+YTUc3olNVo0s7nGTkGsp4gnTkutvITFlSBPi387CKBTotvg\nLNSBFXRiiKfF1ZYfekP4kZ7hAIqlysWdwjmrdHO9gpSUdYCaYQr/wymeEv92ReRd\nCZYtzrfzkKZrZT5TrUoQG0X07b44YQG0PE+3cfoTOo0IWiJ2dUBkOyLwD1XNoQ4q\n4cu4rzh3AK9IQr8Xte732A6x9uayvPaLtxFzxzxxMPpT5HnbaWzDGEukxm4UQol3\nw7rogs5Y7e/Xxs8uGJQxoOqSaLLyB7BX7AnUY05A3yZYG/bfrWn77q7vSvi+Nf9t\nbQIDAQAB\n-----END PUBLIC KEY-----\n"
+        }
+      ],
+      "proof": {
+        "type": "EcdsaSecp256k1VerificationKey2019",
+        "created": "2020-05-12T09:17:44.163534708Z",
+        "proofPurpose": "authentication",
+        "controller": "did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau",
+        "verificationMethod": "did:com:pub1addwnpepqdnzje8vxh4xrdg8aa6lsjegukqhtmrjeux26z7zlk5zry8fp04rcw3vxec",
+        "signatureValue": "MnhISqHW6N0ziIwKJ+gPgfSUPdE4E+/fPSRgff/xZTwe3d9Jqpynhdb09ma3qEKZrVwNaThdvOIOe6a/m4RIRg=="
+      }
+    }
+  }
+}</value>
   </data>
 </root>

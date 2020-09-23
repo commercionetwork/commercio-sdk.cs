@@ -117,6 +117,7 @@ namespace commercio.sdk
                 recipientsDidDocs.Add(await IdHelper.getDidDocument(recipient, wallet));
             }
 
+            // Get a list of al the Did Documents and the associated encryption key
             List<_Pair> keys = new List<_Pair>();
             foreach(DidDocument didDoc in recipientsDidDocs)
             {
@@ -169,7 +170,7 @@ namespace commercio.sdk
                 ),
                 encryptionData: new CommercioDocEncryptionData(
                     keys: encryptionKeys,
-                    encryptedData: encryptedData.Select((e) => e.ToDescriptionString()).ToList()
+                    encryptedData: encryptedData.Select((e) => e.ToEnumMemberAttrValue()).ToList()
                 )
             );
         }

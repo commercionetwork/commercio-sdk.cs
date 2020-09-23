@@ -19,6 +19,47 @@ namespace commercio.sdk
     public class MsgBuyMembership : StdMsg
     {
         #region Properties
+        [JsonProperty("buyMembership", Order = 1)]
+        public BuyMembership buyMembership { get; private set; }
+
+        // The override of the value getter is mandatory to obtain a correct codified Json
+        public override Dictionary<String, Object> value
+        {
+            get
+            {
+                return _toJson();
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// Public constructor.
+        public MsgBuyMembership(BuyMembership buyMembership)
+        {
+            Trace.Assert(buyMembership != null);
+            // Assigns the properties
+            this.buyMembership = buyMembership;
+            base.setProperties("commercio/MsgBuyMembership", _toJson());
+        }
+
+        #endregion
+
+        #region Public Methods
+        #endregion
+
+        #region Helpers
+
+        private Dictionary<String, Object> _toJson()
+        {
+            Dictionary<String, Object> wk = this.buyMembership.toJson();
+            return wk;
+        }
+        #endregion
+
+        /*
+        #region Properties
         [JsonProperty("membershipType", Order = 2)]
         public MembershipType membershipType { get; private set; }
         [JsonProperty("buyerDid", Order = 1)]
@@ -63,5 +104,6 @@ namespace commercio.sdk
             return wk;
         }
         #endregion
+        */
     }
 }

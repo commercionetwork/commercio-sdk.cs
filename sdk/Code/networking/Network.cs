@@ -37,7 +37,7 @@ namespace commercio.sdk
         /// or `null` if some error raised.
         public static async Task<Object> queryChain(String url)
         {
-            Object outValue = null;
+            // Object outValue = null;
             try
             {
                 // Get the response
@@ -53,9 +53,10 @@ namespace commercio.sdk
                 // Return the result part of the response
                 // json.TryGetValue("result", out Object outValue);
                 JObject json = JObject.Parse(encodedJson);
-                JArray jArray = (JArray)json["result"];
-                outValue = jArray.ToObject<List<Dictionary<String, Object>>>();
-                return outValue;
+                JArray jResult = (JArray) json["result"];
+                // outValue = jResult;
+                // outValue = jArray.ToObject<List<Dictionary<String, Object>>>();
+                return jResult;
             }
             catch (Exception e)
             {

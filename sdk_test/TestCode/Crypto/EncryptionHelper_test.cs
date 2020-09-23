@@ -10,7 +10,7 @@ using commercio.sacco.lib;
 using sdk_test.TestResources;
 
 
-namespace commercio.sdk_test
+namespace sdk_test
 {
     [TestClass]
     public class EncryptionHelper_test
@@ -89,7 +89,7 @@ namespace commercio.sdk_test
         public void TestRSAencryptDecryptByteArray()
         {
             KeyPair keys = KeysHelper.generateRsaKeyPair();
-            String originalData = @"Eh bien , mon prince, Genes et Lucques ne sont plus que des apanages, des 'pomestja de la famille Buonaparte. Non, je vous préviens que si vous ne me dites pas que nous avons la guerre";
+            String originalData = @"Eh bien , mon prince, Genes et Lucques ne sont plus que des apanages, des 'pomestja' de la famille Buonaparte. Non, je vous préviens que si vous ne me dites pas que nous avons la guerre";
             byte[] encodedOriginal = Encoding.UTF8.GetBytes(originalData);
             byte[] dataEncoded = EncryptionHelper.encryptBytesWithRsa(encodedOriginal, keys.publicKey);
 

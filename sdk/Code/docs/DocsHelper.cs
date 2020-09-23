@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Crypto.Parameters;
 using commercio.sacco.lib;
 
@@ -50,49 +52,47 @@ namespace commercio.sdk
             KeyParameter aesKey = null,
             List<EncryptedData> encryptedData = null,
             StdFee fee = null,
-            String contentUri = null
+            String contentUri = null,
+            BroadcastingMode mode = BroadcastingMode.SYNC
         )
         {
-            if (encryptedData == null)
-            {
-                encryptedData = new List<EncryptedData>();
-            }
-            // Get a default aes key for encryption if needed
-            if (aesKey == null) 
-            {
-                aesKey = KeysHelper.generateAesKey();
-            }
-
             // Build a generic document
-            CommercioDoc commercioDocument = new CommercioDoc(
-                senderDid: wallet.bech32Address,
-                recipientDids: recipients,
-                uuid: id,
-                contentUri: contentUri,
+            CommercioDoc commercioDoc = await CommercioDocHelper.fromWallet(
+                wallet: wallet,
+                recipients: recipients,
+                id: id,
                 metadata: metadata,
                 checksum: checksum,
-                encryptionData: null,
-                doSign: doSign
+                contentUri: contentUri,
+                doSign: doSign,
+                encryptedData: encryptedData,
+                aesKey: aesKey
             );
 
-            // Encrypt its contents, if necessary
-            CommercioDoc finalDoc = commercioDocument;
-            if (encryptedData.Count > 0)
-            {
-                finalDoc = await DocsUtils.encryptField(
-                    commercioDocument,
-                    aesKey,
-                    encryptedData,
-                    recipients,
-                    wallet
-                );
-            }
 
             // Build the tx message
-            MsgShareDocument msg = new MsgShareDocument(document: finalDoc);
+            MsgShareDocument msg = new MsgShareDocument(document: commercioDoc);
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee, mode: mode);
+        }
+
+        /// Create a new transaction that allows to share
+        /// a list of previously generated documents [commercioDocsList].
+        /// Optionally [fee] and broadcasting [mode] parameters can be specified.
+        public static async Task<TransactionResult> shareDocumentsList(
+            List<CommercioDoc> commercioDocsList,
+            Wallet wallet,
+            StdFee fee = null,
+            BroadcastingMode mode = BroadcastingMode.SYNC
+        )
+        {
+            List<MsgShareDocument> msgs = commercioDocsList
+                .Select(x => new MsgShareDocument(x))
+                .ToList();
+
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(msgs.ToList<StdMsg>(), wallet, fee: fee, mode: mode);
         }
 
         /// Returns the list of all the [CommercioDoc] that the
@@ -100,8 +100,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDoc>> getSendDocuments(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/docs/{address}/sent";
-            List <Dictionary<String, Object >> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDoc(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDoc((JObject) json)).ToList();
         }
 
         /// Returns the list of all the [CommercioDoc] that the
@@ -109,8 +109,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDoc>> getReceivedDocuments(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/docs/{address}/received";
-            List<Dictionary<String, Object>> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDoc(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDoc((JObject)json)).ToList();
         }
 
         /// Creates a new transaction which tells the [recipient] that the document
@@ -123,21 +123,40 @@ namespace commercio.sdk
             String documentId,
             Wallet wallet,
             String proof = "",
-            StdFee fee  = null
+            StdFee fee  = null,
+            BroadcastingMode mode = BroadcastingMode.SYNC
         )
         {
-            MsgSendDocumentReceipt msg = new MsgSendDocumentReceipt(
-                new CommercioDocReceipt(
-                    uuid: Guid.NewGuid().ToString(), // *** This should be equivalent to Uuid().v4() in Dart
-                    recipientDid: recipient,
-                    txHash: txHash,
-                    documentUuid: documentId,
-                    proof: proof,
-                    senderDid: wallet.bech32Address
-                )
+            CommercioDocReceipt commercioDocReceipt = CommercioDocReceiptHelper.fromWallet(
+                wallet: wallet,
+                recipient: recipient,
+                txHash: txHash,
+                documentId: documentId,
+                proof: proof
             );
+
+            MsgSendDocumentReceipt msg = new MsgSendDocumentReceipt(receipt: commercioDocReceipt);
+
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
-            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee : fee);
+            return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee : fee, mode: mode);
+        }
+
+        /// Creates a new transaction which sends
+        /// a list of previously generated receipts [commercioDocReceiptsList].
+        /// Optionally [fee] and broadcasting [mode] parameters can be specified.
+        public static async Task<TransactionResult> sendDocumentReceiptsList(
+            List<CommercioDocReceipt> sendDocumentReceiptsList,
+            Wallet wallet,
+            StdFee fee = null,
+            BroadcastingMode mode = BroadcastingMode.SYNC
+        )
+        {
+            List<MsgSendDocumentReceipt> msgs = sendDocumentReceiptsList
+                .Select(x => new MsgSendDocumentReceipt(x))
+                .ToList();
+
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(msgs.ToList<StdMsg>(), wallet, fee: fee, mode: mode);
         }
 
         /// Returns the list of all the [CommercioDocReceipt] that
@@ -145,8 +164,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDocReceipt>> getSentReceipts(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/receipts/{address}/sent";
-            List<Dictionary<String, Object>> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDocReceipt(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDocReceipt((JObject)json)).ToList();
         }
 
         /// Returns the list of all the [CommercioDocReceipt] that
@@ -154,8 +173,8 @@ namespace commercio.sdk
         public static async Task<List<CommercioDocReceipt>> getReceivedReceipts(String address, Wallet wallet)
         {
             String url = $"{wallet.networkInfo.lcdUrl}/receipts/{address}/received";
-            List<Dictionary<String, Object>> response = await Network.queryChain(url) as List<Dictionary<String, Object>>;
-            return response.Select((json) => new CommercioDocReceipt(json)).ToList();
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new CommercioDocReceipt((JObject)json)).ToList();
         }
 
         #endregion

@@ -66,7 +66,7 @@ namespace commercio.sdk
         /// Generates a new RSA key pair having the given [bytes] length.
         /// If no length is specified, the default is going to be 2048.
         // public static async Task<KeyPair> generateRsaKeyPair(int bytes = 2048)
-        public static KeyPair generateRsaKeyPair(int bytes = 2048)
+        public static KeyPair generateRsaKeyPair(int bytes = 2048, String type = null)
         {
             SecureRandom secureRandom = _getSecureRandom();
             RsaKeyGenerationParameters keyGenerationParameters = new RsaKeyGenerationParameters(new BigInteger("65537", 10), secureRandom, bytes, 5);
@@ -77,12 +77,12 @@ namespace commercio.sdk
             RsaKeyParameters rsaPubRaw = (RsaKeyParameters)rsaKeys.Public;
             RsaKeyParameters rsaPrivRaw = (RsaKeyParameters)rsaKeys.Private;
             // Return the key
-            return new KeyPair(new RSAPublicKey(rsaPubRaw), new RSAPrivateKey(rsaPrivRaw));
+            return new KeyPair(new RSAPublicKey(rsaPubRaw, keyType: type), new RSAPrivateKey(rsaPrivRaw));
         }
 
         /// Generates a new random EC key pair.
         // public static async Task<KeyPair> generateEcKeyPair()
-        public static KeyPair generateEcKeyPair()
+        public static KeyPair generateEcKeyPair( String type = null)
         {
             var curve = ECNamedCurveTable.GetByName("secp256k1");
             ECDomainParameters domainParams = new ECDomainParameters(curve.Curve, curve.G, curve.N, curve.H, curve.GetSeed());
@@ -96,7 +96,7 @@ namespace commercio.sdk
             ECPrivateKeyParameters privateKey = keyPair.Private as ECPrivateKeyParameters;
             ECPublicKeyParameters publicKey = keyPair.Public as ECPublicKeyParameters;
 
-            return new KeyPair(new ECPublicKey(publicKey), new ECPrivateKey(privateKey));
+            return new KeyPair(new ECPublicKey(publicKey, keyType: type), new ECPrivateKey(privateKey));
         }
 
         #endregion
