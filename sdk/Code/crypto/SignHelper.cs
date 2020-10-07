@@ -18,7 +18,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
-
+using System.Security.Cryptography;
 
 namespace commercio.sdk
 {
@@ -35,17 +35,11 @@ namespace commercio.sdk
         /// Takes the given [data], converts it to an alphabetically sorted
         /// JSON object and signs its content using the given [wallet].
         public static byte[] signSorted(Object data, Wallet wallet)
-        {
-            Dictionary<String, Object> sorted = null;
-            if (data is Dictionary<String, Object>)
-            {
-                sorted = MapSorter.sort((Dictionary < String, Object >) data);
-            }
-            // Encode the sorted JSON to a string
-            // String jsonData = JsonConvert.SerializeObject(sorted);
+        {           
             String jsonData = JsonConvert.SerializeObject(data);
-            // Create a Sha256 of the message
-            byte[] utf8Bytes = Encoding.UTF8.GetBytes(jsonData);
+            SHA256 sha256Hash = SHA256.Create();
+            byte[] utf8Bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(jsonData));
+
             // Sign and return the message
             return wallet.sign(utf8Bytes);
         }

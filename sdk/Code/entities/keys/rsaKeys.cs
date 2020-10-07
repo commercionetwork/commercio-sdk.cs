@@ -38,7 +38,7 @@ namespace commercio.sdk
         {
             this.pubKey = ecPublicKey;
             // I need to manage this this way due to the way C# treats optional values...
-            this.keyType = (keyType is null ? "RsaVerificationKey2018" : keyType);
+            this.keyType = (string.IsNullOrEmpty(keyType) ? "RsaVerificationKey2018" : keyType);
             // this.keyType = keyType;
         }
 
