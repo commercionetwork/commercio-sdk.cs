@@ -46,24 +46,25 @@ namespace commercio.sdk
         [JsonProperty("service", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
         public List<DidDocumentService> service { get; set; }
 
-        /// Returns the [PublicKey] that should be used as the public encryption
-        /// key when encrypting data that can later be read only by the owner of
-        /// this Did Document.
-        [JsonProperty("encryptionKey", Order = 2)]
-        public RSAPublicKey encryptionKey
-        {
-            get
-            {
-                DidDocumentPublicKey pubKey = publicKeys.FirstOrDefault(key => key.type == "RsaVerificationKey2018");
-                if (pubKey == null)
-                    return null;
-                return new RSAPublicKey(RSAKeyParser.parsePublicKeyFromPem(pubKey.publicKeyPem));
-                //// If existent, creates the RSA public key
-                //BigInteger modulus = new BigInteger(pubKey.publicKeyHex, radix: 16);
-                //BigInteger exponent = new BigInteger("65537", radix: 10);
-                //return new RSAPublicKey(new RsaKeyParameters(false, modulus, exponent));
-            }
-        }
+        // Reverted to apublic method rather than a property - RC 20201010
+        ///// Returns the [PublicKey] that should be used as the public encryption
+        ///// key when encrypting data that can later be read only by the owner of
+        ///// this Did Document.
+        //[JsonProperty("encryptionKey", Order = 2)]
+        //public RSAPublicKey encryptionKey
+        //{
+        //    get
+        //    {
+        //        DidDocumentPublicKey pubKey = publicKeys.FirstOrDefault(key => key.type == "RsaVerificationKey2018");
+        //        if (pubKey == null)
+        //            return null;
+        //        return new RSAPublicKey(RSAKeyParser.parsePublicKeyFromPem(pubKey.publicKeyPem));
+        //        //// If existent, creates the RSA public key
+        //        //BigInteger modulus = new BigInteger(pubKey.publicKeyHex, radix: 16);
+        //        //BigInteger exponent = new BigInteger("65537", radix: 10);
+        //        //return new RSAPublicKey(new RsaKeyParameters(false, modulus, exponent));
+        //    }
+        //}
 
         #endregion
 
@@ -114,6 +115,7 @@ namespace commercio.sdk
         #endregion
 
         #region Public Methods
+
         // I need to call directly the toJson method on the classes! 
         public Dictionary<String, Object> toJson()
         {
@@ -129,9 +131,25 @@ namespace commercio.sdk
             return (output);
         }
 
-    #endregion
+        /// Returns the [PublicKey] that should be used as the public encryption
+        /// key when encrypting data that can later be read only by the owner of
+        /// this Did Document.
+        public RSAPublicKey encryptionKey()
+        {
+            DidDocumentPublicKey pubKey = publicKeys.FirstOrDefault(key => key.type == "RsaVerificationKey2018");
+            if (pubKey == null)
+                return null;
+            return new RSAPublicKey(RSAKeyParser.parsePublicKeyFromPem(pubKey.publicKeyPem));
+            //// If existent, creates the RSA public key
+            //BigInteger modulus = new BigInteger(pubKey.publicKeyHex, radix: 16);
+            //BigInteger exponent = new BigInteger("65537", radix: 10);
+            //return new RSAPublicKey(new RsaKeyParameters(false, modulus, exponent));
+        }
 
-    #region Helpers
-    #endregion
+
+        #endregion
+
+        #region Helpers
+        #endregion
     }
 }

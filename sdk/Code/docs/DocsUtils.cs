@@ -46,7 +46,7 @@ namespace commercio.sdk
             /// creates a _Pair from a didDocument. *** Refactor first and second to better names
             public _Pair(DidDocument didDocument)
             {
-                RSAPublicKey key = didDocument.encryptionKey;
+                RSAPublicKey key = didDocument.encryptionKey();
                 this.document = didDocument;
                 this.pubKey = key;
             }
