@@ -32,17 +32,13 @@ namespace commercio.sdk
         // Get time Stamp in Iso8601 format
         public static String getTimeStamp()
         {
-            // return System.DateTime.UtcNow.ToString("o"); // This get a Iso8601 Time stamp - to be checked
-            // return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString(); // RC 20200913: THis was a old version @@@!
-            // return (DateTime.UtcNow.ToString("s", System.Globalization.CultureInfo.InvariantCulture));
-            // return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
-            return DateTime.UtcNow.ToString("o");
+            return DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ");
         }
 
         // Get time Stamp in millisecond since Epoch (1.1.1970 - Unix Epoch)
         public static String getTimeStampEpoch()
         {
-            return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString(); // RC 20200913: I don't know why two differetn time stamp are used...
+            return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds * 1000).ToString(); // RC 20200913: I don't know why two different time stamps are used...
         }
 
         /// Calculates the default fees from

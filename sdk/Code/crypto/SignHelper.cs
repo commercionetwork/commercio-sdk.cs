@@ -10,11 +10,14 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using commercio.sacco.lib;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Crypto.Signers;
+using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.Encoders;
@@ -36,18 +39,28 @@ namespace commercio.sdk
         /// JSON object and signs its content using the given [wallet].
         public static byte[] signSorted(Object data, Wallet wallet)
         {
-            Dictionary<String, Object> sorted = null;
-            if (data is Dictionary<String, Object>)
-            {
-                sorted = MapSorter.sort((Dictionary < String, Object >) data);
-            }
+            //Dictionary<String, Object> sorted = null;
+            //if (data is Dictionary<String, Object>)
+            //{
+            //    sorted = MapSorter.sort((Dictionary<String, Object>)data);
+            //}
+            //String jsonData = JsonConvert.SerializeObject(sorted);
+
             // Encode the sorted JSON to a string
-            // String jsonData = JsonConvert.SerializeObject(sorted);
             String jsonData = JsonConvert.SerializeObject(data);
-            // Create a Sha256 of the message
+
             byte[] utf8Bytes = Encoding.UTF8.GetBytes(jsonData);
+            //// *** Create a Sha256 of the message - Method Microsoft            
+            // SHA256 sha256Hash = SHA256.Create();
+            // byte[] hashBytes = sha256Hash.ComputeHash(utf8Bytes);
+            // *** Create a Sha256 of the message - Method BouncyCastle            
+            Sha256Digest sha256 = new Sha256Digest();
+            sha256.BlockUpdate(utf8Bytes, 0, utf8Bytes.Length);
+            byte[] hashBytes = new byte[sha256.GetDigestSize()];
+            sha256.DoFinal(hashBytes, 0);
+
             // Sign and return the message
-            return wallet.sign(utf8Bytes);
+            return wallet.sign(hashBytes);
         }
 
         /// Takes [senderDid], [pairwiseDid], [timestamp] and:

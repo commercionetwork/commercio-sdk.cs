@@ -12,6 +12,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Runtime.Serialization;
+using System.Diagnostics;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
@@ -53,10 +54,12 @@ namespace commercio.sdk
                 fee = GenericUtils.calculateDefaultFee(msgsNumber: msgsNumber, fee: defaultAmount, denom: defaultDenom, gas: defaultGas);
             }
 
+            String modeStr = MyEnumExtensions.ToEnumMemberAttrValue(mode);
             StdTx stdTx = TxBuilder.buildStdTx(stdMsgs: msgs, fee: fee);
             StdTx signedTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
-            String modeStr = MyEnumExtensions.ToEnumMemberAttrValue(mode);
-            return await TxSender.broadcastStdTx(wallet: wallet, stdTx: signedTx, mode: modeStr);
+            // return await TxSender.broadcastStdTx(wallet: wallet, stdTx: signedTx, mode: modeStr);
+            TransactionResult res = await TxSender.broadcastStdTx(wallet: wallet, stdTx: signedTx, mode: modeStr);
+            return res;
         }
 
         #endregion

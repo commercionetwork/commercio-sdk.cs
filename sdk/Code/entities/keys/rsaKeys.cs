@@ -61,7 +61,7 @@ namespace commercio.sdk
 
             // I am forced to use this type of PEM coding, although I am not sure if it is right.
             // The previous code from Bouncy Castle, although technicaly correct, doesn't output the same coding od Dart code.
-            DerSequence pubKeySequence = new DerSequence ( new DerInteger(pubKey.Modulus), new DerInteger(pubKey.Exponent));
+            DerSequence pubKeySequence = new DerSequence(new DerInteger(pubKey.Modulus), new DerInteger(pubKey.Exponent));
             string dataBase64 = Convert.ToBase64String(pubKeySequence.GetEncoded());
             string pemString = $"-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A{dataBase64}\n-----END PUBLIC KEY-----";
 
