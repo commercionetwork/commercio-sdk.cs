@@ -17,7 +17,7 @@ using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class CloseCdp
+    public class burnCCC
     {
         #region Properties
         [JsonProperty("signer", Order = 2)]
@@ -29,7 +29,7 @@ namespace commercio.sdk
 
         #region Constructors
         [JsonConstructor]
-        public CloseCdp(String signerDid, String timeStamp)
+        public burnCCC(String signerDid, String timeStamp)
         {
             Trace.Assert(signerDid != null);
             Trace.Assert(timeStamp != null);
@@ -38,7 +38,7 @@ namespace commercio.sdk
         }
 
         // Alternate constructor from Json JObject
-        public CloseCdp(JObject json)
+        public burnCCC(JObject json)
         {
             this.signerDid = (String)json["signer"];
             this.timeStamp = (String)json["cdp_timestamp"];

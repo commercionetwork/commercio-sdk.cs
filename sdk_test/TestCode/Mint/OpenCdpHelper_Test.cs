@@ -10,12 +10,12 @@ using KellermanSoftware.CompareNetObjects;
 namespace sdk_test
 {
     [TestClass]
-    public class OpenCdpHelper_Test
+    public class mintCCCHelper_Test
     {
 
         [TestMethod]
-        // '"fromWallet()" returns a well-formed "OpenCdp" object.'
-        public void WellFormedOpenCdpFromWallet()
+        // '"fromWallet()" returns a well-formed "mintCCC" object.'
+        public void WellFormedmintCCCFromWallet()
         {
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
@@ -27,14 +27,14 @@ namespace sdk_test
 
             List<StdCoin> depositAmount = new List<StdCoin> { new StdCoin(denom: "commercio", amount: "10") };
 
-            OpenCdp expectedOpenCdp = new OpenCdp(
+            mintCCC expectedmintCCC = new mintCCC(
                 depositAmount: depositAmount,
                 signerDid: wallet.bech32Address
             );
 
-            OpenCdp openCdp = OpenCdpHelper.fromWallet(wallet, depositAmount);
+            mintCCC mintCCC = mintCCCHelper.fromWallet(wallet, depositAmount);
 
-            Assert.AreEqual(compareLogic.Compare(openCdp.toJson(), expectedOpenCdp.toJson()).AreEqual, true);
+            Assert.AreEqual(compareLogic.Compare(mintCCC.toJson(), expectedmintCCC.toJson()).AreEqual, true);
 
         }
     }

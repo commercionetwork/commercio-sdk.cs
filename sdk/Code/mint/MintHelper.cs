@@ -28,24 +28,24 @@ namespace commercio.sdk
 
         /// Opens a new CDP depositing the given Commercio Token [amount].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
-        public static async Task<TransactionResult> openCdp(int amount, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
+        public static async Task<TransactionResult> mintCCC(int amount, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
             List<StdCoin> depositAmount = new List<StdCoin> { new StdCoin("ucommercio", amount.ToString()) };
 
-            OpenCdp openCdp = OpenCdpHelper.fromWallet(wallet, depositAmount);
+            mintCCC mintCCC = mintCCCHelper.fromWallet(wallet, depositAmount);
 
-            MsgOpenCdp msg = new MsgOpenCdp(openCdp: openCdp);
+            MsgmintCCC msg = new MsgmintCCC(mintCCC: mintCCC);
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
             return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee : fee, mode: mode);
         }
 
-        /// Performs a transaction opening a new CDP [openCdp] as being
+        /// Performs a transaction opening a new CDP [mintCCC] as being
         /// associated with the address present inside the specified [wallet].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
-        public static async Task<TransactionResult> openCdpSingle(OpenCdp openCdp, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
+        public static async Task<TransactionResult> mintCCCSingle(mintCCC mintCCC, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
-            MsgOpenCdp msg = new MsgOpenCdp(openCdp: openCdp);
+            MsgmintCCC msg = new MsgmintCCC(mintCCC: mintCCC);
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
             return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee, mode: mode);
@@ -53,23 +53,23 @@ namespace commercio.sdk
         
         /// Closes the CDP having the given [timestamp].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
-        public static async Task<TransactionResult> closeCdp(int timestamp, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
+        public static async Task<TransactionResult> burnCCC(int timestamp, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
-            CloseCdp closeCdp = CloseCdpHelper.fromWallet(wallet, timestamp);
+            burnCCC burnCCC = burnCCCHelper.fromWallet(wallet, timestamp);
 
-            MsgCloseCdp msg = new MsgCloseCdp(closeCdp: closeCdp);
+            MsgburnCCC msg = new MsgburnCCC(burnCCC: burnCCC);
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
             return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee, mode: mode);
         }
 
-        /// Closes the open CDPs having the given [closeCdps] list as being
+        /// Closes the open CDPs having the given [burnCCCs] list as being
         /// associated with the address present inside the specified [wallet].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
-        public static async Task<TransactionResult> closeCdpsList(List<CloseCdp> closeCdps, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
+        public static async Task<TransactionResult> burnCCCsList(List<burnCCC> burnCCCs, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
-            List<MsgCloseCdp> msgs = closeCdps
-                .Select(x => new MsgCloseCdp(x))
+            List<MsgburnCCC> msgs = burnCCCs
+                .Select(x => new MsgburnCCC(x))
                 .ToList();
 
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg

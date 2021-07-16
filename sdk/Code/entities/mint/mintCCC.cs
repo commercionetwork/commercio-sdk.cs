@@ -18,7 +18,7 @@ using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class OpenCdp
+    public class mintCCC
     {
         #region Properties
         [JsonProperty("deposit_amount", Order = 2)]
@@ -30,7 +30,7 @@ namespace commercio.sdk
 
         #region Constructors
         [JsonConstructor]
-        public OpenCdp(List<StdCoin> depositAmount, String signerDid)
+        public mintCCC(List<StdCoin> depositAmount, String signerDid)
         {
             Trace.Assert(depositAmount != null);
             Trace.Assert(signerDid != null);
@@ -39,7 +39,7 @@ namespace commercio.sdk
         }
 
         // Alternate constructor from Json JObject
-        public OpenCdp(JObject json)
+        public mintCCC(JObject json)
         {
             this.depositAmount = ((JArray)json["deposit_amount"]).Select(elem => (new StdCoin((JObject)elem))).ToList();
             this.signerDid = (String)json["depositor"];
