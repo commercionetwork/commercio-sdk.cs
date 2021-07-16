@@ -5,7 +5,7 @@
 // Sep. 11, 2020
 // BlockIt s.r.l.
 // 
-/// Allows to easily create a OpenCdp and perform common related operations
+/// Allows to easily create a mintCCC and perform common related operations
 //
 using System;
 using System.Collections.Generic;
@@ -18,12 +18,12 @@ using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class OpenCdpHelper
+    public class mintCCCHelper
     {
-        /// Creates an OpenCdp from the given [wallet] and deposit [amount].
-        public static OpenCdp fromWallet(Wallet wallet, List<StdCoin> amount)
+        /// Creates an mintCCC from the given [wallet] and deposit [amount].
+        public static mintCCC fromWallet(Wallet wallet, List<StdCoin> amount)
         {
-            return new OpenCdp(depositAmount: amount, signerDid: wallet.bech32Address);
+            return new mintCCC(depositAmount: amount, signerDid: wallet.bech32Address);
         }
     }
 }

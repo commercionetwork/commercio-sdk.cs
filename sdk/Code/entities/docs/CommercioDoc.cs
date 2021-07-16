@@ -167,7 +167,7 @@ namespace commercio.sdk
             Trace.Assert(metadata != null);
             // Trace.Assert(contentUri != null); Removed - conflict with opt param
 
-            //Check if contenturi is valorize 15/07/2021 Luigi Arena
+            //Check if contenturi is valorize 15/07/2021 Luigi Arena test se contenturi è valorizzato
             if (!string.IsNullOrEmpty(contentUri))
             {
                 Trace.Assert(contentUri.Length <= 512, "metadata.content_uri must have a valid length");

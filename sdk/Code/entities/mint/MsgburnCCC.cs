@@ -4,27 +4,27 @@
 // Riccardo Costacurta
 // Dec. 30, 2019
 // BlockIt s.r.l.
-//
-/// Represents the transaction message that must be used when wanting to open a
-/// Collateralized Debt position that allows to transform the user's
-/// Commercio Token into Commercio Cash Credits.
+// 
+/// Represents the transaction message that must be used when wanting
+/// to close a previously opened Collateralized Debt position to get
+/// back the Commercio Tokens that have been locked with it.
 //
 using System;
 using System.Text;
 using System.Collections.Generic;
-using System.Linq;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class MsgOpenCdp : StdMsg
+    public class MsgburnCCC : StdMsg
     {
 
+
         #region Properties
-        [JsonProperty("openCdp", Order = 1)]
-        public OpenCdp openCdp { get; private set; }
+        [JsonProperty("burnCCC", Order = 1)]
+        public burnCCC burnCCC { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
         public override Dictionary<String, Object> value
@@ -40,12 +40,12 @@ namespace commercio.sdk
         #region Constructors
 
         /// Public constructor.
-        public MsgOpenCdp(OpenCdp openCdp)
+        public MsgburnCCC(burnCCC burnCCC)
         {
-            Trace.Assert(openCdp != null);
+            Trace.Assert(burnCCC != null);
             // Assigns the properties
-            this.openCdp = openCdp;
-            base.setProperties("commercio/MsgOpenCdp", _toJson());
+            this.burnCCC = burnCCC;
+            base.setProperties("commercio/MsgburnCCC", _toJson());
         }
 
         #endregion
@@ -57,15 +57,15 @@ namespace commercio.sdk
 
         private Dictionary<String, Object> _toJson()
         {
-            Dictionary<String, Object> wk = this.openCdp.toJson();
+            Dictionary<String, Object> wk = this.burnCCC.toJson();
             return wk;
         }
         #endregion
 
         /*
         #region Properties
-        public List<StdCoin> depositAmount { get; private set; }
         public String signerDid { get; private set; }
+        public int timeStamp { get; private set; }
 
         // The override of the value getter is mandatory to obtain a correct codified Json
         public override Dictionary<String, Object> value
@@ -81,14 +81,14 @@ namespace commercio.sdk
         #region Constructors
 
         /// Public constructor.
-        public MsgOpenCdp(List<StdCoin> depositAmount, String signerDid)
+        public MsgburnCCC(String signerDid, int timeStamp)
         {
-            Trace.Assert(depositAmount != null);
             Trace.Assert(signerDid != null);
+            // Trace.Assert(timeStamp != null);
             // Assigns the properties
-            this.depositAmount = depositAmount;
             this.signerDid = signerDid;
-            base.setProperties("commercio/MsgOpenCdp", _toJson());
+            this.timeStamp = timeStamp;
+            base.setProperties("commercio/MsgburnCCC", _toJson());
         }
 
         #endregion
@@ -101,8 +101,8 @@ namespace commercio.sdk
         private Dictionary<String, Object> _toJson()
         {
             Dictionary<String, Object> wk = new Dictionary<String, Object>();
-            wk.Add("deposit_amount", this.depositAmount?.Select(elem => elem?.toJson()?.ToList()));
-            wk.Add("depositor", this.signerDid);
+            wk.Add("signer", this.signerDid);
+            wk.Add("cdp_timestamp", this.timeStamp.ToString());
             return wk;
         }
         #endregion
