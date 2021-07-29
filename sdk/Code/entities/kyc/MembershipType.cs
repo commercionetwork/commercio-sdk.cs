@@ -15,6 +15,8 @@ namespace commercio.sdk
 {
     public enum MembershipType
     {
+        [EnumMember(Value = "green")]
+        GREEN,
         [EnumMember(Value = "bronze")]
         BRONZE,
         [EnumMember(Value = "silver")]
@@ -24,5 +26,4 @@ namespace commercio.sdk
         [EnumMember(Value = "black")]
         BLACK
     }
-
 }

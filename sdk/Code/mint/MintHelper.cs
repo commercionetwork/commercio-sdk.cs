@@ -13,6 +13,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using commercio.sacco.lib;
+using commercio.sdk.Code.entities.mint;
+using Newtonsoft.Json.Linq;
 
 namespace commercio.sdk
 {
@@ -50,7 +52,36 @@ namespace commercio.sdk
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
             return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee, mode: mode);
         }
-        
+
+        ///Luigi Arena 29/07/2021
+        /// Performs a transaction opening a list of new CDP [mintCCC] as being
+        /// associated with the address present inside the specified [wallet].
+        /// Optionally [fee] and broadcasting [mode] parameters can be specified.
+        public static async Task<TransactionResult> mintCCCList(
+            List<mintCCC> mintCCCsList,
+            Wallet wallet,
+            StdFee fee = null,
+            BroadcastingMode mode = BroadcastingMode.SYNC
+        )
+        {
+            List<MsgmintCCC> msgs = mintCCCsList
+                .Select(x => new MsgmintCCC(x))
+                .ToList();
+
+            // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg
+            return await TxHelper.createSignAndSendTx(msgs.ToList<StdMsg>(), wallet, fee: fee, mode: mode);
+        }
+
+        /// Returns the list of all the [ExchangeTradePosition] that the
+        /// specified wallet has minted.
+        public static async Task<List<ExchangeTradePosition>> getExchangeTradePositions(Wallet wallet)
+        {
+            String url = $"{wallet.networkInfo.lcdUrl}/commerciomint/etps/{wallet.bech32Address}";
+            JArray response = await Network.queryChain(url) as JArray;
+            return response.Select((json) => new ExchangeTradePosition((JObject)json)).ToList();
+           
+        }
+
         /// Closes the CDP having the given [timestamp].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
         public static async Task<TransactionResult> burnCCC(int timestamp, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
