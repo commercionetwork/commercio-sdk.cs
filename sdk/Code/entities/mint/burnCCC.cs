@@ -25,6 +25,9 @@ namespace commercio.sdk
         [JsonProperty("cdp_timestamp", Order = 1)]
         public String timeStamp { get; private set; }
 
+        [JsonProperty("id", Order = 3)]
+        public String id { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -33,8 +36,12 @@ namespace commercio.sdk
         {
             Trace.Assert(signerDid != null);
             Trace.Assert(timeStamp != null);
+            Trace.Assert(id != null);
+            Boolean CheckUuid = GenericUtils.matchUuidv4(id); //Check if the uuid is ok
+            Trace.Assert(CheckUuid != false);
             this.signerDid = signerDid;
             this.timeStamp = timeStamp;
+            this.id = id;
         }
 
         // Alternate constructor from Json JObject
@@ -42,6 +49,7 @@ namespace commercio.sdk
         {
             this.signerDid = (String)json["signer"];
             this.timeStamp = (String)json["cdp_timestamp"];
+            this.id = (String)json["id"];
 
             //Object outValue;
             //if (json.TryGetValue("signer", out outValue))
@@ -60,6 +68,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("signer", this.signerDid);
             output.Add("cdp_timestamp", this.timeStamp);
+            output.Add("id", this.id);
             return (output);
         }
 

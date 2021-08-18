@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -25,13 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\sacco.cs-master\sacco\sacco.csproj" />
     <ProjectReference Include="..\sdk\sdk.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="commercio.sacco.lib">
-      <HintPath>..\..\sacco.cs\sacco\bin\Debug\netcoreapp2.1\commercio.sacco.lib.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>
