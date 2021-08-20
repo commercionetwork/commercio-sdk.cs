@@ -28,9 +28,9 @@ namespace sdk_test
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
 
-            String lcdUrl = "http://url";
+            String lcdUrl = "https://lcd-demo.commercio.network";
             NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: lcdUrl);
-            String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
+            String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Wallet wallet = Wallet.derive(mnemonic, networkInfo);
 
@@ -41,7 +41,7 @@ namespace sdk_test
             // Here the mock server part...
             // Build the mockup server
             String localTestUrl1 = $"{lcdUrl}/government/tumbler";
-            String localTestUrl2 = $"{lcdUrl}/identities/did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau";
+            String localTestUrl2 = $"{lcdUrl}/identities/did:com:1fvwfjx2yealxyw5hktqnvm5ynljlc8jqkkd8kl";
 
             var _server = new MockHttpServer();
             //  I need this in order to get the correct data out of the mock server

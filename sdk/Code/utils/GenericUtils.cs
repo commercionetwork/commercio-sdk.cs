@@ -15,6 +15,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using commercio.sacco.lib;
+using System.Text.RegularExpressions;
 
 namespace commercio.sdk
 {
@@ -50,6 +51,16 @@ namespace commercio.sdk
                 gas: (gas * msgsNumber).ToString(), 
                 amount: new List<StdCoin> { new StdCoin(denom: denom, amount: (fee * msgsNumber).ToString())}
             );    
+        }
+
+        // Return [true] if the string [uuid] has a Uuid v4 format. Luigi Arena
+        public static bool matchUuidv4(String uuid)
+        {
+            Regex regExp = new Regex(@"^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$",RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            if (regExp.IsMatch(uuid))
+                return true;
+            else
+                return false;
         }
 
     #endregion

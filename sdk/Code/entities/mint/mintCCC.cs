@@ -18,7 +18,7 @@ using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class OpenCdp
+    public class mintCCC
     {
         #region Properties
         [JsonProperty("deposit_amount", Order = 2)]
@@ -26,23 +26,32 @@ namespace commercio.sdk
         [JsonProperty("depositor", Order = 1)]
         public String signerDid { get; private set; }
 
+        [JsonProperty("id", Order = 3)]
+        public String id { get; private set; }
+
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public OpenCdp(List<StdCoin> depositAmount, String signerDid)
+        public mintCCC(List<StdCoin> depositAmount, String signerDid)
         {
             Trace.Assert(depositAmount != null);
             Trace.Assert(signerDid != null);
+            Trace.Assert(id != null);
+            Boolean CheckUuid= GenericUtils.matchUuidv4(id); //Check if the uuid is ok
+            Trace.Assert(CheckUuid != false);
             this.depositAmount = depositAmount;
             this.signerDid = signerDid;
+            this.id = id;
+                        
         }
 
         // Alternate constructor from Json JObject
-        public OpenCdp(JObject json)
+        public mintCCC(JObject json)
         {
             this.depositAmount = ((JArray)json["deposit_amount"]).Select(elem => (new StdCoin((JObject)elem))).ToList();
             this.signerDid = (String)json["depositor"];
+            this.id = (String)json["id"];
 
             //Object outValue;
             //if (json.TryGetValue("deposit_amount", out outValue))
@@ -61,6 +70,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("deposit_amount", (this.depositAmount?.Select(elem => elem?.toJson())?.ToList()));  // RC - This need to be checked - 20200910
             output.Add("depositor", this.signerDid);
+            output.Add("id", this.id);
             return (output);
         }
 

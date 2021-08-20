@@ -17,7 +17,7 @@ using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class CloseCdp
+    public class burnCCC
     {
         #region Properties
         [JsonProperty("signer", Order = 2)]
@@ -25,23 +25,31 @@ namespace commercio.sdk
         [JsonProperty("cdp_timestamp", Order = 1)]
         public String timeStamp { get; private set; }
 
+        [JsonProperty("id", Order = 3)]
+        public String id { get; private set; }
+
         #endregion
 
         #region Constructors
         [JsonConstructor]
-        public CloseCdp(String signerDid, String timeStamp)
+        public burnCCC(String signerDid, String timeStamp)
         {
             Trace.Assert(signerDid != null);
             Trace.Assert(timeStamp != null);
+            Trace.Assert(id != null);
+            Boolean CheckUuid = GenericUtils.matchUuidv4(id); //Check if the uuid is ok
+            Trace.Assert(CheckUuid != false);
             this.signerDid = signerDid;
             this.timeStamp = timeStamp;
+            this.id = id;
         }
 
         // Alternate constructor from Json JObject
-        public CloseCdp(JObject json)
+        public burnCCC(JObject json)
         {
             this.signerDid = (String)json["signer"];
             this.timeStamp = (String)json["cdp_timestamp"];
+            this.id = (String)json["id"];
 
             //Object outValue;
             //if (json.TryGetValue("signer", out outValue))
@@ -60,6 +68,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("signer", this.signerDid);
             output.Add("cdp_timestamp", this.timeStamp);
+            output.Add("id", this.id);
             return (output);
         }
 

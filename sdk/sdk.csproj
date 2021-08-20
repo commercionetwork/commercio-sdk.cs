@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>commercio.sdk</RootNamespace>
-    <Version>2.1.0.0</Version>
+    <Version>2.2.0.0</Version>
     <Authors>commercio.network, Blockit S.r.l.</Authors>
     <Company>commercio.network</Company>
     <Product />
@@ -17,9 +17,9 @@ https://commercio.network</Description>
     <PackageTags>commercio.network, sdk</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIconUrl>https://avatars0.githubusercontent.com/u/45789950?s=200&amp;v=4</PackageIconUrl>
-    <PackageReleaseNotes>Porting in C# of commercio-sdk.dart.. Aligned to version 2.1.0 sdk dart.</PackageReleaseNotes>
-    <AssemblyVersion>2.1.0.0</AssemblyVersion>
-    <FileVersion>2.1.0.0</FileVersion>
+    <PackageReleaseNotes>Porting in C# of commercio-sdk.dart.. Aligned to version 2.2.0 sdk dart.</PackageReleaseNotes>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <FileVersion>2.2.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,9 +34,7 @@ https://commercio.network</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="commercio.sacco.lib">
-      <HintPath>..\..\sacco.cs\sacco\bin\Debug\netcoreapp2.1\commercio.sacco.lib.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\sacco.cs-master\sacco\sacco.csproj" />
   </ItemGroup>
 
 </Project>

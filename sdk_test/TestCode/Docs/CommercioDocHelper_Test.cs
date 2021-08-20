@@ -7,6 +7,8 @@ using Org.BouncyCastle.Crypto.Parameters;
 using commercio.sdk;
 using commercio.sacco.lib;
 using KellermanSoftware.CompareNetObjects;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace sdk_test
 {
@@ -21,8 +23,8 @@ namespace sdk_test
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
 
-            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "");
-            String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
+            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "https://lcd-demo.commercio.network");
+            String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Wallet wallet = Wallet.derive(mnemonic, networkInfo);
 
@@ -53,6 +55,70 @@ namespace sdk_test
             );
 
             Assert.AreEqual(compareLogic.Compare(commercioDoc.toJson(), expectedCommercioDoc.toJson()).AreEqual, true);
+
+            //Per visualizzare json della classe
+            var dataString = JsonConvert.SerializeObject(commercioDoc);
+
+        }
+
+        [TestMethod]
+        public async Task test_broadcastStdTx()
+        {
+            //This is the comparison class
+            CompareLogic compareLogic = new CompareLogic();
+
+            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "https://lcd-demo.commercio.network");
+            
+            //primo mnemonic
+            String mnemonicString1 = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
+            List<String> mnemonic = new List<String>(mnemonicString1.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+
+            //secondo mnemonic
+            String mnemonicString2 = "daughter conduct slab puppy horn wrap bone road custom acoustic adjust target price trip unknown agent infant proof whip picnic exact hobby phone spin";
+            List<String> mnemonic2 = new List<String>(mnemonicString2.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+
+
+            Wallet wallet = Wallet.derive(mnemonic, networkInfo);
+            Wallet recipientWallet = Wallet.derive(mnemonic2, networkInfo);
+           
+           
+            List<StdCoin> depositAmount = new List<StdCoin> { new StdCoin(denom: "ucommercio", amount: "10000") };
+
+            var dict = new Dictionary<string, object>();
+            dict.Add("from_address", wallet.bech32Address);
+            dict.Add("to_address", recipientWallet.bech32Address);
+            dict.Add("amount", depositAmount);
+
+
+            StdMsg testmsg = new StdMsg("cosmos-sdk/MsgSend", dict);
+            List <StdMsg> Listtestmsg = new List<StdMsg>();
+            Listtestmsg.Add(testmsg);
+
+            StdFee fee = new StdFee(depositAmount, "200000");
+
+            //Invio 
+            try
+            {
+                var stdTx = TxBuilder.buildStdTx(Listtestmsg, "", fee);
+
+                var signedStdTx = await TxSigner.signStdTx(wallet: wallet, stdTx: stdTx);
+                var result = await TxSender.broadcastStdTx(wallet: wallet, stdTx: signedStdTx);
+                if (result.success)
+                {
+                    Console.WriteLine("Tx send successfully:\n$lcdUrl/txs/${result.hash}");
+                }
+                else
+                {
+                    Console.WriteLine("Tx error message:\n${result.error?.errorMessage}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while testing Sacco:\n$error");
+            }
+
+
+
 
         }
 
