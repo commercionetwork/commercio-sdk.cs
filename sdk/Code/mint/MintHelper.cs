@@ -28,7 +28,7 @@ namespace commercio.sdk
 
         #region Public Methods
 
-        /// Opens a new CDP depositing the given Commercio Token [amount].
+        /// Opens a new ETP depositing the given Commercio Token [amount].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
         public static async Task<TransactionResult> mintCCC(int amount, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
@@ -42,7 +42,7 @@ namespace commercio.sdk
             return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee : fee, mode: mode);
         }
 
-        /// Performs a transaction opening a new CDP [mintCCC] as being
+        /// Performs a transaction opening a new ETP [mintCCC] as being
         /// associated with the address present inside the specified [wallet].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
         public static async Task<TransactionResult> mintCCCSingle(mintCCC mintCCC, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
@@ -54,7 +54,7 @@ namespace commercio.sdk
         }
 
         ///Luigi Arena 29/07/2021
-        /// Performs a transaction opening a list of new CDP [mintCCC] as being
+        /// Performs a transaction opening a list of new ETP [mintCCC] as being
         /// associated with the address present inside the specified [wallet].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
         public static async Task<TransactionResult> mintCCCList(
@@ -82,7 +82,7 @@ namespace commercio.sdk
            
         }
 
-        /// Closes the CDP having the given [timestamp].
+        /// Closes the ETP having the given [timestamp].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
         public static async Task<TransactionResult> burnCCC(int timestamp, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
         {
@@ -94,7 +94,7 @@ namespace commercio.sdk
             return await TxHelper.createSignAndSendTx(new List<StdMsg> { msg }, wallet, fee: fee, mode: mode);
         }
 
-        /// Closes the open CDPs having the given [burnCCCs] list as being
+        /// Closes the open ETPs having the given [burnCCCs] list as being
         /// associated with the address present inside the specified [wallet].
         /// Optionally [fee] and broadcasting [mode] parameters can be specified.
         public static async Task<TransactionResult> burnCCCsList(List<burnCCC> burnCCCs, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)

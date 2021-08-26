@@ -22,7 +22,7 @@ namespace commercio.sdk
         #region Properties
         [JsonProperty("signer", Order = 2)]
         public String signerDid { get; private set; }
-        [JsonProperty("cdp_timestamp", Order = 1)]
+        [JsonProperty("etp_timestamp", Order = 1)]
         public String timeStamp { get; private set; }
 
         [JsonProperty("id", Order = 3)]
@@ -48,7 +48,7 @@ namespace commercio.sdk
         public burnCCC(JObject json)
         {
             this.signerDid = (String)json["signer"];
-            this.timeStamp = (String)json["cdp_timestamp"];
+            this.timeStamp = (String)json["etp_timestamp"];
             this.id = (String)json["id"];
 
             //Object outValue;
@@ -67,7 +67,7 @@ namespace commercio.sdk
 
             output = new Dictionary<String, Object>();
             output.Add("signer", this.signerDid);
-            output.Add("cdp_timestamp", this.timeStamp);
+            output.Add("etp_timestamp", this.timeStamp);
             output.Add("id", this.id);
             return (output);
         }

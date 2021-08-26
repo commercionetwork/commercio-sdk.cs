@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sdk_test", "sdk_test\sdk_te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sdk", "sdk\sdk.csproj", "{FDDC9973-F1EC-4E40-8F58-D3B4E98D9612}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sacco", "..\sacco.cs-master\sacco\sacco.csproj", "{1243CBC8-8082-4E1F-BDCE-D88BA75D9E16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sacco", "..\sacco.cs-master\sacco\sacco.csproj", "{F78B4DAF-915C-4667-A607-F7B3F2E7FF0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{FDDC9973-F1EC-4E40-8F58-D3B4E98D9612}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDDC9973-F1EC-4E40-8F58-D3B4E98D9612}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDDC9973-F1EC-4E40-8F58-D3B4E98D9612}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1243CBC8-8082-4E1F-BDCE-D88BA75D9E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1243CBC8-8082-4E1F-BDCE-D88BA75D9E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1243CBC8-8082-4E1F-BDCE-D88BA75D9E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1243CBC8-8082-4E1F-BDCE-D88BA75D9E16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F78B4DAF-915C-4667-A607-F7B3F2E7FF0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F78B4DAF-915C-4667-A607-F7B3F2E7FF0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F78B4DAF-915C-4667-A607-F7B3F2E7FF0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F78B4DAF-915C-4667-A607-F7B3F2E7FF0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
