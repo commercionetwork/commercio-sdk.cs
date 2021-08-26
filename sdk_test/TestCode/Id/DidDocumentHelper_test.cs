@@ -111,7 +111,7 @@ namespace sdk_test
         [TestMethod]
         public async Task DidDocumentFromWalletJsonTest()
         {
-            String lcdUrl = "https://lcd-demo.commercio.network";
+            String lcdUrl = "http://localhost:1317";
            // string didcom = "1fvwfjx2yealxyw5hktqnvm5ynljlc8jqkkd8kl";
             NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: lcdUrl);
             String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";

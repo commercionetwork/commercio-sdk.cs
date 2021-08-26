@@ -23,7 +23,7 @@ namespace sdk_test
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
 
-            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "https://lcd-demo.commercio.network");
+            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "http://localhost:1317");
             String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Wallet wallet = Wallet.derive(mnemonic, networkInfo);
@@ -67,7 +67,7 @@ namespace sdk_test
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
 
-            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "https://lcd-demo.commercio.network");
+            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "http://localhost:1317");
             
             //primo mnemonic
             String mnemonicString1 = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";

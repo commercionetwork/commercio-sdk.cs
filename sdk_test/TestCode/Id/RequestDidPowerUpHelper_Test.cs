@@ -28,7 +28,7 @@ namespace sdk_test
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
 
-            String lcdUrl = "https://lcd-demo.commercio.network";
+            String lcdUrl = "http://localhost:1317";
             NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: lcdUrl);
             String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
