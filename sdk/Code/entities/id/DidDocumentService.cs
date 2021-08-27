@@ -38,8 +38,11 @@ namespace commercio.sdk
         public DidDocumentService(String id, String type, String endpoint)
         {
             Trace.Assert(id != null);
+            Trace.Assert(id.Length <= 64, "service.id must have a valid length");
             Trace.Assert(type != null);
+            Trace.Assert(type.Length <= 64, "service.type must have a valid length");
             Trace.Assert(endpoint != null);
+            Trace.Assert(endpoint.Length <= 512, "service.endpoint must have a valid length");
             this.id = id;
             this.type = type;
             this.endpoint = endpoint;

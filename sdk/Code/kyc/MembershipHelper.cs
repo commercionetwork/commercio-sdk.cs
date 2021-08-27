@@ -48,9 +48,9 @@ namespace commercio.sdk
         }
 
         /// Buys the membership with the given [membershipType].
-        public static async Task<TransactionResult> buyMembership(MembershipType membershipType, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC)
+        public static async Task<TransactionResult> buyMembership(MembershipType membershipType, Wallet wallet, StdFee fee = null, BroadcastingMode mode = BroadcastingMode.SYNC,string tsp="")
         {
-            BuyMembership buyMembership = BuyMembershipHelper.fromWallet(wallet, membershipType);
+            BuyMembership buyMembership = BuyMembershipHelper.fromWallet(wallet, membershipType, tsp);
 
             MsgBuyMembership msg = new MsgBuyMembership(buyMembership: buyMembership);
             // Careful here, Eugene: we are passing a list of BaseType containing the derived MsgSetDidDocument msg

@@ -10,28 +10,28 @@ using KellermanSoftware.CompareNetObjects;
 namespace sdk_test
 {
     [TestClass]
-    public class CloseCdpHelper_Test
+    public class burnCCCHelper_Test
     {
 
         [TestMethod]
-        // '"fromWallet()" returns a well-formed "CloseCdp" object.'
-        public void WellFormedCloseCdpFromWallet()
+        // '"fromWallet()" returns a well-formed "burnCCC" object.'
+        public void WellFormedburnCCCFromWallet()
         {
             //This is the comparison class
             CompareLogic compareLogic = new CompareLogic();
 
             NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "");
-            String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
+            String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Wallet wallet = Wallet.derive(mnemonic, networkInfo);
 
             int timeStamp = 64738;
 
-            CloseCdp expectedCloseCdp = new CloseCdp(signerDid: wallet.bech32Address, timeStamp: timeStamp.ToString());
+            burnCCC expectedburnCCC = new burnCCC(signerDid: wallet.bech32Address, timeStamp: timeStamp.ToString());
 
-            CloseCdp closeCdp = CloseCdpHelper.fromWallet(wallet, timeStamp);
+            burnCCC burnCCC = burnCCCHelper.fromWallet(wallet, timeStamp);
 
-            Assert.AreEqual(compareLogic.Compare(closeCdp.toJson(), expectedCloseCdp.toJson()).AreEqual, true);
+            Assert.AreEqual(compareLogic.Compare(burnCCC.toJson(), expectedburnCCC.toJson()).AreEqual, true);
 
         }
     }

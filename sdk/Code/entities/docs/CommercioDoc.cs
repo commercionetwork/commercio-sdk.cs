@@ -136,15 +136,15 @@ namespace commercio.sdk
         public List<String> recipientDids { get; set; }
         [JsonProperty("uuid", Order = 8)]
         public String uuid { get; set; }
-        [JsonProperty("content_uri", Order = 2)]
+        [JsonProperty("content_uri", Order = 2, NullValueHandling = NullValueHandling.Ignore)]
         public String contentUri { get; set; }
         [JsonProperty("metadata", Order = 5)]
         public CommercioDocMetadata metadata { get; set; }
         [JsonProperty("checksum", Order = 1)]
         public CommercioDocChecksum checksum { get; set; }
-        [JsonProperty("encryption_data", Order = 4)]
+        [JsonProperty("encryption_data", Order = 4, NullValueHandling = NullValueHandling.Ignore)]
         public CommercioDocEncryptionData encryptionData { get; set; }
-        [JsonProperty("do_sign", Order = 3)]
+        [JsonProperty("do_sign", Order = 3, NullValueHandling = NullValueHandling.Ignore)]
         public CommercioDoSign doSign { get; set; }
 
         #endregion
@@ -166,6 +166,14 @@ namespace commercio.sdk
             Trace.Assert(uuid != null);
             Trace.Assert(metadata != null);
             // Trace.Assert(contentUri != null); Removed - conflict with opt param
+
+            //Check if contenturi is valorize 15/07/2021 Luigi Arena test se contenturi è valorizzato
+            if (!string.IsNullOrEmpty(contentUri))
+            {
+                Trace.Assert(contentUri.Length <= 512, "metadata.content_uri must have a valid length");
+            }
+
+            
             this.uuid = uuid;
             this.senderDid = senderDid;
             this.recipientDids = recipientDids;
@@ -238,11 +246,11 @@ namespace commercio.sdk
     public class CommercioDocMetadata
     {
         #region Properties
-        [JsonProperty("content_uri", Order = 1)]
+        [JsonProperty("content_uri", Order = 1, NullValueHandling = NullValueHandling.Ignore)]
         public String contentUri { get; set; }
         [JsonProperty("schema", Order = 2)]
         public CommercioDocMetadataSchema schema { get; set; }
-        [JsonProperty("schema_type", Order = 3)]
+        [JsonProperty("schema_type", Order = 3, NullValueHandling = NullValueHandling.Ignore)]
         public String schemaType { get; set; }
 
         #endregion
@@ -253,11 +261,18 @@ namespace commercio.sdk
                             CommercioDocMetadataSchema schema,
                             String schemaType = "")
         {
-            Trace.Assert(contentUri != null);
+            //15/07/2021 Luigi Arena
+            Trace.Assert(contentUri != null, "metadata.content_uri must not be null");
+            Trace.Assert(contentUri.Length <= 512 , "metadata.content_uri must have a valid length");
+           
             //Trace.Assert(schema != null);
             // Trace.Assert(!String.IsNullOrEmpty(schemaType));
-            Trace.Assert(schemaType != null);
+            Trace.Assert(schemaType != null, "metadata.schemaType must not be null");
+            Trace.Assert(schemaType.Length <= 512, "metadata.schemaType must have a valid length");
+
             Trace.Assert((schema != null) || (!String.IsNullOrEmpty(schemaType)));
+
+            
             this.contentUri = contentUri;
             this.schema = schema;
             this.schemaType = schemaType;
@@ -316,7 +331,9 @@ namespace commercio.sdk
         public CommercioDocMetadataSchema(String uri, String version)
         {
             Trace.Assert(uri != null);
+            Trace.Assert(uri.Length <= 512, "metadata.schema.uri must have a valid length");
             Trace.Assert(version != null);
+            Trace.Assert(version.Length <= 32, "metadata.schema.version must have a valid length");
             this.uri = uri;
             this.version = version;
         }
@@ -425,6 +442,8 @@ namespace commercio.sdk
         {
             Trace.Assert(keys != null);
             Trace.Assert(encryptedData != null);
+
+
             this.keys = keys;
             this.encryptedData = encryptedData;
         }
@@ -479,6 +498,8 @@ namespace commercio.sdk
         {
             Trace.Assert(recipientDid != null);
             Trace.Assert(value != null);
+            Trace.Assert(value.Length <= 512, "encryption_data.keys.*.value must have a valid length");
+
             this.recipientDid = recipientDid;
             this.value = value;
         }
@@ -540,6 +561,19 @@ namespace commercio.sdk
             Trace.Assert(storageUri != null);
             Trace.Assert(signerInstance != null);
             // Trace.Assert(vcrId != null); // RC 20200508 - Commented this, as it conflicts with optional param - different from Dart version, maybe a bug there.
+
+            //Check if vcrId is valorize 15/07/2021 Luigi Arena
+            if (!string.IsNullOrEmpty(vcrId))
+            {
+                Trace.Assert(vcrId.Length <= 64, "Do_Sign.vcrId must have a valid length");
+            }
+
+            //Check if certificateProfile is valorize 15/07/2021 Luigi Arena
+            if (!string.IsNullOrEmpty(certificateProfile))
+            {
+                Trace.Assert(certificateProfile.Length <= 32, "Do_Sign.certificateProfile must have a valid length");
+            }
+
             this.storageUri = storageUri;
             this.signerInstance = signerInstance;
             this.sdnData = sdnData;

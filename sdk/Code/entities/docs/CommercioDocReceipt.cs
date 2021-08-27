@@ -39,7 +39,7 @@ namespace commercio.sdk
         public String documentUuid { get; set; }
 
          /// Optional reading proof
-        [JsonProperty("proof", Order = 2)]
+        [JsonProperty("proof", Order = 2, NullValueHandling = NullValueHandling.Ignore)]
         public String proof { get; set; }
 
         #endregion

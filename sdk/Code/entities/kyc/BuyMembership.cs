@@ -20,6 +20,9 @@ namespace commercio.sdk
     public class BuyMembership
     {
         #region Properties
+        [JsonProperty("tsp", Order = 3)]
+        public String tsp { get; private set; }
+
         [JsonProperty("membership_type", Order = 2)]
         public String membershipType { get; private set; }
         [JsonProperty("buyer", Order = 1)]
@@ -29,12 +32,14 @@ namespace commercio.sdk
 
         #region Constructors
         [JsonConstructor]
-        public BuyMembership(String membershipType, String buyerDid)
+        public BuyMembership(String membershipType, String buyerDid, String tsp)
         {
             Trace.Assert(membershipType != null);
             Trace.Assert(buyerDid != null);
+            Trace.Assert(tsp != null);
             this.membershipType = membershipType;
             this.buyerDid = buyerDid;
+            this.tsp = tsp;
         }
 
         // Alternate constructor from Json JObject
@@ -42,6 +47,7 @@ namespace commercio.sdk
         {
             this.membershipType = (String)json["membership_type"];
             this.buyerDid = (String)json["buyer"];
+            this.tsp = (String)json["tsp"];
 
             //Object outValue;
             //if (json.TryGetValue("membership_type", out outValue))
@@ -60,6 +66,7 @@ namespace commercio.sdk
             output = new Dictionary<String, Object>();
             output.Add("membership_type", this.membershipType);
             output.Add("buyer", this.buyerDid);
+            output.Add("tsp", this.tsp);
             return (output);
         }
 

@@ -5,7 +5,7 @@
 // Sep. 11, 2020
 // BlockIt s.r.l.
 // 
-/// Allows to easily create a CloseCdp and perform common related operations
+/// Allows to easily create a burnCCC and perform common related operations
 //
 using System;
 using System.Collections.Generic;
@@ -18,13 +18,13 @@ using commercio.sacco.lib;
 
 namespace commercio.sdk
 {
-    public class CloseCdpHelper
+    public class burnCCCHelper
     {
-        /// Creates a CloseCdp from the given [wallet] and [timeStamp].
+        /// Creates a burnCCC from the given [wallet] and [timeStamp].
         /// N.B.: [timeStamp] is the 'height' at which the position was opened
-        public static CloseCdp fromWallet(Wallet wallet, int timeStamp)
+        public static burnCCC fromWallet(Wallet wallet, int timeStamp)
         {
-            return new CloseCdp(signerDid: wallet.bech32Address, timeStamp: timeStamp.ToString());
+            return new burnCCC(signerDid: wallet.bech32Address, timeStamp: timeStamp.ToString());
         }
     }
 }

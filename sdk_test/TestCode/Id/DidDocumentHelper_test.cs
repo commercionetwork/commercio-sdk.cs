@@ -22,7 +22,7 @@ namespace sdk_test
         {
 
             NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: "");
-            String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
+            String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
             List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
             Wallet wallet = Wallet.derive(mnemonic, networkInfo);
 
@@ -108,51 +108,52 @@ namespace sdk_test
         }
 
 
-        //[TestMethod]
-        //public async Task DidDocumentFromWalletJsonTest()
-        //{
-        //    String lcdUrl = "http://url";
-        //    NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: lcdUrl);
-        //    String mnemonicString = "dash ordinary anxiety zone slot rail flavor tortoise guilt divert pet sound ostrich increase resist short ship lift town ice split payment round apology";
-        //    List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
-        //    Wallet wallet = Wallet.derive(mnemonic, networkInfo);
+        [TestMethod]
+        public async Task DidDocumentFromWalletJsonTest()
+        {
+            String lcdUrl = "http://localhost:1317";
+           // string didcom = "1fvwfjx2yealxyw5hktqnvm5ynljlc8jqkkd8kl";
+            NetworkInfo networkInfo = new NetworkInfo(bech32Hrp: "did:com:", lcdUrl: lcdUrl);
+            String mnemonicString = "gorilla soldier device force cupboard transfer lake series cement another bachelor fatigue royal lens juice game sentence right invite trade perfect town heavy what";
+            List<String> mnemonic = new List<String>(mnemonicString.Split(" ", StringSplitOptions.RemoveEmptyEntries));
+            Wallet wallet = Wallet.derive(mnemonic, networkInfo);
 
-        //    // Here the mock server part...
-        //    // Build the mockup server
+            // Here the mock server part...
+            // Build the mockup server
 
-        //    String localTestUrl1 = $"{lcdUrl}/auth/accounts/did:com:1gkfhddf8hxj38x74zjxla072wyppej7xv9psfg";
-        //    // String localTestUrl2 = $"{lcdUrl}/identities/did:com:14ttg3eyu88jda8udvxpwjl2pwxemh72w0grsau";
+            String localTestUrl1 = $"{lcdUrl}/auth/accounts/did:com:1fvwfjx2yealxyw5hktqnvm5ynljlc8jqkkd8kl";
+            // String localTestUrl2 = $"{lcdUrl}/identities/did:com:1fvwfjx2yealxyw5hktqnvm5ynljlc8jqkkd8kl";
 
-        //    var _server = new MockHttpServer();
-        //    //  I need this in order to get the correct data out of the mock server
-        //    Dictionary<string, object> nodeResponse1 = JsonConvert.DeserializeObject<Dictionary<String, Object>>(TestResources.TestResources.accountResponse);
-        //    // Dictionary<String, Object> nodeResponse2 = JsonConvert.DeserializeObject<Dictionary<String, Object>>(TestResources.TestResources.tumblerIdentityJson);
-        //    // Initialize Server Response
-        //    _server
-        //        .WithService(localTestUrl1)
-        //        .Api("", "GET", nodeResponse1);
-        //    //_server
-        //    //    .WithService(localTestUrl2)
-        //    //    .Api("", "GET", nodeResponse2);
+            var _server = new MockHttpServer();
+            //  I need this in order to get the correct data out of the mock server
+            Dictionary<string, object> nodeResponse1 = JsonConvert.DeserializeObject<Dictionary<String, Object>>(TestResources.TestResources.accountResponse);
+            // Dictionary<String, Object> nodeResponse2 = JsonConvert.DeserializeObject<Dictionary<String, Object>>(TestResources.TestResources.tumblerIdentityJson);
+            // Initialize Server Response
+            _server
+                .WithService(localTestUrl1)
+                .Api("", "GET", nodeResponse1);
+            //_server
+            //    .WithService(localTestUrl2)
+            //    .Api("", "GET", nodeResponse2);
 
-        //    // Link the client to the retrieval class Network
-        //    HttpClient client = new HttpClient(_server);
-        //    Network.client = client;
+            // Link the client to the retrieval class Network
+            HttpClient client = new HttpClient(_server);
+            Network.client = client;
 
-        //    KeyPair rsaKeyPair = KeysHelper.generateRsaKeyPair();
-        //    KeyPair ecKeyPair = KeysHelper.generateEcKeyPair();
+            KeyPair rsaKeyPair = KeysHelper.generateRsaKeyPair();
+            KeyPair ecKeyPair = KeysHelper.generateEcKeyPair();
 
-        //    List<PublicKey> pubKeys = new List<PublicKey>();
-        //    pubKeys.Add(rsaKeyPair.publicKey);
-        //    pubKeys.Add(ecKeyPair.publicKey);
+            List<PublicKey> pubKeys = new List<PublicKey>();
+            pubKeys.Add(rsaKeyPair.publicKey);
+            pubKeys.Add(ecKeyPair.publicKey);
 
-        //    DidDocument didDocument = DidDocumentHelper.fromWallet(wallet, pubKeys);
-        //    TransactionResult results = await IdHelper.setDidDocument(didDocument, wallet);
+            DidDocument didDocument = DidDocumentHelper.fromWallet(wallet, pubKeys);
+            TransactionResult results = await IdHelper.setDidDocument(didDocument, wallet);
 
-        //    // Just to test no exception in the code
-        //    Assert.AreEqual(true, true);
+            // Just to test no exception in the code
+            Assert.AreEqual(true, true);
 
-        //}
+        }
     }
 
 }
